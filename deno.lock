@@ -3,6 +3,7 @@
   "specifiers": {
     "jsr:@std/assert@^1.0.12": "1.0.12",
     "jsr:@std/internal@^1.0.6": "1.0.6",
+    "jsr:@std/testing@*": "1.0.10",
     "npm:hono@^4.7.5": "4.7.6"
   },
   "jsr": {
@@ -14,6 +15,13 @@
     },
     "@std/internal@1.0.6": {
       "integrity": "9533b128f230f73bd209408bb07a4b12f8d4255ab2a4d22a1fd6d87304aca9a4"
+    },
+    "@std/testing@1.0.10": {
+      "integrity": "8997bd0b0df020b81bf5eae103c66622918adeff7e45e96291c92a29dbf82cc1",
+      "dependencies": [
+        "jsr:@std/assert",
+        "jsr:@std/internal"
+      ]
     }
   },
   "npm": {
