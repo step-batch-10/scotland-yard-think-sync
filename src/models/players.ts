@@ -1,7 +1,4 @@
-interface PlayerStats {
-  matchID?: string;
-  status?: "waiting" | "playing";
-}
+import { PlayerStats } from "./types.ts";
 
 export class Players {
   private players;
@@ -15,5 +12,13 @@ export class Players {
 
   getPlayer(playerName: string) {
     return this.players.get(playerName);
+  }
+
+  isPlayerRegistered(playerName: string) {
+    return this.players.has(playerName);
+  }
+
+  removePlayer(playerName: string) {
+    return this.players.delete(playerName);
   }
 }
