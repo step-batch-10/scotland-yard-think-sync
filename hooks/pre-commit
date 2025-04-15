@@ -9,7 +9,6 @@ deno lint
 
 echo "------------------* All lint passed ! *--------------------------"
 
-deno fmt
 deno test -A
 
 echo "------------------* All test passed ! *--------------------------"
