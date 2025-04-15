@@ -17,7 +17,9 @@
   },
   "workspace": {
     "dependencies": [
-      "jsr:@std/assert@^1.0.12"
+      "jsr:@std/assert@^1.0.12",
+      "jsr:@std/testing@*",
+      "npm:hono@^4.7.5"
     ]
   }
 }
