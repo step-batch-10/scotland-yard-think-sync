@@ -1,6 +1,6 @@
 import { PlayerStats } from "./types.ts";
 
-export class Players {
+export class PlayerRegistry {
   private players;
   constructor() {
     this.players = new Map<string, PlayerStats>();

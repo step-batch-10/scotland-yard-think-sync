@@ -1,11 +1,11 @@
 import { describe, it } from "testing";
 import { assert, assertEquals, assertFalse } from "assert";
-import { Players } from "../src/models/players.ts";
+import { PlayerRegistry } from "../src/models/players.ts";
 
 describe("players model", () => {
   it("should create player with player name", () => {
     const playerName = "test1";
-    const players = new Players();
+    const players = new PlayerRegistry();
     players.createPlayer(playerName);
     const expected = {};
 
@@ -14,7 +14,7 @@ describe("players model", () => {
 
   it("should return true if player is registered", () => {
     const playerName = "test1";
-    const players = new Players();
+    const players = new PlayerRegistry();
     players.createPlayer(playerName);
 
     assert(players.isPlayerRegistered(playerName));
@@ -22,14 +22,14 @@ describe("players model", () => {
 
   it("should return false if player is not registered", () => {
     const playerName = "test1";
-    const players = new Players();
+    const players = new PlayerRegistry();
 
     assertFalse(players.isPlayerRegistered(playerName));
   });
 
   it("should remove player by the player name", () => {
     const playerName = "test1";
-    const players = new Players();
+    const players = new PlayerRegistry();
     players.createPlayer(playerName);
 
     assert(players.removePlayer(playerName));
@@ -38,7 +38,7 @@ describe("players model", () => {
 
   it("should not crash if non registered player removes", () => {
     const playerName = "test1";
-    const players = new Players();
+    const players = new PlayerRegistry();
 
     assertFalse(players.removePlayer(playerName));
     assertFalse(players.isPlayerRegistered(playerName));

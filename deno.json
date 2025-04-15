@@ -25,17 +25,17 @@
     "lineWidth": 80,
     "semiColons": true
   },
-  "tasks" :{
+  "tasks": {
     "remove-coverage": {
       "description": "Removes coverage folder",
       "command": "rm -rf coverage"
     },
-    "test" :{
+    "test": {
       "description": "Runs test with coverage",
       "command": "deno test --coverage",
       "dependencies": ["remove-coverage"]
     },
-    "start":{
+    "start": {
       "command": "deno run -A --watch main.ts",
       "description": "Runs the project"
     }
