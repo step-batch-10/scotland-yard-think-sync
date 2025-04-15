@@ -1,0 +1,32 @@
+{
+  "tasks": {
+    "start": "deno run -A --watch main.ts",
+    "test": "deno test -A"
+  },
+  "imports": {
+    "assert": "jsr:@std/assert@^1.0.12",
+    "testing": "jsr:@std/testing/bdd",
+    "hono": "npm:hono@^4.7.5"
+  },
+  "lint": {
+    "rules": {
+      "tags": ["recommended"],
+      "include": [
+        "camelcase",
+        "no-unused-vars",
+        "no-debugger",
+        "no-constant-condition",
+        "no-empty-interface",
+        "no-var",
+        "ban-untagged-ignore"
+      ],
+      "exclude": []
+    }
+  },
+
+  "fmt": {
+    "indentWidth": 2,
+    "lineWidth": 80,
+    "semiColons": true
+  }
+}
