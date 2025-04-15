@@ -38,7 +38,7 @@ jobs:
 
       - name: Run tests
         run: deno test -A
-        
+
       - name: Upload to Deno Deploy
         uses: denoland/deployctl@v1
         with:
