@@ -1,3 +1,13 @@
 * {
   font-family: sans-serif;
 }
+
+h1 {
+  text-align: center;
+}
+
+#play {
+  margin: auto 96vh;
+  width: 4vw;
+  height: 4vh;
+}
