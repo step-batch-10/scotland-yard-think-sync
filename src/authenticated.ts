@@ -46,7 +46,7 @@ const serveRoomId = (context: GameContext) => {
 
 const servePlayerList = (context: GameContext) => {
   const playerId = extractPlayerId(context);
-  const player = context.env.playerRegistry.getPlayer(playerId);
+  const player = context.env.playerRegistry.getPlayerStats(playerId);
   const players = context.env.rooms.getPlayers(player.matchID || "");
   const isRoomFull = context.env.rooms.isRoomFull(player.matchID || "");
   if (!players) return context.json({ success: false }, 400);
@@ -56,7 +56,7 @@ const servePlayerList = (context: GameContext) => {
 
 const removePlayer = (context: GameContext) => {
   const playerId = extractPlayerId(context);
-  const player = context.env.playerRegistry.getPlayer(playerId);
+  const player = context.env.playerRegistry.getPlayerStats(playerId);
   context.env.rooms.removePlayer(playerId, player.matchID || "");
 
   return context.json({ success: true });
