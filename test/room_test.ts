@@ -38,6 +38,7 @@ describe("Rooms", () => {
     rooms.addPlayer("d", roomId);
     rooms.addPlayer("e", roomId);
     rooms.addPlayer("f", roomId);
+
     assert(rooms.isRoomFull(roomId));
   });
 });

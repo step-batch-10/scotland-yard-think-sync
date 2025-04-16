@@ -1,11 +1,16 @@
 import { getCookie, setCookie } from "hono/cookie";
 import { MiddlewareHandler } from "hono/types";
 import { HonoRequest } from "hono";
-import { GameHandler } from "../models/types.ts";
+import { GameContext, GameHandler } from "../models/types.ts";
 
-export const ensureAthenticated: MiddlewareHandler = async (context, next) => {
-  const cookie = getCookie(context, "playerId");
-  if (cookie) {
+export const ensureAthenticated: MiddlewareHandler = async (
+  context: GameContext,
+  next
+) => {
+  const playerId = getCookie(context, "playerId") || "";
+  const playerRegistry = context.env.playerRegistry;
+
+  if (playerRegistry.isPlayerRegistered(playerId)) {
     return await next();
   }
 
