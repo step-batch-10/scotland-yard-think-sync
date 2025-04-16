@@ -10,8 +10,8 @@ export class PlayerRegistry {
     this.players.set(playerName, {});
   }
 
-  getPlayer(playerName: string) {
-    return this.players.get(playerName);
+  getPlayer(playerName: string): PlayerStats {
+    return this.players.get(playerName) || {};
   }
 
   isPlayerRegistered(playerName: string) {
@@ -20,5 +20,18 @@ export class PlayerRegistry {
 
   removePlayer(playerName: string) {
     return this.players.delete(playerName);
+  }
+
+  assignRoom(playerName: string, roomID: string) {
+    const player = this.getPlayer(playerName);
+    player.matchID = roomID;
+    player.status = "waiting";
+  }
+
+  resetPlayer(playerName: string) {
+    if (!this.isPlayerRegistered(playerName)) return false;
+
+    this.players.set(playerName, {});
+    return true;
   }
 }
