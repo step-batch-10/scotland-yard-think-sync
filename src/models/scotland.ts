@@ -55,8 +55,9 @@ export class ScotlandYard {
   private defaultAssignment(): void {
     for (const index in this.players) {
       const role = this.roles[index];
-      if (!this.assignedRoles.has(role))
+      if (!this.assignedRoles.has(role)) {
         this.assignedRoles.set(role, this.players[index]);
+      }
     }
   }
 
@@ -92,10 +93,9 @@ export class ScotlandYard {
   distributeTickets(): void {
     for (const index in this.players) {
       const role = this.roles[index];
-      const tickets =
-        role === Role.MrX
-          ? ScotlandYard.TicketsOfMrX()
-          : ScotlandYard.TicketsOfDetective();
+      const tickets = role === Role.MrX
+        ? ScotlandYard.TicketsOfMrX()
+        : ScotlandYard.TicketsOfDetective();
 
       this.tickets.set(role, tickets);
     }

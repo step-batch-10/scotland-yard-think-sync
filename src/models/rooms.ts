@@ -1,12 +1,19 @@
 export class Rooms {
   private lobbies: Map<string, Set<string>>;
+  private roomId: number;
 
   constructor() {
     this.lobbies = new Map();
+    this.roomId = 100000;
+  }
+
+  #generateId() {
+    this.roomId++;
+    return this.roomId.toString();
   }
 
   #createRoom() {
-    const roomId = Date.now().toString().slice(-6);
+    const roomId = this.#generateId();
     this.lobbies.set(roomId, new Set());
 
     return roomId;
@@ -27,5 +34,9 @@ export class Rooms {
 
   getPlayers(roomId: string) {
     return this.lobbies.get(roomId);
+  }
+
+  isRoomFull(roomId: string) {
+    return this.lobbies.get(roomId)?.size === 6;
   }
 }

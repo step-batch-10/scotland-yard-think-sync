@@ -1,5 +1,5 @@
-import { assertEquals, assert } from "assert";
-import { describe, it, beforeEach } from "testing";
+import { assert, assertEquals, assertFalse } from "assert";
+import { beforeEach, describe, it } from "testing";
 import { Rooms } from "../src/models/rooms.ts";
 
 describe("Rooms", () => {
@@ -26,5 +26,18 @@ describe("Rooms", () => {
   it("should add player", () => {
     rooms.addPlayer("b", roomId);
     assert(rooms.getPlayers(roomId)?.has("b"));
+  });
+
+  it("should return false when room is not full", () => {
+    assertFalse(rooms.isRoomFull(roomId));
+  });
+
+  it("should return true when room is full", () => {
+    rooms.addPlayer("b", roomId);
+    rooms.addPlayer("c", roomId);
+    rooms.addPlayer("d", roomId);
+    rooms.addPlayer("e", roomId);
+    rooms.addPlayer("f", roomId);
+    assert(rooms.isRoomFull(roomId));
   });
 });

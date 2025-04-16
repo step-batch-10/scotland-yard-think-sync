@@ -1,0 +1,27 @@
+body {
+  margin: 0px;
+  border: 0px;
+  display: flex;
+  justify-content: center;
+}
+
+#outer {
+  width: 20vw;
+  height: 40vh;
+  border: 1px solid black;
+  margin: 30vh;
+  background-color: #a6b28c;
+  border-color: #0c2f25;
+  gap: 2rem;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+}
+
+#roomId {
+  /* border: 1px solid black; */
+  width: 2vw;
+  height: 4vh;
+}
