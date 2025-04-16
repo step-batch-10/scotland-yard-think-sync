@@ -4,8 +4,7 @@ import { createAuthApp } from "./authonticated.ts";
 
 export const createApp = (): Hono => {
   const app = new Hono();
-  const authApp = createAuthApp();
-  app.route("/setup", authApp);
+  app.route("/setup", createAuthApp());
   app.get(serveStatic({ root: "./public" }));
 
   return app;
