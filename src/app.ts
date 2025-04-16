@@ -20,7 +20,8 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   // app.use(ensureAthenticated);
   app.get("/login", serveStatic({ path: "./public/html/login.html" }));
   app.route("/setup", createAuthApp());
-  app.get(serveStatic({ root: "./public" }));
+
+  app.get("*", serveStatic({ root: "public" }));
 
   app.post("/login", loginHandler);
 
