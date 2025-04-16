@@ -2,8 +2,11 @@ import { Hono, HonoRequest } from "hono";
 import { getCookie } from "hono/cookie";
 import { Bindings, GameContext, GameHandler } from "./models/types.ts";
 
-export const extractPlayerId = (context: GameContext): string =>
-  getCookie(context, "playerId") || "";
+export const extractPlayerId = (context: GameContext): string => {
+  const playerId = getCookie(context, "playerId");
+
+  return String(playerId);
+};
 
 const handleCreateRoom = (context: GameContext) => {
   const playerId = extractPlayerId(context);
