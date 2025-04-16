@@ -1,7 +1,7 @@
-import { getCookie } from "hono/cookie";
+import { getCookie, setCookie } from "hono/cookie";
 import { MiddlewareHandler } from "hono/types";
 import { HonoRequest } from "hono";
-import { Handler } from "hono/types";
+import { GameHandler } from "../models/types.ts";
 
 export const ensureAthenticated: MiddlewareHandler = async (context, next) => {
   const cookie = getCookie(context, "playerId");
@@ -19,9 +19,10 @@ export const extractPlayer = async (request: HonoRequest): Promise<string> => {
   return String(plyerName);
 };
 
-export const loginHandler: Handler = async (context) => {
+export const loginHandler: GameHandler = async (context) => {
   const playerName = await extractPlayer(context.req);
-  console.log(playerName);
+  context.env.playerRegistry.createPlayer(playerName);
+  setCookie(context, "playerId", playerName);
 
-  return context;
+  return context.redirect("/", 303);
 };

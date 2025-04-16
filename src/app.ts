@@ -1,14 +1,23 @@
 import { logger } from "hono/logger";
-import { Hono } from "hono";
+import { Hono, MiddlewareHandler } from "hono";
 import { serveStatic } from "hono/deno";
 import { createAuthApp } from "./authonticated.ts";
-import { ensureAthenticated, loginHandler } from "./handlers/auth-handler.ts";
+import { loginHandler } from "./handlers/auth-handler.ts";
+import { Bindings } from "./models/types.ts";
 
-export const createApp = (): Hono => {
-  const app = new Hono();
+const inject = (bindings: Bindings): MiddlewareHandler => {
+  return async (context, next) => {
+    context.env = bindings;
+    await next();
+  };
+};
+
+export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
+  const app = new Hono<{ Bindings: Bindings }>();
 
   app.use(logger());
-  app.use(ensureAthenticated);
+  app.use(inject(bindings));
+  // app.use(ensureAthenticated);
   app.get("/login", serveStatic({ path: "./public/html/login.html" }));
   app.route("/setup", createAuthApp());
   app.get(serveStatic({ root: "./public" }));
