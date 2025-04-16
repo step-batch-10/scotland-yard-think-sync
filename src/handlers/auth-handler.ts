@@ -5,13 +5,12 @@ import { GameContext, GameHandler } from "../models/types.ts";
 
 export const ensureAuthenticated: MiddlewareHandler = async (
   context: GameContext,
-  next
+  next,
 ) => {
   const playerId = getCookie(context, "playerId") || "";
   const playerRegistry = context.env.playerRegistry;
 
   if (playerRegistry.isPlayerRegistered(playerId)) {
-
     return await next();
   }
 

@@ -15,38 +15,63 @@ describe("Rooms", () => {
     assertEquals(roomId.length, 6);
   });
 
-  it("type should be string", () => {
-    assertEquals(typeof roomId, "string");
+  describe("getPlayers", () => {
+    it("should true if particular is there", () => {
+      assert(rooms.getPlayers(roomId)?.has("a"));
+    });
+
+    it("should add player", () => {
+      rooms.addPlayer("b", roomId);
+      assert(rooms.getPlayers(roomId)?.has("b"));
+    });
   });
 
-  it("should true if particular is there", () => {
-    assert(rooms.getPlayers(roomId)?.has("a"));
+  describe("isRoomFull", () => {
+    it("should return false when room is not full", () => {
+      assertFalse(rooms.isRoomFull(roomId));
+    });
+
+    it("should return true when room is full", () => {
+      rooms.addPlayer("b", roomId);
+      rooms.addPlayer("c", roomId);
+      rooms.addPlayer("d", roomId);
+      rooms.addPlayer("e", roomId);
+      rooms.addPlayer("f", roomId);
+
+      assert(rooms.isRoomFull(roomId));
+    });
   });
 
-  it("should add player", () => {
-    rooms.addPlayer("b", roomId);
-    assert(rooms.getPlayers(roomId)?.has("b"));
+  describe("hasRoom", () => {
+    it("should give true if room is there", () => {
+      assert(rooms.hasRoom(roomId));
+    });
+
+    it("should give false if room is not there", () => {
+      assertFalse(rooms.hasRoom("9808"));
+    });
   });
 
-  it("should return false when room is not full", () => {
-    assertFalse(rooms.isRoomFull(roomId));
-  });
+  describe("removePlayer", () => {
+    it("should remove player from room if player present", () => {
+      rooms.addPlayer("test1", roomId);
+      rooms.addPlayer("test2", roomId);
 
-  it("should return true when room is full", () => {
-    rooms.addPlayer("b", roomId);
-    rooms.addPlayer("c", roomId);
-    rooms.addPlayer("d", roomId);
-    rooms.addPlayer("e", roomId);
-    rooms.addPlayer("f", roomId);
+      rooms.removePlayer("test1", roomId);
 
-    assert(rooms.isRoomFull(roomId));
-  });
+      const roomMembers = rooms.getPlayers(roomId) || [];
 
-  it("should give true if room is there", () => {
-    assert(rooms.hasRoom(roomId));
-  });
+      const expected = ["a", "test2"];
+      assertEquals([...roomMembers], expected);
+    });
 
-  it("should give false if room is not there", () => {
-    assertFalse(rooms.hasRoom("9808"));
+    it("should remove player and lobby from room if player present and host left", () => {
+      rooms.removePlayer("a", roomId);
+
+      const roomMembers = rooms.getPlayers(roomId) || [];
+
+      assertEquals([...roomMembers], []);
+      assertFalse(rooms.hasRoom(roomId));
+    });
   });
 });

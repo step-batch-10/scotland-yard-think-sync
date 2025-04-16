@@ -47,6 +47,7 @@ export class Rooms {
   removePlayer(playerName: string, roomId: string) {
     const room = this.lobbies.get(roomId);
     room?.delete(playerName);
+
     if (room?.size === 0) {
       this.lobbies.delete(roomId);
     }
