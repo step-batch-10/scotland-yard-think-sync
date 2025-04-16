@@ -1,0 +1,7 @@
+{
+  "lines": 90,
+  "branches": 85,
+  "functions": 95,
+  "perFile": true,
+  "exclude": "src/*.ts"
+}

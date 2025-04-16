@@ -26,14 +26,14 @@
     "semiColons": true
   },
   "tasks": {
-    "remove-coverage": {
-      "description": "Removes coverage folder",
-      "command": "rm -rf coverage"
-    },
     "test": {
       "description": "Runs test with coverage",
-      "command": "deno test -A --coverage",
-      "dependencies": ["remove-coverage"]
+      "command": "deno test --coverage --clean"
+    },
+    "coverage": {
+      "description": "coverage checker",
+      "command": "deno run -A jsr:@ashishkujoy/deno-coverage-checker",
+      "dependencies": ["test"]
     },
     "start": {
       "command": "deno run -A --watch main.ts",
