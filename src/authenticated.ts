@@ -16,7 +16,7 @@ const handleCreateRoom = (context: GameContext) => {
   return context.json({ success: true });
 };
 
-const exatractRoomId = async (request: HonoRequest): Promise<string> => {
+const extractRoomId = async (request: HonoRequest): Promise<string> => {
   const fd = await request.formData();
   const roomId = fd.get("roomId") || "";
 
@@ -25,7 +25,7 @@ const exatractRoomId = async (request: HonoRequest): Promise<string> => {
 
 const handleJoinRoom: GameHandler = async (context: GameContext) => {
   const playerId = extractPlayerId(context);
-  const roomId = await exatractRoomId(context.req);
+  const roomId = await extractRoomId(context.req);
 
   if (!context.env.rooms.hasRoom(roomId)) {
     return context.redirect("/html/join.html", 303);
@@ -44,21 +44,31 @@ const serveRoomId = (context: GameContext) => {
   return context.json({ roomId: player.matchID });
 };
 
-const servePlayerList = (ctx: GameContext) => {
-  const playerId = getCookie(ctx, "playerId") || "";
-  const player = ctx.env.playerRegistry.getPlayer(playerId);
-  const players = ctx.env.rooms.getPlayers(player.matchID || "");
-  const isRoomFull = ctx.env.rooms.isRoomFull(player.matchID || "");
-  if (!players) return ctx.json({ success: false }, 400);
+const servePlayerList = (context: GameContext) => {
+  const playerId = extractPlayerId(context);
+  const player = context.env.playerRegistry.getPlayer(playerId);
+  const players = context.env.rooms.getPlayers(player.matchID || "");
+  const isRoomFull = context.env.rooms.isRoomFull(player.matchID || "");
+  if (!players) return context.json({ success: false }, 400);
 
-  return ctx.json({ isRoomFull, players: [...players] });
+  return context.json({ isRoomFull, players: [...players] });
+};
+
+const removePlayer = (context: GameContext) => {
+  const playerId = extractPlayerId(context);
+  const player = context.env.playerRegistry.getPlayer(playerId);
+  context.env.rooms.removePlayer(playerId, player.matchID || "");
+
+  return context.json({ success: true });
 };
 
 export const createAuthApp = (): Hono<{ Bindings: Bindings }> => {
   const app = new Hono<{ Bindings: Bindings }>();
 
-  app.get("/setup/create-room", handleCreateRoom);
-  app.get("/setup/room-id", serveRoomId);
-  app.get("/setup/player-list", servePlayerList);
+  app.get("/create-room", handleCreateRoom);
+  app.get("/room-id", serveRoomId);
+  app.get("/player-list", servePlayerList);
+  app.post("/join-room", handleJoinRoom);
+  app.get("/remove-player", removePlayer);
   return app;
 };

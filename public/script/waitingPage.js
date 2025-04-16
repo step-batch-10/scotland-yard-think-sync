@@ -37,11 +37,21 @@ const renderPlayerList = () => {
   }, 1000);
 };
 
+const removePlayer = async () => {
+  const response = await fetch("/setup/remove-player");
+
+  if (response.ok) {
+    globalThis.location = "/lobby";
+  }
+};
+
 const main = async () => {
   await renderId();
+  renderPlayerList();
   const copyId = document.querySelector("#copy");
   copyId.addEventListener("click", copyText);
-  renderPlayerList();
+  const leave = document.getElementById("leave");
+  leave.addEventListener("click", removePlayer);
 };
 
 globalThis.onload = main;
