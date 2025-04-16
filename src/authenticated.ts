@@ -47,9 +47,12 @@ const serveRoomId = (context: GameContext) => {
 const servePlayerList = (context: GameContext) => {
   const playerId = extractPlayerId(context);
   const player = context.env.playerRegistry.getPlayerStats(playerId);
-  const players = context.env.rooms.getPlayers(player.matchID || "");
-  const isRoomFull = context.env.rooms.isRoomFull(player.matchID || "");
+  const matchID = player.matchID || "";
+
+  const players = context.env.rooms.getPlayers(matchID);
   if (!players) return context.json({ success: false }, 400);
+
+  const isRoomFull = context.env.rooms.isRoomFull(matchID);
 
   return context.json({ isRoomFull, players: [...players] });
 };
@@ -70,5 +73,6 @@ export const createAuthApp = (): Hono<{ Bindings: Bindings }> => {
   app.get("/player-list", servePlayerList);
   app.post("/join-room", handleJoinRoom);
   app.get("/remove-player", removePlayer);
+
   return app;
 };
