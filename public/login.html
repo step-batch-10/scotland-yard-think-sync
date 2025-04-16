@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Login</title>
+    <link rel="stylesheet" href="/login.css" />
+  </head>
+  <body>
+    <div class="decoration">
+      <form action="/login" method="post">
+        <div class="playerDetails">
+          <label for="name"> Enter Player Name </label>
+          <input
+            type="text"
+            name="playerName"
+            id="playerName"
+            placeholder="Player Name"
+            minlength="3"
+            maxlength="20"
+            required
+          />
+          <button type="submit" id="submit">Login</button>
+        </div>
+      </form>
+    </div>
+  </body>
+</html>
