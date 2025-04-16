@@ -30,5 +30,5 @@ export const loginHandler: GameHandler = async (context) => {
   context.env.playerRegistry.createPlayer(playerName);
   setCookie(context, "playerId", playerName);
 
-  return context.redirect("/", 303);
+  return context.redirect("/lobby", 303);
 };

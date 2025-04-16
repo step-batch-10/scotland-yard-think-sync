@@ -20,6 +20,6 @@ describe("login handler", () => {
     const res = await app.request("/login", { method: "POST", body: formData });
 
     assertEquals(res.status, 303);
-    assertEquals(res.headers.get("location"), "/");
+    assertEquals(res.headers.get("location"), "/lobby");
   });
 });
