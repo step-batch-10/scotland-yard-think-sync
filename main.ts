@@ -1,7 +1,10 @@
-import { Hono } from "hono";
-import { serveStatic } from "hono/deno";
+import { createApp } from "./src/app.ts";
 
-const app = new Hono();
-app.get(serveStatic({ root: "./public" }));
+const main = () => {
+  const port = 8000;
+  const app = createApp();
 
-Deno.serve(app.fetch);
+  Deno.serve({ port }, app.fetch);
+};
+
+main();
