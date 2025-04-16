@@ -1,12 +1,12 @@
 export enum Detective {
-  Red = 'Red',
-  Blue = 'Blue',
-  Green = 'Green',
-  Yellow = 'Yellow',
-  Purple = 'Purple',
+  Red = "Red",
+  Blue = "Blue",
+  Green = "Green",
+  Yellow = "Yellow",
+  Purple = "Purple",
 }
 
-type Role = 'Mr.X' | Detective;
+type Role = "Mr.X" | Detective;
 export type Roles = Record<string, Role>;
 
 export class ScotlandYard {
@@ -18,7 +18,7 @@ export class ScotlandYard {
     this.players = [...players];
     this.assignedRoles = {};
     this.roles = [
-      'Mr.X',
+      "Mr.X",
       Detective.Red,
       Detective.Blue,
       Detective.Green,
