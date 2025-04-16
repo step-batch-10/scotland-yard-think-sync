@@ -44,12 +44,21 @@ const serveRoomId = (context: GameContext) => {
   return context.json({ roomId: player.matchID });
 };
 
+const servePlayerList = (ctx: GameContext) => {
+  const playerId = getCookie(ctx, "playerId") || "";
+  const player = ctx.env.playerRegistry.getPlayer(playerId);
+  const players = ctx.env.rooms.getPlayers(player.matchID || "");
+  const isRoomFull = ctx.env.rooms.isRoomFull(player.matchID || "");
+  if (!players) return ctx.json({ success: false }, 400);
+
+  return ctx.json({ isRoomFull, players: [...players] });
+};
+
 export const createAuthApp = (): Hono<{ Bindings: Bindings }> => {
   const app = new Hono<{ Bindings: Bindings }>();
 
-  app.get("/create-room", handleCreateRoom);
-  app.get("/room-id", serveRoomId);
-  app.post("/join-room", handleJoinRoom);
-
+  app.get("/setup/create-room", handleCreateRoom);
+  app.get("/setup/room-id", serveRoomId);
+  app.get("/setup/player-list", servePlayerList);
   return app;
 };
