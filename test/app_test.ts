@@ -29,9 +29,10 @@ describe("ensure Authentication", () => {
         cookie: "playerId=1",
       },
     });
+
     // req.headers.set("Cookie", "playerId:1");
     const res = await app.request(req);
-    res.text();
+    await res.text();
 
     assertEquals(res.status, 200);
   });

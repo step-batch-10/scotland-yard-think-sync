@@ -28,7 +28,7 @@
   "tasks": {
     "test": {
       "description": "Runs test with coverage",
-      "command": "deno test --coverage --clean"
+      "command": "deno test -A --coverage --clean"
     },
     "coverage": {
       "description": "coverage checker",
