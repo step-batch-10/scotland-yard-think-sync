@@ -4,7 +4,6 @@ const hostGame = async () => {
   if (response.ok) {
     globalThis.location = "/html/waiting.html";
   }
-
 };
 
 const joinGame = () => {
