@@ -30,7 +30,6 @@ describe("ensure Authentication", () => {
       },
     });
 
-    // req.headers.set("Cookie", "playerId:1");
     const res = await app.request(req);
     await res.text();
 
