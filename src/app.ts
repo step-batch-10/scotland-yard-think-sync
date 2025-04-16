@@ -26,7 +26,7 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   app.use(ensureAuthenticated);
   app.get("/lobby", serveStatic({ path: "./public/html/lobby.html" }));
 
-  app.route("/", createGameSetup());
+  app.route("/setup", createGameSetup());
 
   app.get("*", serveStatic({ root: "public" }));
 
