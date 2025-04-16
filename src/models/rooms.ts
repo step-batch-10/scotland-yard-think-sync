@@ -39,4 +39,8 @@ export class Rooms {
   isRoomFull(roomId: string) {
     return this.lobbies.get(roomId)?.size === 6;
   }
+
+  hasRoom(roomId: string) {
+    return this.lobbies.has(roomId);
+  }
 }

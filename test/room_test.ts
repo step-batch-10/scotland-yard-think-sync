@@ -41,4 +41,12 @@ describe("Rooms", () => {
 
     assert(rooms.isRoomFull(roomId));
   });
+
+  it("should give true if room is there", () => {
+    assert(rooms.hasRoom(roomId));
+  });
+
+  it("should give false if room is not there", () => {
+    assertFalse(rooms.hasRoom("9808"));
+  });
 });
