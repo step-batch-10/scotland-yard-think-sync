@@ -3,7 +3,7 @@ import { MiddlewareHandler } from "hono/types";
 import { HonoRequest } from "hono";
 import { GameContext, GameHandler } from "../models/types.ts";
 
-export const ensureAthenticated: MiddlewareHandler = async (
+export const ensureAuthenticated: MiddlewareHandler = async (
   context: GameContext,
   next
 ) => {
@@ -11,6 +11,7 @@ export const ensureAthenticated: MiddlewareHandler = async (
   const playerRegistry = context.env.playerRegistry;
 
   if (playerRegistry.isPlayerRegistered(playerId)) {
+
     return await next();
   }
 
