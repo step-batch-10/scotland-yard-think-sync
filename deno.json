@@ -32,7 +32,7 @@
     },
     "test": {
       "description": "Runs test with coverage",
-      "command": "deno test --coverage",
+      "command": "deno test -A --coverage",
       "dependencies": ["remove-coverage"]
     },
     "start": {

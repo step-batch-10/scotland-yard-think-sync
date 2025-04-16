@@ -16,6 +16,7 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   const app = new Hono<{ Bindings: Bindings }>();
 
   app.use(logger());
+
   app.use(inject(bindings));
 
   app.post("/login", loginHandler);
