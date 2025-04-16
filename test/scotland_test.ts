@@ -2,6 +2,10 @@ import { describe, it } from "testing";
 import { assertEquals } from "assert";
 import { Role, Roles, ScotlandYard } from "../src/models/scotland.ts";
 
+const mapToObject = (map: Map<string, string>) => {
+  return Object.fromEntries([...map.entries()]);
+};
+
 describe("test playerNames", () => {
   it("should provide playerNames", () => {
     const players = new Set(["a", "b", "c", "d", "e", "d"]);
@@ -25,27 +29,49 @@ describe("test assignRole", () => {
 
     sy.assignRole(roles);
     assertEquals(sy.getPlayers(), [...players]);
+
     const assignedRoles = sy.getRoles();
-    assertEquals(Object.fromEntries([...assignedRoles.entries()]), roles);
+    assertEquals(mapToObject(assignedRoles), roles);
   });
 
   it("should assign role partially", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     const roles: Roles = { MrX: "b", Blue: "a" };
+
     sy.assignRole(roles);
-    assertEquals(sy.getPlayers(), [...players]);
-    assertEquals(sy.getRoles().get("MrX"), "b");
-    assertEquals(sy.getRoles().get("Blue"), "a");
+    const assignedRoles = sy.getRoles();
+
+    const expected = {
+      MrX: "b",
+      Blue: "a",
+      Red: "b",
+      Green: "d",
+      Yellow: "e",
+      Purple: "f",
+    };
+
+    assertEquals(mapToObject(assignedRoles), expected);
   });
 });
 
-describe("test ticket distribution", () => {
+describe("ticket distribution", () => {
   it("should provide detective with proper tickets", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     const roles: Roles = { [Role.Red]: "a" };
     sy.assignRole(roles);
     sy.distributeTickets();
+    const expected = {
+      Red: "a",
+      MrX: "a",
+      Blue: "c",
+      Green: "d",
+      Yellow: "e",
+      Purple: "f",
+    };
+
+    const assignedRoles = sy.getRoles();
+    assertEquals(mapToObject(assignedRoles), expected);
   });
 });

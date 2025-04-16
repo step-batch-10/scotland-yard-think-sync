@@ -39,7 +39,7 @@ const handleJoinRoom: GameHandler = async (context: GameContext) => {
 
 const serveRoomId = (context: GameContext) => {
   const playerId = extractPlayerId(context);
-  const player = context.env.playerRegistry.getPlayer(playerId);
+  const player = context.env.playerRegistry.getPlayerStats(playerId);
 
   return context.json({ roomId: player.matchID });
 };

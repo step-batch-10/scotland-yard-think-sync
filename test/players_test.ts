@@ -11,7 +11,7 @@ describe("players model", () => {
       players.createPlayer(playerName);
       const expected = {};
 
-      assertEquals(players.getPlayer(playerName), expected);
+      assertEquals(players.getPlayerStats(playerName), expected);
     });
   });
 
@@ -65,7 +65,7 @@ describe("players model", () => {
         status: "waiting",
       };
 
-      assertEquals(players.getPlayer(playerName), expected);
+      assertEquals(players.getPlayerStats(playerName), expected);
     });
 
     it("should return empty object if player is not registared", () => {
@@ -73,7 +73,7 @@ describe("players model", () => {
       const players = new PlayerRegistry();
       const expected: PlayerStats = {};
 
-      assertEquals(players.getPlayer(playerName), expected);
+      assertEquals(players.getPlayerStats(playerName), expected);
     });
   });
 
@@ -89,7 +89,7 @@ describe("players model", () => {
 
       const expected: PlayerStats = {};
 
-      assertEquals(players.getPlayer(playerName), expected);
+      assertEquals(players.getPlayerStats(playerName), expected);
     });
 
     it("should not reset if player is not registared", () => {

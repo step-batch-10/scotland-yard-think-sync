@@ -10,7 +10,7 @@ export class PlayerRegistry {
     this.players.set(playerName, {});
   }
 
-  getPlayer(playerName: string): PlayerStats {
+  getPlayerStats(playerName: string): PlayerStats {
     return this.players.get(playerName) || {};
   }
 
@@ -23,7 +23,7 @@ export class PlayerRegistry {
   }
 
   assignRoom(playerName: string, roomID: string) {
-    const player = this.getPlayer(playerName);
+    const player = this.getPlayerStats(playerName);
     player.matchID = roomID;
     player.status = "waiting";
   }

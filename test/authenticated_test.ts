@@ -3,7 +3,27 @@ import { describe, it } from "testing";
 import { assert, assertEquals } from "jsr:@std/assert";
 import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
-import { Bindings } from "../src/models/types.ts";
+import { App, Bindings } from "../src/models/types.ts";
+
+const createAppWithHostedRoom = (
+  playerName: string
+): {
+  app: App;
+  roomId: string;
+} => {
+  const bindings: Bindings = {
+    playerRegistry: new PlayerRegistry(),
+    rooms: new Rooms(),
+  };
+
+  bindings.playerRegistry.createPlayer(playerName);
+  const roomId = bindings.rooms.addHost(playerName);
+  bindings.playerRegistry.assignRoom(playerName, roomId);
+
+  const app = createApp(bindings);
+
+  return { app, roomId };
+};
 
 describe("create room", () => {
   it("should get success if room created", async () => {
@@ -55,17 +75,8 @@ describe("serveRoomId", () => {
 
 describe("handleJoin ", () => {
   it("should redirect to waiting the user if room id is valid", async () => {
-    const bindings: Bindings = {
-      playerRegistry: new PlayerRegistry(),
-      rooms: new Rooms(),
-    };
-
-    const app = createApp(bindings);
-
-    const playerName = "test";
-    bindings.playerRegistry.createPlayer(playerName);
-    const roomId = bindings.rooms.addHost(playerName);
-    bindings.playerRegistry.assignRoom(playerName, roomId);
+    const playerName = "Gangadhar";
+    const { app, roomId } = createAppWithHostedRoom(playerName);
 
     const fd = new FormData();
     fd.set("roomId", roomId);
@@ -81,15 +92,8 @@ describe("handleJoin ", () => {
   });
 
   it("should redirect to joining page the user if room id is invalid", async () => {
-    const bindings: Bindings = {
-      playerRegistry: new PlayerRegistry(),
-      rooms: new Rooms(),
-    };
-
-    const app = createApp(bindings);
-
-    const playerName = "test";
-    bindings.playerRegistry.createPlayer(playerName);
+    const playerName = "Ramulal";
+    const { app } = createAppWithHostedRoom(playerName);
 
     const fd = new FormData();
     fd.set("roomId", "something");
