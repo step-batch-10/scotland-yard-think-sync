@@ -31,6 +31,10 @@ const handleJoinRoom: GameHandler = async (context: GameContext) => {
     return context.json({ isJoined: false, message: "Invalid roomId" }, 400);
   }
 
+  if (context.env.rooms.isRoomFull(roomId)) {
+    return context.json({ isJoined: false, message: "Room is full" }, 400);
+  }
+
   context.env.playerRegistry.assignRoom(playerId, roomId);
   context.env.rooms.addPlayer(playerId, roomId);
 

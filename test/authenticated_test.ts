@@ -6,7 +6,11 @@ import { Rooms } from "../src/models/rooms.ts";
 import { App, Bindings } from "../src/models/types.ts";
 
 interface TestApp {
-  (host: string, ...players: string[]): { app: App; roomId: string };
+  (host: string, ...players: string[]): {
+    app: App;
+    roomId: string;
+    bindings: Bindings;
+  };
 }
 
 const createAppWithPlayers = (...players: string[]): App => {
@@ -39,7 +43,7 @@ const createAppWithHostedRoom: TestApp = (host, ...players) => {
 
   const app = createApp(bindings);
 
-  return { app, roomId };
+  return { app, roomId, bindings };
 };
 
 describe("create room", () => {
@@ -140,6 +144,30 @@ describe("handleJoin ", () => {
 
     const actual = await response.json();
     const expected = { isJoined: false, message: "Invalid roomId" };
+
+    assertEquals(response.status, 400);
+    assertEquals(actual, expected);
+  });
+
+  it("should return false and room full messsage if room is full", async () => {
+    const allPlayers = ["test1", "test2", "test3", "test4", "test5", "test6"];
+    const [host, ...players] = allPlayers;
+    const { app, roomId, bindings } = createAppWithHostedRoom(host, ...players);
+
+    const playerName = "faketTest";
+    bindings.playerRegistry.createPlayer(playerName);
+
+    const fd = new FormData();
+    fd.set("roomId", roomId);
+
+    const response = await app.request("/setup/join-room", {
+      headers: { cookie: `playerId=${playerName}` },
+      body: fd,
+      method: "POST",
+    });
+
+    const actual = await response.json();
+    const expected = { isJoined: false, message: "Room is full" };
 
     assertEquals(response.status, 400);
     assertEquals(actual, expected);
