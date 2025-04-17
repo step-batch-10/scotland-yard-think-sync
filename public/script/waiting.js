@@ -1,58 +1,70 @@
-const copyText = () => {
-  const copyText = document.getElementById("roomId");
+const POLLING_TIMEOUT = 1000;
+
+const copyRoomID = () => {
+  const copyText = document.querySelector("#roomId");
   navigator.clipboard.writeText(copyText.textContent);
 };
 
-const renderId = async () => {
-  const response = await fetch("/setup/room-id");
-  const { roomId } = await response.json();
+const fetchRoomId = () => fetch("/setup/room-id").then((res) => res.json());
 
-  const roomIdElement = document.getElementById("roomId");
+const renderId = async () => {
+  const roomIdElement = document.querySelector("#roomId");
+  const { roomId } = await fetchRoomId();
+
   roomIdElement.textContent = roomId;
 };
 
-const addPlayerNames = (names) => {
-  const list = document.querySelector("tbody");
-  const rows = names.map((name) => {
-    const tr = document.createElement("tr");
-    const td = document.createElement("td");
-    td.textContent = name;
-    tr.appendChild(td);
+const playerRow = (name) => {
+  const trElement = document.createElement("tr");
+  const tdElement = document.createElement("td");
 
-    return tr;
-  });
+  tdElement.textContent = name;
+  trElement.appendChild(tdElement);
+
+  return trElement;
+};
+
+const renderPlayers = (names) => {
+  const list = document.querySelector("tbody");
+  const rows = names.map(playerRow);
 
   list.replaceChildren(...rows);
 };
 
+const redirectTo = (location) => (globalThis.location = location);
+
+const fetchPlayers = () =>
+  fetch("/setup/player-list").then((res) => res.json());
+
 const renderPlayerList = () => {
   const intervalId = setInterval(async () => {
-    const response = await fetch("/setup/player-list");
-    const jsonData = await response.json();
-    if (jsonData.isRoomFull) {
-      clearInterval(intervalId);
+    const { players, isRoomFull } = await fetchPlayers();
+    renderPlayers(players);
 
-      globalThis.location = "/html/game.html";
+    if (isRoomFull) {
+      clearInterval(intervalId);
+      redirectTo("/html/game.html");
     }
-    addPlayerNames(jsonData.players);
-  }, 1000);
+  }, POLLING_TIMEOUT);
 };
 
 const removePlayer = async () => {
   const response = await fetch("/setup/remove-player");
+  if (response.ok) return redirectTo("/lobby");
+};
 
-  if (response.ok) {
-    globalThis.location = "/lobby";
-  }
+const addListeners = () => {
+  const copyId = document.querySelector("#copy");
+  const leave = document.querySelector("#leave");
+
+  copyId.addEventListener("click", copyRoomID);
+  leave.addEventListener("click", removePlayer);
 };
 
 const main = async () => {
   await renderId();
   renderPlayerList();
-  const copyId = document.querySelector("#copy");
-  copyId.addEventListener("click", copyText);
-  const leave = document.getElementById("leave");
-  leave.addEventListener("click", removePlayer);
+  addListeners();
 };
 
 globalThis.onload = main;
