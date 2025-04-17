@@ -1,11 +1,12 @@
 import { getCookie, setCookie } from "hono/cookie";
 import { MiddlewareHandler } from "hono/types";
 import { HonoRequest } from "hono";
-import { GameContext, GameHandler } from "../models/types.ts";
+import { GameContext, GameHandler, GameMiddleWare } from "../models/types.ts";
+import { extractPlayerId } from "../game_setup.ts";
 
 export const ensureAuthenticated: MiddlewareHandler = async (
   context: GameContext,
-  next,
+  next
 ) => {
   const playerId = getCookie(context, "playerId") || "";
   const playerRegistry = context.env.playerRegistry;
@@ -30,4 +31,15 @@ export const loginHandler: GameHandler = async (context) => {
   setCookie(context, "playerId", playerName);
 
   return context.redirect("/lobby", 303);
+};
+
+export const skipIfAuthenticated: GameMiddleWare = async (context, next) => {
+  const playerId = extractPlayerId(context);
+  const registry = context.env.playerRegistry;
+
+  if (registry.isPlayerRegistered(playerId)) {
+    return context.redirect("/lobby", 303);
+  }
+
+  await next();
 };

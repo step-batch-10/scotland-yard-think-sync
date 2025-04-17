@@ -2,7 +2,11 @@ import { logger } from "hono/logger";
 import { Hono, MiddlewareHandler } from "hono";
 import { serveStatic } from "hono/deno";
 import { createGameSetup } from "./game_setup.ts";
-import { ensureAuthenticated, loginHandler } from "./handlers/auth-handler.ts";
+import {
+  ensureAuthenticated,
+  skipIfAuthenticated,
+  loginHandler,
+} from "./handlers/auth-handler.ts";
 import { Bindings } from "./models/types.ts";
 import { createGame } from "./game.ts";
 
@@ -20,8 +24,10 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
 
   app.use(inject(bindings));
 
+  app.use("/login", skipIfAuthenticated);
   app.post("/login", loginHandler);
   app.get("/login", serveStatic({ path: "./public/html/login.html" }));
+
   app.get("/css/login.css", serveStatic({ root: "./public" }));
 
   app.use(ensureAuthenticated);

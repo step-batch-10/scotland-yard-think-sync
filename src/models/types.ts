@@ -1,6 +1,6 @@
 import { Context, Hono } from "hono";
 import { PlayerRegistry } from "./players.ts";
-import { Handler } from "hono/types";
+import { Handler, MiddlewareHandler } from "hono/types";
 import { Rooms } from "./rooms.ts";
 import { Match } from "./match.ts";
 
@@ -17,4 +17,6 @@ export type Bindings = {
 
 export type GameContext = Context<{ Bindings: Bindings }>;
 export type GameHandler = Handler<{ Bindings: Bindings }>;
+export type GameMiddleWare = MiddlewareHandler<{ Bindings: Bindings }>;
+
 export type App = Hono<{ Bindings: Bindings }>;
