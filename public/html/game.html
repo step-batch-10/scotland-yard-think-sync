@@ -4,6 +4,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/game.css" />
+    <script src="/script/game.js"></script>
     <title>Document</title>
   </head>
   <body>
@@ -1168,5 +1169,25 @@
         </g>
       </svg>
     </div>
+    <div id="pop-up"></div>
   </body>
+  <template id="role-row">
+    <tr>
+      <td></td>
+      <td></td>
+    </tr>
+  </template>
+  <template id="roles-table">
+    <div class="pop-up">
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>Player</th>
+          </tr>
+        </thead>
+        <tbody></tbody>
+      </table>
+    </div>
+  </template>
 </html>

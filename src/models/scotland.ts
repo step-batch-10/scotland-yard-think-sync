@@ -70,7 +70,7 @@ export class ScotlandYard {
     return this.assignedRoles;
   }
 
-  static TicketsOfDetective(): Record<Ticket, number> {
+  static ticketsOfDetective(): Record<Ticket, number> {
     return {
       [Ticket.Green]: 8,
       [Ticket.Yellow]: 10,
@@ -80,7 +80,7 @@ export class ScotlandYard {
     };
   }
 
-  static TicketsOfMrX(): Record<Ticket, number> {
+  static ticketsOfMrX(): Record<Ticket, number> {
     return {
       [Ticket.Green]: 3,
       [Ticket.Yellow]: 4,
@@ -93,9 +93,10 @@ export class ScotlandYard {
   distributeTickets(): void {
     for (const index in this.players) {
       const role = this.roles[index];
-      const tickets = role === Role.MrX
-        ? ScotlandYard.TicketsOfMrX()
-        : ScotlandYard.TicketsOfDetective();
+      const tickets =
+        role === Role.MrX
+          ? ScotlandYard.ticketsOfMrX()
+          : ScotlandYard.ticketsOfDetective();
 
       this.tickets.set(role, tickets);
     }

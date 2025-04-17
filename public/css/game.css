@@ -1,8 +1,13 @@
-.bg-image {
-  background-image: url("/assets/images/game-map.svg");
-  width: 100vw;
-  height: 100vh;
-  background-repeat: no-repeat;
-  background-size: contain;
-  background-position: center;
+#pop-up {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-100%);
+  background-color: rgba(0, 255, 255, 0.6);
+  padding: 10px 40px;
+}
+
+td,
+th {
+  padding: 8px;
 }
