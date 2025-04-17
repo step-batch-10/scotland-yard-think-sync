@@ -15,23 +15,20 @@ const renderId = async () => {
 };
 
 const playerRow = (name) => {
-  const trElement = document.createElement("tr");
-  const tdElement = document.createElement("td");
+  const listElement = document.createElement("li");
+  listElement.textContent = name;
 
-  tdElement.textContent = name;
-  trElement.appendChild(tdElement);
-
-  return trElement;
+  return listElement;
 };
 
 const renderPlayers = (names) => {
-  const list = document.querySelector("tbody");
+  const list = document.querySelector("ol");
   const rows = names.map(playerRow);
 
   list.replaceChildren(...rows);
 };
 
-const redirectTo = (location) => (globalThis.location = location);
+export const redirectTo = (location) => (globalThis.location = location);
 
 const fetchPlayers = () =>
   fetch("/setup/player-list").then((res) => res.json());

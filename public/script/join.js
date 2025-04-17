@@ -1,6 +1,6 @@
-const alertUser = (msg) => alert(msg);
-const redirectTo = (loc) => (globalThis.location = loc);
+import { redirectTo } from "./waiting.js";
 
+const alertUser = (msg) => alert(msg);
 const handleSubmit = async (event) => {
   event.preventDefault();
 

@@ -4,25 +4,26 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Login</title>
-    <link rel="stylesheet" href="/css/login.css" />
+    <link rel="stylesheet" href="/css/common.css" />
   </head>
   <body>
-    <div class="decoration">
-      <form action="/login" method="post">
-        <div class="playerDetails">
-          <label for="name"> Enter Player Name </label>
+    <main id="root">
+      <div class="decoration">
+        <h2 class="head">Login</h2>
+
+        <form action="/login" method="post">
           <input
             type="text"
             name="playerName"
             id="playerName"
-            placeholder="Player Name"
+            placeholder="Eg: Technoblade"
             minlength="3"
             maxlength="20"
             required
           />
           <button type="submit" id="submit">Login</button>
-        </div>
-      </form>
-    </div>
+        </form>
+      </div>
+    </main>
   </body>
 </html>

@@ -4,26 +4,30 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-    <link rel="stylesheet" href="/css/waiting.css" />
-    <script src="/script/waiting.js"></script>
+
+    <link rel="stylesheet" href="/css/common.css" />
+    <link rel="stylesheet" href="/css/waiting.css" / >
+
+    <script type="module" src="/script/waiting.js"></script>
   </head>
   <body>
-    <div id="outer">
-      <div id="gameId">
-        <p id="roomId-heading">ID <span id="roomId"></span></p>
-        <button id="copy">copy</button>
-        <button id="leave">Leave Room</button>
+    <main id="root">
+      <div id="waiting-section">
+        <h3 id="roomId-heading">ID: <strong id="roomId"></strong></h3>
+
+        <section id="gameId">
+          <button id="copy">Copy</button>
+          <button id="leave">Exit</button>
+        </section>
+
+        <p>Waiting for other players.....</p>
+        <div class="spinner"></div>
+
+        <section class="participants">
+          <h4>Participants</h4>
+          <ol></ol>
+        </section>
       </div>
-      <p>waiting for other players</p>
-      <div class="spinner"></div>
-      <table>
-        <thead>
-          <tr>
-            <th><h1>Participants</h1></th>
-          </tr>
-        </thead>
-        <tbody></tbody>
-      </table>
-    </div>
+    </main>
   </body>
 </html>

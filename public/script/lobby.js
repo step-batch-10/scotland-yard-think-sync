@@ -1,18 +1,19 @@
+import { redirectTo } from "./waiting.js";
+
 const hostGame = async () => {
   const response = await fetch("/setup/create-room");
 
   if (response.ok) {
-    globalThis.location = "/html/waiting.html";
+    redirectTo("/html/waiting.html");
   }
 };
 
-const joinGame = () => {
-  globalThis.location = "/html/join.html";
-};
+const joinGame = () => redirectTo("/html/join.html");
 
 const main = () => {
   const host = document.getElementById("host");
   const join = document.getElementById("join");
+
   host.addEventListener("click", hostGame);
   join.addEventListener("click", joinGame);
 };

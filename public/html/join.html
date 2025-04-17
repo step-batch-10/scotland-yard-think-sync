@@ -3,25 +3,29 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="/css/join.css" />
-    <script src="/script/join.js"></script>
+
+    <link rel="stylesheet" href="/css/common.css" />
+    <script type="module" src="/script/join.js"></script>
     <title>Lobby | Join</title>
   </head>
   <body>
-    <div id="outer">
-      <h1>JOIN</h1>
-      <form action="/setup/join-room" method="POST" id="form">
-        <input
-          type="text"
-          name="roomId"
-          placeholder="Enter roomId"
-          id="roomNum"
-          required
-          minlength="6"
-          maxlength="6"
-        />
-        <button type="submit" id="submit">submit</button>
-      </form>
-    </div>
+    <main id="root">
+      <div class="decoration">
+        <h2 class="head">Join Room</h2>
+
+        <form action="/setup/join-room" method="POST">
+          <input
+            type="text"
+            name="roomId"
+            placeholder="Enter roomId"
+            id="roomId"
+            required
+            minlength="6"
+            maxlength="6"
+          />
+          <button type="submit" id="submit">Join</button>
+        </form>
+      </div>
+    </main>
   </body>
 </html>

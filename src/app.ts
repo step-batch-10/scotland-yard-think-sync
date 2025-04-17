@@ -27,8 +27,7 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   app.use("/login", skipIfAuthenticated);
   app.post("/login", loginHandler);
   app.get("/login", serveStatic({ path: "./public/html/login.html" }));
-
-  app.get("/css/login.css", serveStatic({ root: "./public" }));
+  app.get("/css/*", serveStatic({ root: "./public" }));
 
   app.use(ensureAuthenticated);
   app.get("/lobby", serveStatic({ path: "./public/html/lobby.html" }));
