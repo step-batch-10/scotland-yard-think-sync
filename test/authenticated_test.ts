@@ -14,7 +14,7 @@ interface TestApp {
   };
 }
 
-const createAppWithPlayers = (...players: string[]): App => {
+export const createAppWithPlayers = (...players: string[]): App => {
   const bindings: Bindings = {
     playerRegistry: new PlayerRegistry(),
     rooms: new Rooms(),
@@ -28,7 +28,7 @@ const createAppWithPlayers = (...players: string[]): App => {
   return createApp(bindings);
 };
 
-const createAppWithHostedRoom: TestApp = (host, ...players) => {
+export const createAppWithHostedRoom: TestApp = (host, ...players) => {
   const bindings: Bindings = {
     playerRegistry: new PlayerRegistry(),
     rooms: new Rooms(),

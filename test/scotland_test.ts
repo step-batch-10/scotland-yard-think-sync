@@ -1,10 +1,7 @@
 import { describe, it } from "testing";
 import { assertEquals } from "assert";
 import { Role, Roles, ScotlandYard } from "../src/models/scotland.ts";
-
-const mapToObject = (map: Map<string, string>) => {
-  return Object.fromEntries([...map.entries()]);
-};
+import { mapToObject } from "../src/game.ts";
 
 describe("test playerNames", () => {
   it("should provide playerNames", () => {

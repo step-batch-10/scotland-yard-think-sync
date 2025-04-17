@@ -13,8 +13,11 @@ export class Match {
   }
 
   private defaltMatchFormat(players: string[]) {
+    const game = new ScotlandYard(players);
+    game.assignRole();
+
     return {
-      game: new ScotlandYard(players),
+      game,
       winner: null,
       isGameFinished: false,
     };
