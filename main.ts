@@ -1,4 +1,5 @@
 import { createApp } from "./src/app.ts";
+import { Match } from "./src/models/match.ts";
 import { PlayerRegistry } from "./src/models/players.ts";
 import { Rooms } from "./src/models/rooms.ts";
 import { Bindings } from "./src/models/types.ts";
@@ -9,6 +10,7 @@ const main = () => {
   const bindings: Bindings = {
     playerRegistry: new PlayerRegistry(),
     rooms: new Rooms(),
+    match: new Match(),
   };
 
   const app = createApp(bindings);

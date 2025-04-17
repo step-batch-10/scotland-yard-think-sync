@@ -1,6 +1,7 @@
 import { assert, assertEquals, assertFalse } from "assert";
 import { beforeEach, describe, it } from "testing";
 import { Rooms } from "../src/models/rooms.ts";
+import { Match } from "../src/models/match.ts";
 
 describe("Rooms", () => {
   let rooms: Rooms;
@@ -72,6 +73,42 @@ describe("Rooms", () => {
 
       assertEquals([...roomMembers], []);
       assertFalse(rooms.hasRoom(roomId));
+    });
+  });
+
+  describe("assignGame", () => {
+    it("should assign game if there roomId is valid", () => {
+      rooms.addPlayer("b", roomId);
+      rooms.addPlayer("c", roomId);
+      rooms.addPlayer("d", roomId);
+      rooms.addPlayer("e", roomId);
+      rooms.addPlayer("f", roomId);
+
+      const match = new Match();
+
+      assert(rooms.assignGame(roomId, match));
+      assert(match.hasMatch(roomId));
+    });
+
+    it("should not assign game if there roomId is invalid", () => {
+      const match = new Match();
+
+      assertFalse(rooms.assignGame("123456", match));
+      assertFalse(match.hasMatch("123456"));
+    });
+
+    it("should not assign game if there game is already assigned", () => {
+      rooms.addPlayer("b", roomId);
+      rooms.addPlayer("c", roomId);
+      rooms.addPlayer("d", roomId);
+      rooms.addPlayer("e", roomId);
+      rooms.addPlayer("f", roomId);
+
+      const match = new Match();
+
+      assert(rooms.assignGame(roomId, match));
+      assert(match.hasMatch(roomId));
+      assertFalse(rooms.assignGame(roomId, match));
     });
   });
 });

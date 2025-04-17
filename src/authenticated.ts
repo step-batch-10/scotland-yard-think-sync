@@ -62,6 +62,10 @@ const servePlayerList = (context: GameContext) => {
 
   const isRoomFull = context.env.rooms.isRoomFull(matchID);
 
+  if (isRoomFull) {
+    context.env.rooms.assignGame(matchID, context.env.match);
+  }
+
   return context.json({ isRoomFull, players: [...players] });
 };
 

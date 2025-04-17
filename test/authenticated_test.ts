@@ -1,9 +1,10 @@
 import { createApp } from "../src/app.ts";
 import { describe, it } from "testing";
-import { assert, assertEquals } from "jsr:@std/assert";
+import { assert, assertEquals, assertFalse } from "jsr:@std/assert";
 import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
 import { App, Bindings } from "../src/models/types.ts";
+import { Match } from "../src/models/match.ts";
 
 interface TestApp {
   (host: string, ...players: string[]): {
@@ -17,6 +18,7 @@ const createAppWithPlayers = (...players: string[]): App => {
   const bindings: Bindings = {
     playerRegistry: new PlayerRegistry(),
     rooms: new Rooms(),
+    match: new Match(),
   };
 
   for (const player of players) {
@@ -30,6 +32,7 @@ const createAppWithHostedRoom: TestApp = (host, ...players) => {
   const bindings: Bindings = {
     playerRegistry: new PlayerRegistry(),
     rooms: new Rooms(),
+    match: new Match(),
   };
 
   bindings.playerRegistry.createPlayer(host);
@@ -51,6 +54,7 @@ describe("create room", () => {
     const bindings: Bindings = {
       playerRegistry: new PlayerRegistry(),
       rooms: new Rooms(),
+      match: new Match(),
     };
 
     const app = createApp(bindings);
@@ -221,6 +225,52 @@ describe("servePlayerList", () => {
 
     assertEquals(response.status, 400);
     assertEquals(actual, expected);
+  });
+
+  it("should assign game if room is full", async () => {
+    const playerName = "faking";
+    const players = ["a", "b", "c", "d", "e"];
+    const { app, bindings, roomId } = createAppWithHostedRoom(
+      playerName,
+      ...players
+    );
+
+    await app.request("/setup/player-list", {
+      headers: { cookie: `playerId=${playerName}` },
+    });
+
+    assert(bindings.match.hasMatch(roomId));
+  });
+
+  it("should not assign game if room is not full", async () => {
+    const playerName = "faking";
+    const players = ["a", "b", "c", "d"];
+    const { app, bindings, roomId } = createAppWithHostedRoom(
+      playerName,
+      ...players
+    );
+
+    await app.request("/setup/player-list", {
+      headers: { cookie: `playerId=${playerName}` },
+    });
+
+    assertFalse(bindings.match.hasMatch(roomId));
+  });
+
+  it("should not assign game if room has already assigned a game", async () => {
+    const playerName = "faking";
+    const players = ["a", "b", "c", "d", "e"];
+    const { app, bindings, roomId } = createAppWithHostedRoom(
+      playerName,
+      ...players
+    );
+
+    await app.request("/setup/player-list", {
+      headers: { cookie: `playerId=${playerName}` },
+    });
+
+    assert(bindings.match.hasMatch(roomId));
+    assertFalse(bindings.rooms.assignGame(roomId, bindings.match));
   });
 });
 

@@ -4,12 +4,14 @@ import { assertEquals } from "jsr:@std/assert";
 import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
 import { Bindings } from "../src/models/types.ts";
+import { Match } from "../src/models/match.ts";
 
 describe("ensure Authentication", () => {
   it("should get redirected to the login page because player is not logined", async () => {
     const bindings: Bindings = {
       playerRegistry: new PlayerRegistry(),
       rooms: new Rooms(),
+      match: new Match(),
     };
     const app = createApp(bindings);
     const res = await app.request("/");
@@ -25,8 +27,9 @@ describe("ensure Authentication", () => {
     playerRegistry.createPlayer(playerName);
 
     const bindings: Bindings = {
-      playerRegistry: playerRegistry,
+      playerRegistry,
       rooms: new Rooms(),
+      match: new Match(),
     };
 
     const app = createApp(bindings);
