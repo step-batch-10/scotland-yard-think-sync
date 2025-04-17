@@ -34,7 +34,7 @@ describe("test assignRole", () => {
     assertEquals(mapToObject(assignedRoles), roles);
   });
 
-  it("should assign role partially", () => {
+  it("should assign multiple role to a player", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     const roles: Roles = { MrX: "b", Blue: "a" };

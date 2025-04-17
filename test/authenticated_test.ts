@@ -182,3 +182,37 @@ describe("servePlayerList", () => {
     assertEquals(actual, expected);
   });
 });
+
+describe("removeplayer", () => {
+  it("should remove the player if matchId is valid", async () => {
+    const playerName = "test1";
+    const { app } = createAppWithHostedRoom(playerName);
+
+    const response = await app.request("/setup/remove-player", {
+      headers: {
+        cookie: `playerId=${playerName}`,
+      },
+    });
+
+    assertEquals(response.status, 200);
+    const data = await response.json();
+
+    assertEquals(data, { success: true });
+  });
+
+  it("should not remove the player if matchId is is not present", async () => {
+    const playerName = "test1";
+    const app = createAppWithPlayers(playerName);
+
+    const response = await app.request("/setup/remove-player", {
+      headers: {
+        cookie: `playerId=${playerName}`,
+      },
+    });
+
+    assertEquals(response.status, 200);
+    const data = await response.json();
+
+    assertEquals(data, { success: false });
+  });
+});

@@ -60,7 +60,10 @@ const servePlayerList = (context: GameContext) => {
 const removePlayer = (context: GameContext) => {
   const playerId = extractPlayerId(context);
   const player = context.env.playerRegistry.getPlayerStats(playerId);
-  context.env.rooms.removePlayer(playerId, player.matchID || "");
+
+  if (!player.matchID) return context.json({ success: false });
+
+  context.env.rooms.removePlayer(playerId, player.matchID);
 
   return context.json({ success: true });
 };

@@ -9,9 +9,10 @@ deno lint
 
 echo "------------------* All lint passed ! *--------------------------"
 
-deno test -A
+deno run -A jsr:@ashishkujoy/deno-coverage-checker
 
 echo "------------------* All test passed ! *--------------------------"
+
 
 echo "-----------------------------------------------------------------"
 echo "-------------------* Before Commit *-----------------------------"
