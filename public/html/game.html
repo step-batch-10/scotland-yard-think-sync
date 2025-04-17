@@ -9,6 +9,7 @@
   </head>
   <body>
     <h1>game page</h1>
+    <button id="ticket-show">show Ticket</button>
     <div>
       <svg
         version="1.1"
@@ -1170,6 +1171,7 @@
       </svg>
     </div>
     <div id="pop-up"></div>
+    <div class="ticket-table"></div>
   </body>
   <template id="role-row">
     <tr>
@@ -1179,6 +1181,7 @@
   </template>
   <template id="ticket-row">
     <tr>
+      <td></td>
       <td></td>
       <td></td>
       <td></td>
@@ -1199,11 +1202,14 @@
         <tbody></tbody>
       </table>
     </div>
-    <div class="pop-up-2">
+  </template>
+  <template id="stats">
+      <div class="pop-up-2">
       <table>
         <thead>
           <tr>
             <th>Role</th>
+            <th>player</th>
             <th>Taxi</th>
             <th>Bus</th>
             <th>Metro</th>
@@ -1214,7 +1220,7 @@
         <tbody></tbody>
       </table>
     </div>
-  </template>
+    </template>
 
   <template id="distribute-tickets"> </template>
 </html>

@@ -134,4 +134,11 @@ export class ScotlandYard {
 
     return positionObject;
   }
+
+  getGameState() {
+    return {
+      tickets: this.tickets,
+      roles: this.assignedRoles,
+    };
+  }
 }

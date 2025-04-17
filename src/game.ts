@@ -17,16 +17,29 @@ const serveMatchInfo: GameHandler = (context: GameContext) => {
   if (!match) return context.json({ message: "Game not found" }, 404);
 
   const rolesMap = match.game.getRoles();
-  const ticketsMap = match.game.getTickets();
   const roles = mapToObject<string>(rolesMap);
-  const tickets = mapToObject<Tickets>(ticketsMap);
 
-  return context.json({ roles, tickets });
+  return context.json({ roles });
+};
+
+const serveMatchState: GameHandler = (context: GameContext) => {
+  const playerId = extractPlayerId(context);
+  const { matchID = "" } = context.env.playerRegistry.getPlayerStats(playerId);
+
+  const match = context.env.match.getMatch(matchID);
+  if (!match) return context.json({ message: "Game not found" }, 404);
+
+  const { tickets: ticketsMap, roles: roleMap } = match.game.getGameState();
+  const tickets = mapToObject<Tickets>(ticketsMap);
+  const roles = mapToObject<string>(roleMap);
+
+  return context.json({ tickets, roles });
 };
 
 export const createGame = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
   gameApp.get("/info", serveMatchInfo);
+  gameApp.get("/state", serveMatchState);
 
   return gameApp;
 };

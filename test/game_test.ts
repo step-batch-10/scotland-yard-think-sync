@@ -55,12 +55,38 @@ describe("serveMatchInfo", () => {
     assertEquals(actual.message, expected.message);
     assertEquals(response.status, 404);
   });
+});
 
-  it("should serve tickets if player are present", async () => {
+describe("gameState", () => {
+  it("should return gameState", async () => {
     const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
     const [host, ...players] = allPlayers;
 
     const { app, roomId, bindings } = createAppWithHostedRoom(host, ...players);
+
+    const header = { headers: { cookie: `playerId=${host}` } };
+
+    bindings.rooms.assignGame(roomId, bindings.match);
+    const response = await app.request("/game/state", header);
+
+    const actual = await response.json();
+    const expected = {
+      MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
+      "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Blue": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Green": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Yellow": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Purple": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+    };
+
+    assertEquals(actual.tickets, expected);
+  });
+
+  it("should give room not found if roomId is invalid", async () => {
+    const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
+    const [host, ...players] = allPlayers;
+
+    const app = createAppWithPlayers(host, ...players);
 
     const header = {
       headers: {
@@ -68,56 +94,13 @@ describe("serveMatchInfo", () => {
       },
     };
 
-    bindings.rooms.assignGame(roomId, bindings.match);
-    const response = await app.request("/game/info", header);
+    const response = await app.request("/game/state", header);
 
     const actual = await response.json();
-    const expected = {
-      MrX: {
-        Bus: 3,
-        Taxi: 4,
-        Metro: 3,
-        All: 5,
-        "2x": 2,
-      },
-      "Detective:Red": {
-        Bus: 8,
-        Taxi: 10,
-        Metro: 4,
-        All: 0,
-        "2x": 0,
-      },
-      "Detective:Blue": {
-        Bus: 8,
-        Taxi: 10,
-        Metro: 4,
-        All: 0,
-        "2x": 0,
-      },
-      "Detective:Green": {
-        Bus: 8,
-        Taxi: 10,
-        Metro: 4,
-        All: 0,
-        "2x": 0,
-      },
-      "Detective:Yellow": {
-        Bus: 8,
-        Taxi: 10,
-        Metro: 4,
-        All: 0,
-        "2x": 0,
-      },
-      "Detective:Purple": {
-        Bus: 8,
-        Taxi: 10,
-        Metro: 4,
-        All: 0,
-        "2x": 0,
-      },
-    };
+    const expected = { message: "Game not found" };
 
-    assertEquals(actual.tickets, expected);
+    assertEquals(actual.message, expected.message);
+    assertEquals(response.status, 404);
   });
 });
 

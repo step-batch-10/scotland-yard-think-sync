@@ -80,7 +80,7 @@ describe("ticket distribution", () => {
 });
 
 describe("assignStartingPositions", () => {
-  it("should assign postion based on random fucntion", () => {
+  it("should assign position based on random function", () => {
     const random: RandomIndex = () => 0;
 
     const players = new Set([
@@ -134,5 +134,34 @@ describe("assignStartingPositions", () => {
     };
 
     assertEquals(actual, expected);
+  });
+});
+
+describe("game state", () => {
+  it("should provide tickets", () => {
+    const players = new Set(["a", "b", "c", "d", "e", "f"]);
+    const sy = new ScotlandYard([...players]);
+    const roles = {
+      "Detective:Red": "b",
+      MrX: "a",
+      "Detective:Blue": "c",
+      "Detective:Yellow": "d",
+      "Detective:Purple": "e",
+      "Detective:Green": "f",
+    };
+    sy.assignRole(roles);
+    sy.distributeTickets();
+    const expected = {
+      MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
+      "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Blue": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Green": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Yellow": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Purple": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+    };
+
+    const { tickets, roles: assignedRoles } = sy.getGameState();
+    assertEquals(mapToObject<Tickets>(tickets), expected);
+    assertEquals(mapToObject(assignedRoles), roles);
   });
 });
