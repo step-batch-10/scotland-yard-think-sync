@@ -33,11 +33,16 @@ export class ScotlandYard {
   private readonly roles: Role[];
   private assignedRoles: Map<string, string>;
   private tickets: Map<Role, Tickets>;
+  private startingStations: number[];
 
   constructor(players: string[]) {
     this.players = [...players];
     this.assignedRoles = new Map();
     this.tickets = new Map();
+
+    this.startingStations = [
+      181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193,
+    ];
     this.roles = [
       Role.MrX,
       Role.Red,
