@@ -102,7 +102,7 @@ describe("handleJoin ", () => {
     const actual = await response.json();
     const expected = {
       isJoined: true,
-      location: "/html/waitingPage.html",
+      location: "/html/waiting.html",
       message: "Succesfully joined",
     };
 

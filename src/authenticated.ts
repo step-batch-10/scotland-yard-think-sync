@@ -40,7 +40,7 @@ const handleJoinRoom: GameHandler = async (context: GameContext) => {
 
   return context.json({
     isJoined: true,
-    location: "/html/waitingPage.html",
+    location: "/html/waiting.html",
     message: "Succesfully joined",
   });
 };

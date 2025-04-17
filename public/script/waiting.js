@@ -30,8 +30,9 @@ const renderPlayerList = () => {
     const response = await fetch("/setup/player-list");
     const jsonData = await response.json();
     if (jsonData.isRoomFull) {
-      console.log("room full");
       clearInterval(intervalId);
+
+      globalThis.location = "/html/game.html";
     }
     addPlayerNames(jsonData.players);
   }, 1000);

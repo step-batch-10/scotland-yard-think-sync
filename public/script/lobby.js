@@ -2,7 +2,7 @@ const hostGame = async () => {
   const response = await fetch("/setup/create-room");
 
   if (response.ok) {
-    globalThis.location = "/html/waitingPage.html";
+    globalThis.location = "/html/waiting.html";
   }
 };
 
