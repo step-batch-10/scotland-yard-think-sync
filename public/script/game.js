@@ -24,20 +24,17 @@ const renderRoles = (rolesObject) => {
   const tableRows = roles.map(makeRow);
 
   tbody.append(...tableRows);
-
   popup.appendChild(table);
-  console.dir(popup);
+
+  setTimeout(() => {
+    popup.remove();
+  }, 10000);
 };
 
-const main = () => {
-  const roles = {
-    "Blue": "akshay",
-    "Red": "Bhagya",
-    "Green": "Siddhi",
-    "Mr.X": "Athul",
-    "Purple": "Suman"
-  };
+const fetchRoles = () => fetch("/game/info").then(res => res.json());
 
+const main = async () => {
+  const roles = await fetchRoles();
   renderRoles(roles);
 };
 
