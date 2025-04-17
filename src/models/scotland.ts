@@ -31,7 +31,9 @@ export type Postions = {
 
 export type AssignedRoles = Map<Role, string>;
 export type Tickets = Record<Ticket, number>;
-
+export interface RandomIndex {
+  (x: number, y: number): number;
+}
 export class ScotlandYard {
   private readonly players;
   private readonly roles: Role[];
@@ -116,13 +118,18 @@ export class ScotlandYard {
     return this.tickets;
   }
 
-  assignStartingPositions(random: (x: number[]) => number[]) {
+  assignStartingPositions(random: RandomIndex) {
     const positions = [...this.startingStations];
-    const start = random(positions);
 
     const positionObject: Postions = {};
-    for (let index = 0; index < start.length; index++) {
-      positionObject[this.roles[index]] = start[index];
+
+    for (let index = 0; index < this.roles.length; index++) {
+      const role = this.roles[index];
+
+      const randomIndex = random(0, 6) % positions.length;
+      const [start] = positions.splice(randomIndex, 1);
+
+      positionObject[role] = start;
     }
 
     return positionObject;

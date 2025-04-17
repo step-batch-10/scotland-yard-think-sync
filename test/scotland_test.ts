@@ -1,6 +1,12 @@
 import { describe, it } from "testing";
 import { assertEquals } from "assert";
-import { Role, Roles, ScotlandYard, Tickets } from "../src/models/scotland.ts";
+import {
+  RandomIndex,
+  Role,
+  Roles,
+  ScotlandYard,
+  Tickets,
+} from "../src/models/scotland.ts";
 import { mapToObject } from "../src/game.ts";
 
 describe("test playerNames", () => {
@@ -75,7 +81,7 @@ describe("ticket distribution", () => {
 
 describe("assignStartingPositions", () => {
   it("should assign postion based on random fucntion", () => {
-    const random = (arr: number[]) => arr.slice(0, 6);
+    const random: RandomIndex = () => 0;
 
     const players = new Set([
       "test1",
@@ -85,6 +91,7 @@ describe("assignStartingPositions", () => {
       "test5",
       "test6",
     ]);
+
     const game = new ScotlandYard([...players]);
     game.assignRole();
 
@@ -96,6 +103,34 @@ describe("assignStartingPositions", () => {
       "Detective:Green": 184,
       "Detective:Yellow": 185,
       "Detective:Purple": 186,
+    };
+
+    assertEquals(actual, expected);
+  });
+
+  it("should handle if random number is above role number", () => {
+    const random: RandomIndex = () => 10;
+
+    const players = new Set([
+      "test1",
+      "test2",
+      "test3",
+      "test4",
+      "test5",
+      "test6",
+    ]);
+
+    const game = new ScotlandYard([...players]);
+    game.assignRole();
+
+    const actual = game.assignStartingPositions(random);
+    const expected = {
+      "Detective:Blue": 193,
+      "Detective:Green": 181,
+      "Detective:Purple": 185,
+      "Detective:Red": 192,
+      "Detective:Yellow": 183,
+      MrX: 191,
     };
 
     assertEquals(actual, expected);
