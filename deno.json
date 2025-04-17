@@ -4,6 +4,10 @@
     "testing": "jsr:@std/testing/bdd",
     "hono": "npm:hono@^4.7.5"
   },
+  "test": {
+    "include": ["**/*.ts"],
+    "exclude": ["main.ts"]
+  },
   "lint": {
     "rules": {
       "tags": ["recommended"],
