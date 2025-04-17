@@ -25,6 +25,10 @@ export enum Ticket {
 export type Roles = {
   [key in Role]?: string;
 };
+export type Postions = {
+  [key in Role]?: number;
+};
+
 export type AssignedRoles = Map<Role, string>;
 export type Tickets = Record<Ticket, number>;
 
@@ -43,6 +47,7 @@ export class ScotlandYard {
     this.startingStations = [
       181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193,
     ];
+
     this.roles = [
       Role.MrX,
       Role.Red,
@@ -109,5 +114,17 @@ export class ScotlandYard {
 
   getTickets() {
     return this.tickets;
+  }
+
+  assignStartingPositions(random: (x: number[]) => number[]) {
+    const positions = [...this.startingStations];
+    const start = random(positions);
+
+    const positionObject: Postions = {};
+    for (let index = 0; index < start.length; index++) {
+      positionObject[this.roles[index]] = start[index];
+    }
+
+    return positionObject;
   }
 }

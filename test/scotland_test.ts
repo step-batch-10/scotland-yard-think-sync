@@ -72,3 +72,32 @@ describe("ticket distribution", () => {
     assertEquals(mapToObject<Tickets>(assignedTickets), expected);
   });
 });
+
+describe("assignStartingPositions", () => {
+  it("should assign postion based on random fucntion", () => {
+    const random = (arr: number[]) => arr.slice(0, 6);
+
+    const players = new Set([
+      "test1",
+      "test2",
+      "test3",
+      "test4",
+      "test5",
+      "test6",
+    ]);
+    const game = new ScotlandYard([...players]);
+    game.assignRole();
+
+    const actual = game.assignStartingPositions(random);
+    const expected = {
+      MrX: 181,
+      "Detective:Red": 182,
+      "Detective:Blue": 183,
+      "Detective:Green": 184,
+      "Detective:Yellow": 185,
+      "Detective:Purple": 186,
+    };
+
+    assertEquals(actual, expected);
+  });
+});
