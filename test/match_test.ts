@@ -18,7 +18,7 @@ describe("getMatch", () => {
     match.setMatch(roomId, players);
     const addedMatch = match.getMatch(roomId);
 
-    assertEquals(addedMatch?.status, "playing");
+    assertEquals(addedMatch?.isGameFinished, false);
     assertEquals(addedMatch?.winner, null);
     assertEquals(addedMatch?.game.getPlayers(), [...players]);
   });

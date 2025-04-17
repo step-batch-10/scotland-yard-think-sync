@@ -3,7 +3,7 @@ import { ScotlandYard } from "./scotland.ts";
 interface MatchStatus {
   game: ScotlandYard;
   winner: null | string;
-  status: string;
+  isGameFinished: boolean;
 }
 
 export class Match {
@@ -16,7 +16,7 @@ export class Match {
     return {
       game: new ScotlandYard(players),
       winner: null,
-      status: "playing",
+      isGameFinished: false,
     };
   }
 

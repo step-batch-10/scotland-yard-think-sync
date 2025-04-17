@@ -62,7 +62,7 @@ describe("players model", () => {
 
       const expected: PlayerStats = {
         matchID: roomID,
-        status: "waiting",
+        isPlaying: false,
       };
 
       assertEquals(players.getPlayerStats(playerName), expected);
@@ -97,6 +97,38 @@ describe("players model", () => {
       const players = new PlayerRegistry();
 
       assertFalse(players.resetPlayer(playerName));
+    });
+  });
+
+  describe("join room", () => {
+    it("should set the isPlaying status of all players to true.", () => {
+      const roomID = "something";
+      const players = new PlayerRegistry();
+      const playerName = "test1";
+      const expected = { matchID: roomID, isPlaying: true };
+
+      players.createPlayer(playerName);
+      players.assignRoom(playerName, roomID);
+      players.joinMatch([playerName]);
+
+      assertEquals(players.getPlayerStats(playerName), expected);
+    });
+
+    it("should set the isPlaying status of all players to true.", () => {
+      const roomID = "something";
+      const players = new PlayerRegistry();
+      const playerNames = ["test1", "test2", "test3", "test4"];
+      const expected = { matchID: roomID, isPlaying: true };
+
+      playerNames.forEach((player) => {
+        players.createPlayer(player);
+        players.assignRoom(player, roomID);
+      });
+      players.joinMatch(playerNames);
+
+      playerNames.forEach((player) => {
+        assertEquals(players.getPlayerStats(player), expected);
+      });
     });
   });
 });

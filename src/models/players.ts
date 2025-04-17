@@ -25,7 +25,13 @@ export class PlayerRegistry {
   assignRoom(playerName: string, roomID: string) {
     const player = this.getPlayerStats(playerName);
     player.matchID = roomID;
-    player.status = "waiting";
+    player.isPlaying = false;
+  }
+
+  joinMatch(playerIds: string[]) {
+    playerIds.forEach((playerId) => {
+      this.getPlayerStats(playerId).isPlaying = true;
+    });
   }
 
   resetPlayer(playerName: string) {

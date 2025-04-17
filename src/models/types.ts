@@ -6,7 +6,7 @@ import { Match } from "./match.ts";
 
 export interface PlayerStats {
   matchID?: string;
-  status?: "waiting" | "playing";
+  isPlaying?: boolean;
 }
 
 export type Bindings = {
