@@ -19,13 +19,20 @@
       "exclude": []
     }
   },
-
   "fmt": {
     "indentWidth": 2,
     "lineWidth": 80,
     "semiColons": true
   },
   "tasks": {
+    "deploy-qa": {
+      "description": "Deploy in the QA environment for testing",
+      "command": "deployctl deploy --project=scotland-yard-qa --entrypoint=main.ts --org=ThinkSync"
+    },
+    "deploy-pro": {
+      "description": "Deploy in the production environment",
+      "command": "deployctl deploy --project=scotland-yard --entrypoint=main.ts --org=ThinkSync"
+    },
     "test": {
       "description": "Runs test with coverage",
       "command": "deno test -A --coverage --clean"
@@ -39,5 +46,11 @@
       "command": "deno run -A --watch main.ts",
       "description": "Runs the project"
     }
+  },
+  "deploy": {
+    "project": "37bc7a48-ad29-4c4e-9f7e-e3f0ec1ea3bc",
+    "exclude": ["**/node_modules"],
+    "include": [],
+    "entrypoint": "main.ts"
   }
 }
