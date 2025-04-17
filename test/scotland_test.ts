@@ -1,6 +1,6 @@
 import { describe, it } from "testing";
 import { assertEquals } from "assert";
-import { Role, Roles, ScotlandYard } from "../src/models/scotland.ts";
+import { Role, Roles, ScotlandYard, Tickets } from "../src/models/scotland.ts";
 import { mapToObject } from "../src/game.ts";
 
 describe("test playerNames", () => {
@@ -16,12 +16,12 @@ describe("test assignRole", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     const roles = {
-      Red: "b",
+      "Detective:Red": "b",
       MrX: "a",
-      Blue: "c",
-      Yellow: "d",
-      Purple: "e",
-      Green: "f",
+      "Detective:Blue": "c",
+      "Detective:Yellow": "d",
+      "Detective:Purple": "e",
+      "Detective:Green": "f",
     };
 
     sy.assignRole(roles);
@@ -34,18 +34,18 @@ describe("test assignRole", () => {
   it("should assign multiple role to a player", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
-    const roles: Roles = { MrX: "b", Blue: "a" };
+    const roles: Roles = { MrX: "b", "Detective:Blue": "a" };
 
     sy.assignRole(roles);
     const assignedRoles = sy.getRoles();
 
     const expected = {
       MrX: "b",
-      Blue: "a",
-      Red: "b",
-      Green: "d",
-      Yellow: "e",
-      Purple: "f",
+      "Detective:Blue": "a",
+      "Detective:Red": "b",
+      "Detective:Green": "d",
+      "Detective:Yellow": "e",
+      "Detective:Purple": "f",
     };
 
     assertEquals(mapToObject(assignedRoles), expected);
@@ -60,15 +60,15 @@ describe("ticket distribution", () => {
     sy.assignRole(roles);
     sy.distributeTickets();
     const expected = {
-      Red: "a",
-      MrX: "a",
-      Blue: "c",
-      Green: "d",
-      Yellow: "e",
-      Purple: "f",
+      MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
+      "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Blue": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Green": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Yellow": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      "Detective:Purple": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
     };
 
-    const assignedRoles = sy.getRoles();
-    assertEquals(mapToObject(assignedRoles), expected);
+    const assignedTickets = sy.getTickets();
+    assertEquals(mapToObject<Tickets>(assignedTickets), expected);
   });
 });

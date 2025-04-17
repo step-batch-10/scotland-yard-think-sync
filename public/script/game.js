@@ -31,11 +31,16 @@ const renderRoles = (rolesObject) => {
   }, 10000);
 };
 
-const fetchRoles = () => fetch("/game/info").then(res => res.json());
+const renderTickets = (tickets) => {
+  console.log(tickets);
+};
+
+const fetchRoles = () => fetch("/game/info").then((res) => res.json());
 
 const main = async () => {
-  const roles = await fetchRoles();
+  const { roles, tickets } = await fetchRoles();
   renderRoles(roles);
+  renderTickets(tickets);
 };
 
 globalThis.onload = main;

@@ -1,9 +1,9 @@
 export enum Role {
-  Red = "Red",
-  Blue = "Blue",
-  Green = "Green",
-  Yellow = "Yellow",
-  Purple = "Purple",
+  Red = "Detective:Red",
+  Blue = "Detective:Blue",
+  Green = "Detective:Green",
+  Yellow = "Detective:Yellow",
+  Purple = "Detective:Purple",
   MrX = "MrX",
 }
 
@@ -100,5 +100,9 @@ export class ScotlandYard {
 
       this.tickets.set(role, tickets);
     }
+  }
+
+  getTickets() {
+    return this.tickets;
   }
 }
