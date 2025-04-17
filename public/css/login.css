@@ -19,13 +19,22 @@ body {
   align-items: center;
   justify-content: center;
   margin-top: 17rem;
-  background-color: ghostwhite;
-  border: 0.1px solid black;
-  width: 30rem;
+  background-color: #a6b28c;
+  border: 1px solid #0c2f25;
+  width: 20rem;
   height: 20vw;
 }
 
+#playerName {
+  background-color: #d1b278;
+  width: 100%;
+  height: 2vh;
+}
+
 #submit {
-  width: 90%;
-  margin-top: 6rem;
+  width: 60%;
+  height: 2rem;
+  max-width: 600rem;
+  margin: 1rem 2em;
+  background-color: #d1b278;
 }

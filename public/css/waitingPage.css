@@ -11,9 +11,9 @@ body {
 
 #outer {
   width: 20vw;
-  height: 40vh;
+  height: 60vh;
   border: 1px solid black;
-  margin: 30vh;
+  margin: 20vh;
   background-color: #a6b28c;
   border-color: #0c2f25;
   gap: 2rem;
@@ -24,8 +24,26 @@ body {
   align-items: center;
 }
 
-#roomId {
-  /* border: 1px solid black; */
-  width: 2vw;
-  height: 4vh;
+#copy,
+#leave {
+  background-color: #d1b278;
+}
+
+.spinner {
+  margin-top: 1rem;
+  border: 5px solid #d1b278;
+  border-top: 5px solid #333;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
