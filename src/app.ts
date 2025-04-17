@@ -1,9 +1,10 @@
 import { logger } from "hono/logger";
 import { Hono, MiddlewareHandler } from "hono";
 import { serveStatic } from "hono/deno";
-import { createAuthApp as createGameSetup } from "./authenticated.ts";
+import { createGameSetup } from "./game_setup.ts";
 import { ensureAuthenticated, loginHandler } from "./handlers/auth-handler.ts";
 import { Bindings } from "./models/types.ts";
+import { createGame } from "./game.ts";
 
 const inject = (bindings: Bindings): MiddlewareHandler => {
   return async (context, next) => {
@@ -27,6 +28,7 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   app.get("/lobby", serveStatic({ path: "./public/html/lobby.html" }));
 
   app.route("/setup", createGameSetup());
+  app.route("/game", createGame());
 
   app.get("*", serveStatic({ root: "public" }));
 

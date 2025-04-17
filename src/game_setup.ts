@@ -81,14 +81,14 @@ const removePlayer = (context: GameContext) => {
   return context.json({ success: true });
 };
 
-export const createAuthApp = (): Hono<{ Bindings: Bindings }> => {
-  const app = new Hono<{ Bindings: Bindings }>();
+export const createGameSetup = (): Hono<{ Bindings: Bindings }> => {
+  const gameSetup = new Hono<{ Bindings: Bindings }>();
 
-  app.get("/create-room", handleCreateRoom);
-  app.get("/room-id", serveRoomId);
-  app.get("/player-list", servePlayerList);
-  app.post("/join-room", handleJoinRoom);
-  app.get("/remove-player", removePlayer);
+  gameSetup.get("/create-room", handleCreateRoom);
+  gameSetup.get("/room-id", serveRoomId);
+  gameSetup.get("/player-list", servePlayerList);
+  gameSetup.post("/join-room", handleJoinRoom);
+  gameSetup.get("/remove-player", removePlayer);
 
-  return app;
+  return gameSetup;
 };
