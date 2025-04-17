@@ -28,13 +28,17 @@ const handleJoinRoom: GameHandler = async (context: GameContext) => {
   const roomId = await extractRoomId(context.req);
 
   if (!context.env.rooms.hasRoom(roomId)) {
-    return context.redirect("/html/join.html", 303);
+    return context.json({ isJoined: false, message: "Invalid roomId" }, 400);
   }
 
   context.env.playerRegistry.assignRoom(playerId, roomId);
   context.env.rooms.addPlayer(playerId, roomId);
 
-  return context.redirect("/html/waitingPage.html", 303);
+  return context.json({
+    isJoined: true,
+    location: "/html/waitingPage.html",
+    message: "Succesfully joined",
+  });
 };
 
 const serveRoomId = (context: GameContext) => {

@@ -82,7 +82,7 @@ describe("serveRoomId", () => {
 });
 
 describe("handleJoin ", () => {
-  it("should redirect to waiting the user if room id is valid", async () => {
+  it("should give valid room message and give location if roomId is valid", async () => {
     const playerName = "Gangadhar";
     const { app, roomId } = createAppWithHostedRoom(playerName);
 
@@ -95,11 +95,18 @@ describe("handleJoin ", () => {
       method: "POST",
     });
 
-    assertEquals(response.status, 303);
-    assertEquals(response.headers.get("location"), "/html/waitingPage.html");
+    const actual = await response.json();
+    const expected = {
+      isJoined: true,
+      location: "/html/waitingPage.html",
+      message: "Succesfully joined",
+    };
+
+    assertEquals(response.status, 200);
+    assertEquals(actual, expected);
   });
 
-  it("should redirect to joining page the user if room id is invalid", async () => {
+  it("should return false & invalid room id message if room id is invalid", async () => {
     const playerName = "Ramulal";
     const { app } = createAppWithHostedRoom(playerName);
 
@@ -112,11 +119,14 @@ describe("handleJoin ", () => {
       method: "POST",
     });
 
-    assertEquals(response.status, 303);
-    assertEquals(response.headers.get("location"), "/html/join.html");
+    const actual = await response.json();
+    const expected = { isJoined: false, message: "Invalid roomId" };
+
+    assertEquals(response.status, 400);
+    assertEquals(actual, expected);
   });
 
-  it("should redirect to joining page the user if room id is is not present", async () => {
+  it("should return false and  invalid room msg if room id is is not present", async () => {
     const playerName = "testing";
     const { app } = createAppWithHostedRoom(playerName);
 
@@ -128,8 +138,11 @@ describe("handleJoin ", () => {
       method: "POST",
     });
 
-    assertEquals(response.status, 303);
-    assertEquals(response.headers.get("location"), "/html/join.html");
+    const actual = await response.json();
+    const expected = { isJoined: false, message: "Invalid roomId" };
+
+    assertEquals(response.status, 400);
+    assertEquals(actual, expected);
   });
 });
 
