@@ -1,7 +1,6 @@
 import { Hono } from "hono";
 import { Bindings, GameContext, GameHandler } from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
-import { Tickets } from "./models/scotland.ts";
 
 export function mapToObject<T>(map?: Map<string, T>) {
   if (!map) return {};
@@ -29,11 +28,9 @@ const serveMatchState: GameHandler = (context: GameContext) => {
   const match = context.env.match.getMatch(matchID);
   if (!match) return context.json({ message: "Game not found" }, 404);
 
-  const { tickets: ticketsMap, roles: roleMap } = match.game.getGameState();
-  const tickets = mapToObject<Tickets>(ticketsMap);
-  const roles = mapToObject<string>(roleMap);
+  const state = match.game.getGameState();
 
-  return context.json({ tickets, roles });
+  return context.json(state);
 };
 
 export const createGame = (): Hono<{ Bindings: Bindings }> => {

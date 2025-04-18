@@ -1,51 +1,20 @@
-export enum Role {
-  Red = "Detective:Red",
-  Blue = "Detective:Blue",
-  Green = "Detective:Green",
-  Yellow = "Detective:Yellow",
-  Purple = "Detective:Purple",
-  MrX = "MrX",
-}
+import { mapToObject } from "../game.ts";
+import { RandomIndex, Role, Tickets, Roles, Ticket } from "./types.ts";
 
-export enum Transport {
-  Bus = "Bus",
-  Taxi = "Taxi",
-  Metro = "Metro",
-  Ferry = "Ferry",
-}
-
-export enum Ticket {
-  Green = "Bus",
-  Yellow = "Taxi",
-  Red = "Metro",
-  Black = "All",
-  "2x" = "2x",
-}
-
-export type Roles = {
-  [key in Role]?: string;
-};
-export type Postions = {
-  [key in Role]?: number;
-};
-
-export type AssignedRoles = Map<Role, string>;
-export type Tickets = Record<Ticket, number>;
-export interface RandomIndex {
-  (x: number, y: number): number;
-}
-
+const randomNumber: RandomIndex = () => 1;
 export class ScotlandYard {
   private readonly players;
   private readonly roles: Role[];
   private assignedRoles: Map<string, string>;
   private tickets: Map<Role, Tickets>;
   private startingStations: number[];
+  private currentPostion: Map<Role, number>;
 
   constructor(players: string[]) {
     this.players = [...players];
     this.assignedRoles = new Map();
     this.tickets = new Map();
+    this.currentPostion = new Map();
 
     this.startingStations = [
       181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193,
@@ -119,27 +88,27 @@ export class ScotlandYard {
     return this.tickets;
   }
 
-  assignStartingPositions(random: RandomIndex) {
+  assignStartingPositions(random: RandomIndex = randomNumber) {
     const positions = [...this.startingStations];
-
-    const positionObject: Postions = {};
 
     for (let index = 0; index < this.roles.length; index++) {
       const role = this.roles[index];
 
       const randomIndex = random(0, 6) % positions.length;
       const [start] = positions.splice(randomIndex, 1);
-
-      positionObject[role] = start;
+      this.currentPostion.set(role, start);
     }
-
-    return positionObject;
   }
 
   getGameState() {
     return {
-      tickets: this.tickets,
-      roles: this.assignedRoles,
+      tickets: mapToObject<Tickets>(this.tickets),
+      roles: mapToObject<string>(this.assignedRoles),
+      positions: mapToObject(this.currentPostion),
     };
+  }
+
+  getCurrentPostion() {
+    return this.currentPostion;
   }
 }

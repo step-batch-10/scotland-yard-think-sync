@@ -4,6 +4,43 @@ import { Handler, MiddlewareHandler } from "hono/types";
 import { Rooms } from "./rooms.ts";
 import { Match } from "./match.ts";
 
+export enum Role {
+  Red = "Detective:Red",
+  Blue = "Detective:Blue",
+  Green = "Detective:Green",
+  Yellow = "Detective:Yellow",
+  Purple = "Detective:Purple",
+  MrX = "MrX",
+}
+
+export enum Transport {
+  Bus = "Bus",
+  Taxi = "Taxi",
+  Metro = "Metro",
+  Ferry = "Ferry",
+}
+
+export enum Ticket {
+  Green = "Bus",
+  Yellow = "Taxi",
+  Red = "Metro",
+  Black = "All",
+  "2x" = "2x",
+}
+
+export type Roles = {
+  [key in Role]?: string;
+};
+export type Postions = {
+  [key in Role]?: number;
+};
+
+export type AssignedRoles = Map<Role, string>;
+export type Tickets = Record<Ticket, number>;
+export interface RandomIndex {
+  (x: number, y: number): number;
+}
+
 export interface PlayerStats {
   matchID?: string;
   isPlaying?: boolean;
