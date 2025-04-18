@@ -1,7 +1,7 @@
 import { mapToObject } from "../game_play.ts";
 import { basicMap } from "../maps/game_map.ts";
 import { ticketsOf } from "./tickets.ts";
-import { RandomIndex, Role, Tickets, Roles, GameMap } from "./types.ts";
+import { RandomIndex, Role, Tickets, Roles, GameMap, Route } from "./types.ts";
 
 const randomNumber: RandomIndex = () => 1;
 
@@ -13,6 +13,7 @@ export class ScotlandYard {
   private startingStations: number[];
   private currentPosition: Map<Role, number>;
   private currentRole: Role;
+  private gameMap: GameMap;
 
   constructor(players: string[], map: GameMap = basicMap) {
     this.players = [...players];
@@ -20,6 +21,7 @@ export class ScotlandYard {
     this.tickets = new Map();
     this.currentPosition = new Map();
     this.startingStations = map.startingPositions;
+    this.gameMap = map;
 
     this.roles = [
       Role.MrX,
@@ -71,6 +73,10 @@ export class ScotlandYard {
     this.currentRole = this.roles[nextPlayerIndex];
 
     return this.currentRole;
+  }
+
+  possibleStations(station: number): Route[] {
+    return this.gameMap.routes[station] || [];
   }
 
   getGameState() {

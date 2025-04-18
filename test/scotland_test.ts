@@ -2,7 +2,13 @@ import { describe, it } from "testing";
 import { assertEquals } from "assert";
 import { ScotlandYard } from "../src/models/scotland.ts";
 import { mapToObject } from "../src/game_play.ts";
-import { Roles, Role, Tickets, RandomIndex } from "../src/models/types.ts";
+import {
+  Roles,
+  Role,
+  Tickets,
+  RandomIndex,
+  Transport,
+} from "../src/models/types.ts";
 
 describe("test playerNames", () => {
   it("should provide playerNames", () => {
@@ -227,5 +233,38 @@ describe("change turn", () => {
     const nextPlayer = sy.changeTurn();
 
     assertEquals(nextPlayer, "MrX");
+  });
+});
+
+describe("possible stations", () => {
+  it("should return possible stations if possible", () => {
+    const game = new ScotlandYard([
+      "test1",
+      "test2",
+      "test3",
+      "test4",
+      "test5",
+      "test6",
+    ]);
+
+    const actual = game.possibleStations(181);
+    const expected = [{ to: 182, mode: Transport.Taxi }];
+
+    assertEquals(actual, expected);
+  });
+
+  it("should return empty array if station is not valid", () => {
+    const game = new ScotlandYard([
+      "test1",
+      "test2",
+      "test3",
+      "test4",
+      "test5",
+      "test6",
+    ]);
+
+    const actual = game.possibleStations(0);
+
+    assertEquals(actual, []);
   });
 });

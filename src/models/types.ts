@@ -31,6 +31,7 @@ export enum Ticket {
 export type Roles = {
   [key in Role]?: string;
 };
+
 export type Postions = {
   [key in Role]?: number;
 };
