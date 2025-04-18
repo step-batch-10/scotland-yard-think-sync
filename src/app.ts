@@ -8,7 +8,7 @@ import {
   loginHandler,
 } from "./handlers/auth_handler.ts";
 import { Bindings } from "./models/types.ts";
-import { createGame as createGameRoutes } from "./game.ts";
+import { createGame as createGameRoutes } from "./game_play.ts";
 
 const inject = (bindings: Bindings): MiddlewareHandler => {
   return async (context, next) => {

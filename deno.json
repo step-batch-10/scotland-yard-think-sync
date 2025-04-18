@@ -6,7 +6,7 @@
   },
   "test": {
     "include": ["**/*.ts"],
-    "exclude": ["main.ts"]
+    "exclude": ["main.ts", "src/"]
   },
   "lint": {
     "rules": {

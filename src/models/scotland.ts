@@ -1,4 +1,4 @@
-import { mapToObject } from "../game.ts";
+import { mapToObject } from "../game_play.ts";
 import { basicMap } from "../maps/game_map.ts";
 import { ticketsOf } from "./tickets.ts";
 import { RandomIndex, Role, Tickets, Roles, GameMap } from "./types.ts";

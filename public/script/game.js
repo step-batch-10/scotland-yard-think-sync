@@ -1,3 +1,5 @@
+import { combineObjects } from "./game_utils.js";
+
 const fetchState = () => fetch("/game/state").then((res) => res.json());
 const fetchRoles = () => fetch("/game/info").then((res) => res.json());
 
@@ -33,26 +35,13 @@ const playerStats = ([role, playerName, tickets, station]) => {
   return trElement;
 };
 
-const combine3Object = (obj1, obj2, obj3) => {
-  const result = [];
-
-  for (const key in obj1) {
-    const value1 = obj1[key];
-    const value2 = obj2[key];
-    const value3 = obj3[key];
-
-    result.push([key, value1, value2, value3]);
-  }
-
-  return result;
-};
-
 const renderPlayerTickets = (tickets, roles, positions) => {
   const statsTable = cloneTemplate("#stats");
   const tbody = statsTable.querySelector("tbody");
   const tableContainer = document.querySelector("#ticket-table");
 
-  const stats = combine3Object(roles, tickets, positions);
+  const stats = combineObjects(roles, tickets, positions);
+
   const tableTicketRows = stats.map(playerStats);
 
   tbody.append(...tableTicketRows);

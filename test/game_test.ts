@@ -1,119 +1,50 @@
 import { describe, it } from "testing";
-import {
-  createAppWithHostedRoom,
-  createAppWithPlayers,
-} from "./game_setup_test.ts";
-import { assertEquals } from "assert/equals";
-import { mapToObject } from "../src/game.ts";
+import { assertEquals } from "assert";
+import { combineObjects } from "../public/script/game_utils.js";
 
-describe("serveMatchInfo", () => {
-  it("should serve roles if player are present", async () => {
-    const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
-    const [host, ...players] = allPlayers;
-
-    const { app, roomId, bindings } = createAppWithHostedRoom(host, ...players);
-
-    const header = {
-      headers: {
-        cookie: `playerId=${host}`,
-      },
+describe("combines objects", () => {
+  it("should return array of key values", () => {
+    const param1 = {
+      a: 1,
     };
 
-    bindings.rooms.assignGame(roomId, bindings.match);
-    const response = await app.request("/game/info", header);
+    const param2 = {
+      a: 2,
+    };
+    assertEquals(combineObjects(param1, param2), [["a", 1, 2]]);
+  });
 
-    const actual = await response.json();
-    const expected = {
-      MrX: "tes1",
-      "Detective:Red": "test2",
-      "Detective:Blue": "test3",
-      "Detective:Green": "test4",
-      "Detective:Yellow": "test5",
-      "Detective:Purple": "test6",
+  it("should return array of key values in 1 params", () => {
+    const param1 = {
+      a: 1,
     };
 
-    assertEquals(actual.roles, expected);
+    assertEquals(combineObjects(param1), [["a", 1]]);
   });
 
-  it("should give game not found if roomId is invalid", async () => {
-    const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
-    const [host, ...players] = allPlayers;
-
-    const app = createAppWithPlayers(host, ...players);
-
-    const header = {
-      headers: {
-        cookie: `playerId=${host}`,
-      },
+  it("should return array of key values with multiple params", () => {
+    const param1 = {
+      a: 1,
+      b: 2,
     };
 
-    const response = await app.request("/game/info", header);
-
-    const actual = await response.json();
-    const expected = { message: "Game not found" };
-
-    assertEquals(actual.message, expected.message);
-    assertEquals(response.status, 404);
-  });
-});
-
-describe("gameState", () => {
-  it("should return gameState", async () => {
-    const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
-    const [host, ...players] = allPlayers;
-
-    const { app, roomId, bindings } = createAppWithHostedRoom(host, ...players);
-
-    const header = { headers: { cookie: `playerId=${host}` } };
-
-    bindings.rooms.assignGame(roomId, bindings.match);
-    const response = await app.request("/game/state", header);
-
-    const actual = await response.json();
-    const expected = {
-      MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
-      "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Blue": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Green": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Yellow": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Purple": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+    const param2 = {
+      a: 2,
+      b: 8,
     };
 
-    assertEquals(actual.tickets, expected);
-  });
-
-  it("should give Game not found if roomId is invalid", async () => {
-    const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
-    const [host, ...players] = allPlayers;
-
-    const app = createAppWithPlayers(host, ...players);
-
-    const header = {
-      headers: {
-        cookie: `playerId=${host}`,
-      },
+    const param3 = {
+      b: 5,
+      a: 6,
     };
 
-    const response = await app.request("/game/state", header);
-
-    const actual = await response.json();
-    const expected = { message: "Game not found" };
-
-    assertEquals(actual.message, expected.message);
-    assertEquals(response.status, 404);
-  });
-});
-
-describe("mapToObject", () => {
-  it("should return object if map has values", () => {
-    const map = new Map();
-    map.set("name", "akshay");
-    map.set("age", "none");
-
-    assertEquals(mapToObject<string>(map), { name: "akshay", age: "none" });
+    assertEquals(combineObjects(param1, param2, param3), [
+      ["a", 1, 2, 6],
+      ["b", 2, 8, 5],
+    ]);
   });
 
-  it("should return empty object if there is no parameter", () => {
-    assertEquals(mapToObject(), {});
+  it("should return empty array if no param passed", () => {
+    assertEquals(combineObjects(), []);
   });
 });

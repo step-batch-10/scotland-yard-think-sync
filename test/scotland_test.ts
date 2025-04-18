@@ -1,7 +1,7 @@
 import { describe, it } from "testing";
 import { assertEquals } from "assert";
 import { ScotlandYard } from "../src/models/scotland.ts";
-import { mapToObject } from "../src/game.ts";
+import { mapToObject } from "../src/game_play.ts";
 import { Roles, Role, Tickets, RandomIndex } from "../src/models/types.ts";
 
 describe("test playerNames", () => {
