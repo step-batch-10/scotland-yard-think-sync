@@ -44,7 +44,7 @@ everything you need to jump into the game.
 
 ## 🌐 Try the Game
 
-🚀 [Play Here](https://scotland-yard-xjammqwrcyfh.deno.dev/login)
+🚀 [Play Here](https://scotland-yard.deno.dev/login)
 
 Experience the game live in your browser! No installation needed—just gather
 your friends, choose your roles, and dive into the chase through London. The
