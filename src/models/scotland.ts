@@ -1,7 +1,12 @@
+<<<<<<< HEAD
 import { mapToObject } from "../game_play.ts";
 import { basicMap } from "../maps/game_map.ts";
 import { ticketsOf } from "./tickets.ts";
 import { RandomIndex, Role, Tickets, Roles, GameMap } from "./types.ts";
+=======
+import { mapToObject } from "../game.ts";
+import { RandomIndex, Role, Roles, Ticket, Tickets } from "./types.ts";
+>>>>>>> 92c3858 ([#29] | Charan/Bhagya | Adds interactivity to map)
 
 const randomNumber: RandomIndex = () => 1;
 
@@ -18,8 +23,29 @@ export class ScotlandYard {
     this.players = [...players];
     this.assignedRoles = new Map();
     this.tickets = new Map();
+<<<<<<< HEAD
     this.currentPosition = new Map();
     this.startingStations = map.startingPositions;
+=======
+    this.currentPostion = new Map();
+
+    this.startingStations = [
+      181,
+      182,
+      183,
+      184,
+      185,
+      186,
+      187,
+      188,
+      189,
+      190,
+      191,
+      192,
+      193,
+    ];
+
+>>>>>>> 92c3858 ([#29] | Charan/Bhagya | Adds interactivity to map)
     this.roles = [
       Role.MrX,
       Role.Red,
@@ -49,7 +75,15 @@ export class ScotlandYard {
   distributeTickets(): void {
     for (const index in this.players) {
       const role = this.roles[index];
+<<<<<<< HEAD
       this.tickets.set(role, ticketsOf(role));
+=======
+      const tickets = role === Role.MrX
+        ? ScotlandYard.ticketsOfMrX()
+        : ScotlandYard.ticketsOfDetective();
+
+      this.tickets.set(role, tickets);
+>>>>>>> 92c3858 ([#29] | Charan/Bhagya | Adds interactivity to map)
     }
   }
 

@@ -4,9 +4,13 @@ import { serveStatic } from "hono/deno";
 import { createGameSetup as createSetupRoutes } from "./game_setup.ts";
 import {
   ensureAuthenticated,
-  skipIfAuthenticated,
   loginHandler,
+<<<<<<< HEAD
 } from "./handlers/auth_handler.ts";
+=======
+  skipIfAuthenticated,
+} from "./handlers/auth-handler.ts";
+>>>>>>> 92c3858 ([#29] | Charan/Bhagya | Adds interactivity to map)
 import { Bindings } from "./models/types.ts";
 import { createGame as createGameRoutes } from "./game_play.ts";
 

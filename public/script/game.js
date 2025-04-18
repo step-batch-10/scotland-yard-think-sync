@@ -61,7 +61,35 @@ const renderPlayer = (rolesObject) => {
 
   setTimeout(() => {
     popup.remove();
-  }, 10000);
+  }, 1000);
+};
+
+const printStationDetails = (e) => {
+  alert(e.target.id);
+  console.log(e.target.getAttribute("x"));
+};
+
+const movePlayer = () => {
+  const stations = document.querySelectorAll("tspan");
+  stations.forEach((station) => {
+    station.addEventListener("click", printStationDetails);
+  });
+};
+
+const renderPawns = (roles, tickets, positions) => {
+  const stats = combineObjects(roles, tickets, positions);
+  const svg = document.querySelector("body");
+  const player = stats[1];
+  const position = player.at(-1);
+  const rect = document.querySelector(`#station-${position}`);
+
+  const pawn = cloneTemplate("#move-pawn");
+  pawn.style.border = "1px solid black";
+  pawn.style.position = "absolute";
+  pawn.style.left = `${rect.getAttribute("x")}px`;
+  pawn.style.top = `${rect.getAttribute("y")}px`;
+
+  svg.appendChild(pawn);
 };
 
 const main = async () => {
@@ -69,10 +97,12 @@ const main = async () => {
   renderPlayer(roles);
 
   setInterval(async () => {
-    const { tickets, positions, currentRole, isYourTurn } = await fetchState();
+    const { tickets, positions } = await fetchState();
     renderPlayerTickets(tickets, roles, positions);
-    console.log(currentRole, isYourTurn);
   }, 3000);
+
+  renderPawns(roles, tickets, positions);
+  movePlayer();
 };
 
 globalThis.onload = main;

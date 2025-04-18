@@ -1,17 +1,47 @@
 #pop-up {
   position: absolute;
-  left: 50%;
-  top: 50%;
+  left: 60%;
+  top: 30%;
   transform: translateX(-100%);
-  background-color: rgba(0, 255, 255, 0.6);
+  background-color: rgba(43, 0, 255, 0.6);
+  backdrop-filter: blur(25px);
+
   padding: 10px 40px;
 }
 
 #ticket-show {
-  margin-left: 25rem;
+  background-color: transparent;
+  border: none;
+  padding: 0px;
 }
 
 td,
 th {
   padding: 8px;
+}
+
+.player-panel {
+  position: absolute;
+  right: 1vw;
+  top: 4vh;
+  border: 1px solid black;
+}
+
+.icon {
+  width: 60px;
+}
+
+.player-stats {
+  position: absolute;
+  left: 60vw;
+  top: 6vh;
+}
+
+.pawn {
+  position: absolute;
+  width: 4vw;
+  height: 10vh;
+  left: 10vw;
+  top: 10vh;
+  background-color: olive;
 }

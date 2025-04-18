@@ -1,8 +1,13 @@
 import { describe, it } from "testing";
 import { assertEquals } from "assert";
 import { ScotlandYard } from "../src/models/scotland.ts";
+<<<<<<< HEAD
 import { mapToObject } from "../src/game_play.ts";
 import { Roles, Role, Tickets, RandomIndex } from "../src/models/types.ts";
+=======
+import { mapToObject } from "../src/game.ts";
+import { RandomIndex, Role, Roles, Tickets } from "../src/models/types.ts";
+>>>>>>> 92c3858 ([#29] | Charan/Bhagya | Adds interactivity to map)
 
 describe("test playerNames", () => {
   it("should provide playerNames", () => {
