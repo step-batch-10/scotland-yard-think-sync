@@ -1,9 +1,10 @@
 import { mapToObject } from "../game.ts";
-import { RandomIndex, Role, Tickets, Roles, Ticket } from "./types.ts";
+import { ticketsOf } from "./tickets.ts";
+import { RandomIndex, Role, Tickets, Roles } from "./types.ts";
 
 const randomNumber: RandomIndex = () => 1;
 export class ScotlandYard {
-  private readonly players;
+  private readonly players: string[];
   private readonly roles: Role[];
   private assignedRoles: Map<string, string>;
   private tickets: Map<Role, Tickets>;
@@ -30,13 +31,10 @@ export class ScotlandYard {
     ];
   }
 
-  getPlayers(): string[] {
-    return this.players;
-  }
-
   private defaultAssignment(): void {
     for (const index in this.players) {
       const role = this.roles[index];
+
       if (!this.assignedRoles.has(role)) {
         this.assignedRoles.set(role, this.players[index]);
       }
@@ -48,44 +46,11 @@ export class ScotlandYard {
     this.defaultAssignment();
   }
 
-  getRoles(): Map<string, string> {
-    return this.assignedRoles;
-  }
-
-  static ticketsOfDetective(): Record<Ticket, number> {
-    return {
-      [Ticket.Green]: 8,
-      [Ticket.Yellow]: 10,
-      [Ticket.Red]: 4,
-      [Ticket.Black]: 0,
-      [Ticket["2x"]]: 0,
-    };
-  }
-
-  static ticketsOfMrX(): Record<Ticket, number> {
-    return {
-      [Ticket.Green]: 3,
-      [Ticket.Yellow]: 4,
-      [Ticket.Red]: 3,
-      [Ticket.Black]: 5,
-      [Ticket["2x"]]: 2,
-    };
-  }
-
   distributeTickets(): void {
     for (const index in this.players) {
       const role = this.roles[index];
-      const tickets =
-        role === Role.MrX
-          ? ScotlandYard.ticketsOfMrX()
-          : ScotlandYard.ticketsOfDetective();
-
-      this.tickets.set(role, tickets);
+      this.tickets.set(role, ticketsOf(role));
     }
-  }
-
-  getTickets() {
-    return this.tickets;
   }
 
   assignStartingPositions(random: RandomIndex = randomNumber) {
@@ -110,5 +75,17 @@ export class ScotlandYard {
 
   getCurrentPostion() {
     return this.currentPostion;
+  }
+
+  getPlayers(): string[] {
+    return this.players;
+  }
+
+  getRoles(): Map<string, string> {
+    return this.assignedRoles;
+  }
+
+  getTickets() {
+    return this.tickets;
   }
 }
