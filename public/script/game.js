@@ -1,6 +1,9 @@
+const fetchState = () => fetch("/game/state").then((res) => res.json());
+const fetchRoles = () => fetch("/game/info").then((res) => res.json());
+
 const cloneTemplate = (targetId) => {
   const template = document.querySelector(targetId);
-  return template.content.cloneNode(true);
+  return template.content.firstElementChild.cloneNode(true);
 };
 
 const makeRoleRow = (data) => {
@@ -14,48 +17,57 @@ const makeRoleRow = (data) => {
   return trElement;
 };
 
-const makeTicketRow = (data, role) => {
+const playerStats = ([role, playerName, tickets, station]) => {
   const trElement = cloneTemplate("#ticket-row");
-  const rows = trElement.querySelectorAll("td");
+  const cells = trElement.querySelectorAll("td");
 
-  rows[0].textContent = data[0];
-  rows[1].textContent = role;
-  rows[2].textContent = data[1].Taxi;
-  rows[3].textContent = data[1].Bus;
-  rows[4].textContent = data[1].Metro;
-  rows[5].textContent = data[1].All;
-  rows[6].textContent = data[1]["2x"];
+  cells[0].textContent = role;
+  cells[1].textContent = playerName;
+  cells[2].textContent = tickets.Taxi;
+  cells[3].textContent = tickets.Bus;
+  cells[4].textContent = tickets.Metro;
+  cells[5].textContent = tickets.All;
+  cells[6].textContent = tickets["2x"];
+  cells[7].textContent = station;
 
   return trElement;
 };
-const fetchState = () => fetch("/game/state").then((res) => res.json());
 
-const renderPlayerTickets = async () => {
-  const { tickets: ticketsObject, roles: rolesObject } = await fetchState();
-  const table = cloneTemplate("#stats");
-  const ticketTableDiv = document.querySelector(".ticket-table");
-  const ticketTable = table.querySelector(".pop-up-2");
+const combine3Object = (obj1, obj2, obj3) => {
+  const result = [];
 
-  const tbody = ticketTable.querySelector("tbody");
-  const roles = Object.entries(rolesObject);
-  const tickets = Object.entries(ticketsObject);
-  const tableTicketRows = tickets.map((ticket, index) =>
-    makeTicketRow(ticket, roles[index][1])
-  );
+  for (const key in obj1) {
+    const value1 = obj1[key];
+    const value2 = obj2[key];
+    const value3 = obj3[key];
 
-  tbody.append(...tableTicketRows);
-  ticketTableDiv.replaceChildren(table);
+    result.push([key, value1, value2, value3]);
+  }
+
+  return result;
 };
 
-const renderPlayerInfo = (rolesObject) => {
+const renderPlayerTickets = (tickets, roles, positions) => {
+  const statsTable = cloneTemplate("#stats");
+  const tbody = statsTable.querySelector("tbody");
+  const tableContainer = document.querySelector("#ticket-table");
+
+  const stats = combine3Object(roles, tickets, positions);
+  const tableTicketRows = stats.map(playerStats);
+
+  tbody.append(...tableTicketRows);
+  tableContainer.replaceChildren(statsTable);
+};
+
+const renderPlayer = (rolesObject) => {
   const table = cloneTemplate("#roles-table");
+  const tbody = table.querySelector("tbody");
   const popup = document.querySelector("#pop-up");
-  const popup1 = table.querySelector(".pop-up-1");
-  const tbody1 = popup1.querySelector("tbody");
+
   const roles = Object.entries(rolesObject);
   const tableRoleRows = roles.map(makeRoleRow);
 
-  tbody1.append(...tableRoleRows);
+  tbody.append(...tableRoleRows);
   popup.appendChild(table);
 
   setTimeout(() => {
@@ -63,13 +75,12 @@ const renderPlayerInfo = (rolesObject) => {
   }, 10000);
 };
 
-const fetchRoles = () => fetch("/game/info").then((res) => res.json());
-
 const main = async () => {
   const { roles } = await fetchRoles();
-  renderPlayerInfo(roles);
+  const { tickets, positions } = await fetchState();
 
-  renderPlayerTickets();
+  renderPlayer(roles);
+  renderPlayerTickets(tickets, roles, positions);
 };
 
 globalThis.onload = main;
