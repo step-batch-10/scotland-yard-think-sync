@@ -10,7 +10,8 @@ export function mapToObject<T>(map?: Map<string, T>) {
 
 const serveMatchInfo: GameHandler = (context: GameContext) => {
   const playerId = extractPlayerId(context);
-  const { matchID = "" } = context.env.playerRegistry.getPlayerStats(playerId);
+  const { roomId: matchID = "" } =
+    context.env.playerRegistry.getPlayerStats(playerId);
 
   const match = context.env.match.getMatch(matchID);
   if (!match) return context.json({ message: "Game not found" }, 404);
@@ -23,7 +24,8 @@ const serveMatchInfo: GameHandler = (context: GameContext) => {
 
 const serveMatchState: GameHandler = (context: GameContext) => {
   const playerId = extractPlayerId(context);
-  const { matchID = "" } = context.env.playerRegistry.getPlayerStats(playerId);
+  const { roomId: matchID = "" } =
+    context.env.playerRegistry.getPlayerStats(playerId);
 
   const match = context.env.match.getMatch(matchID);
   if (!match) return context.json({ message: "Game not found" }, 404);

@@ -2,7 +2,7 @@ import { describe, it } from "testing";
 import {
   createAppWithHostedRoom,
   createAppWithPlayers,
-} from "./authenticated_test.ts";
+} from "./game_setup_test.ts";
 import { assertEquals } from "assert/equals";
 import { mapToObject } from "../src/game.ts";
 
@@ -35,7 +35,7 @@ describe("serveMatchInfo", () => {
     assertEquals(actual.roles, expected);
   });
 
-  it("should give room not found if roomId is invalid", async () => {
+  it("should give game not found if roomId is invalid", async () => {
     const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
     const [host, ...players] = allPlayers;
 
@@ -82,7 +82,7 @@ describe("gameState", () => {
     assertEquals(actual.tickets, expected);
   });
 
-  it("should give room not found if roomId is invalid", async () => {
+  it("should give Game not found if roomId is invalid", async () => {
     const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
     const [host, ...players] = allPlayers;
 

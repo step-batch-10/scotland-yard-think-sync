@@ -3,7 +3,7 @@ import { describe, it } from "testing";
 import { Match } from "../src/models/match.ts";
 
 describe("getMatch", () => {
-  it("should return the match if match is present", () => {
+  it("should return the match status if match is present", () => {
     const match = new Match();
     const roomId = "123456";
     const players = new Set([
@@ -34,7 +34,7 @@ describe("getMatch", () => {
 });
 
 describe("hasMatch", () => {
-  it("should return true if match is there", () => {
+  it("should return true if match is present", () => {
     const match = new Match();
     const roomId = "123456";
     const players = new Set([
@@ -50,7 +50,7 @@ describe("hasMatch", () => {
     assert(match.hasMatch(roomId));
   });
 
-  it("should return false if match is not there", () => {
+  it("should return false if match is not present", () => {
     const match = new Match();
     const roomId = "123456";
 
@@ -75,7 +75,7 @@ describe("removeMatch", () => {
     assert(match.removeMatch(roomId));
   });
 
-  it("should return false if match is not there or can't be deleted", () => {
+  it("should return false if match is not present or can't be deleted", () => {
     const match = new Match();
     const roomId = "123456";
 

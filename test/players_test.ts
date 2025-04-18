@@ -5,17 +5,16 @@ import { PlayerStats } from "../src/models/types.ts";
 
 describe("players model", () => {
   describe("createPlayer", () => {
-    it("should create player with player name", () => {
+    it("should create a new player with given player name", () => {
       const playerName = "test1";
       const players = new PlayerRegistry();
       players.createPlayer(playerName);
-      const expected = {};
 
-      assertEquals(players.getPlayerStats(playerName), expected);
+      assertEquals(players.getPlayerStats(playerName), {});
     });
   });
 
-  describe("isPlayerRegistared", () => {
+  describe("isPlayerRegistered", () => {
     it("should return true if player is registered", () => {
       const playerName = "test1";
       const players = new PlayerRegistry();
@@ -33,7 +32,7 @@ describe("players model", () => {
   });
 
   describe("removePlayer", () => {
-    it("should remove player by the player name", () => {
+    it("should remove the given player", () => {
       const playerName = "test1";
       const players = new PlayerRegistry();
       players.createPlayer(playerName);
@@ -52,47 +51,44 @@ describe("players model", () => {
   });
 
   describe("assign room", () => {
-    it("should assign roomid to player", () => {
+    it("should assign roomId to player", () => {
       const playerName = "test1";
-      const roomID = "something";
+      const roomId = "something";
 
       const players = new PlayerRegistry();
       players.createPlayer(playerName);
-      players.assignRoom(playerName, roomID);
+      players.assignRoom(roomId, playerName);
 
       const expected: PlayerStats = {
-        matchID: roomID,
+        roomId: roomId,
         isPlaying: false,
       };
 
       assertEquals(players.getPlayerStats(playerName), expected);
     });
 
-    it("should return empty object if player is not registared", () => {
+    it("should return empty object if player is not registered", () => {
       const playerName = "test1";
       const players = new PlayerRegistry();
-      const expected: PlayerStats = {};
 
-      assertEquals(players.getPlayerStats(playerName), expected);
+      assertEquals(players.getPlayerStats(playerName), {});
     });
   });
 
   describe("reset player", () => {
     it("should reset player if player exists", () => {
       const playerName = "test1";
-      const roomID = "something";
+      const roomId = "something";
 
       const players = new PlayerRegistry();
       players.createPlayer(playerName);
-      players.assignRoom(playerName, roomID);
+      players.assignRoom(roomId, playerName);
       players.resetPlayer(playerName);
 
-      const expected: PlayerStats = {};
-
-      assertEquals(players.getPlayerStats(playerName), expected);
+      assertEquals(players.getPlayerStats(playerName), {});
     });
 
-    it("should not reset if player is not registared", () => {
+    it("should not reset if player is not registered", () => {
       const playerName = "test1";
       const players = new PlayerRegistry();
 
@@ -101,28 +97,28 @@ describe("players model", () => {
   });
 
   describe("join room", () => {
-    it("should set the isPlaying status of all players to true.", () => {
-      const roomID = "something";
+    it("should set the isPlaying status of a player to true.", () => {
+      const roomId = "something";
       const players = new PlayerRegistry();
       const playerName = "test1";
-      const expected = { matchID: roomID, isPlaying: true };
+      const expected = { roomId, isPlaying: true };
 
       players.createPlayer(playerName);
-      players.assignRoom(playerName, roomID);
+      players.assignRoom(roomId, playerName);
       players.joinMatch([playerName]);
 
       assertEquals(players.getPlayerStats(playerName), expected);
     });
 
     it("should set the isPlaying status of all players to true.", () => {
-      const roomID = "something";
+      const roomId = "something";
       const players = new PlayerRegistry();
       const playerNames = ["test1", "test2", "test3", "test4"];
-      const expected = { matchID: roomID, isPlaying: true };
+      const expected = { roomId, isPlaying: true };
 
       playerNames.forEach((player) => {
         players.createPlayer(player);
-        players.assignRoom(player, roomID);
+        players.assignRoom(roomId, player);
       });
       players.joinMatch(playerNames);
 

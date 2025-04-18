@@ -37,32 +37,21 @@ export const createAppWithHostedRoom: TestApp = (host, ...players) => {
 
   bindings.playerRegistry.createPlayer(host);
   const roomId = bindings.rooms.addHost(host);
-  bindings.playerRegistry.assignRoom(host, roomId);
+  bindings.playerRegistry.assignRoom(roomId, host);
 
   for (const player of players) {
-    bindings.rooms.addPlayer(player, roomId);
-    bindings.playerRegistry.assignRoom(player, roomId);
+    bindings.rooms.addPlayer(roomId, player);
+    bindings.playerRegistry.assignRoom(roomId, player);
   }
 
   const app = createApp(bindings);
 
-  return { app, roomId, bindings };
+  return { roomId, app, bindings };
 };
 
 describe("create room", () => {
   it("should get success if room created", async () => {
-    const bindings: Bindings = {
-      playerRegistry: new PlayerRegistry(),
-      rooms: new Rooms(),
-      match: new Match(),
-    };
-
-    const app = createApp(bindings);
-    const fd = new FormData();
-    fd.set("playerName", "a");
-
-    await app.request("/login", { method: "POST", body: fd });
-
+    const { app } = createAppWithHostedRoom("a");
     const res = await app.request("/setup/create-room", {
       headers: { cookie: "playerId=a" },
     });
@@ -77,12 +66,12 @@ describe("serveRoomId", () => {
   it("should give room id", async () => {
     const playerName = "testing";
 
-    const { app, roomId } = createAppWithHostedRoom(playerName);
+    const { roomId, app } = createAppWithHostedRoom(playerName);
     const response = await app.request("/setup/room-id", {
       headers: { cookie: `playerId=${playerName}` },
     });
-
     const jsonData = await response.json();
+
     assertEquals(response.status, 200);
     assertEquals(jsonData.roomId.length, 6);
     assertEquals(roomId, jsonData.roomId);
@@ -92,7 +81,7 @@ describe("serveRoomId", () => {
 describe("handleJoin ", () => {
   it("should give valid room message and give location if roomId is valid", async () => {
     const playerName = "Gangadhar";
-    const { app, roomId } = createAppWithHostedRoom(playerName);
+    const { roomId, app } = createAppWithHostedRoom(playerName);
 
     const fd = new FormData();
     fd.set("roomId", roomId);
@@ -107,7 +96,7 @@ describe("handleJoin ", () => {
     const expected = {
       isJoined: true,
       location: "/html/waiting.html",
-      message: "Succesfully joined",
+      message: "Successfully joined",
     };
 
     assertEquals(response.status, 200);
@@ -153,12 +142,12 @@ describe("handleJoin ", () => {
     assertEquals(actual, expected);
   });
 
-  it("should return false and room full messsage if room is full", async () => {
+  it("should return false and room full message if room is full", async () => {
     const allPlayers = ["test1", "test2", "test3", "test4", "test5", "test6"];
     const [host, ...players] = allPlayers;
-    const { app, roomId, bindings } = createAppWithHostedRoom(host, ...players);
+    const { roomId, app, bindings } = createAppWithHostedRoom(host, ...players);
 
-    const playerName = "faketTest";
+    const playerName = "fakeTest";
     bindings.playerRegistry.createPlayer(playerName);
 
     const fd = new FormData();
@@ -179,7 +168,7 @@ describe("handleJoin ", () => {
 });
 
 describe("servePlayerList", () => {
-  it("should return the players if players exists", async () => {
+  it("should return the player if there is one player", async () => {
     const playerName = "test";
     const { app } = createAppWithHostedRoom(playerName);
 
@@ -193,7 +182,7 @@ describe("servePlayerList", () => {
     assertEquals(actual, expected);
   });
 
-  it("should return the players if players exists", async () => {
+  it("should return the players if there are multiple players", async () => {
     const allPlayers = ["test1", "test2", "test3"];
     const [host, ...players] = allPlayers;
     const { app } = createAppWithHostedRoom(host, ...players);
@@ -221,7 +210,7 @@ describe("servePlayerList", () => {
     });
 
     const actual = await response.json();
-    const expected = { success: false };
+    const expected = { isValid: false };
 
     assertEquals(response.status, 400);
     assertEquals(actual, expected);
@@ -230,7 +219,7 @@ describe("servePlayerList", () => {
   it("should assign game if room is full", async () => {
     const playerName = "faking";
     const players = ["a", "b", "c", "d", "e"];
-    const { app, bindings, roomId } = createAppWithHostedRoom(
+    const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
       ...players
     );
@@ -245,7 +234,7 @@ describe("servePlayerList", () => {
   it("should not assign game if room is not full", async () => {
     const playerName = "faking";
     const players = ["a", "b", "c", "d"];
-    const { app, bindings, roomId } = createAppWithHostedRoom(
+    const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
       ...players
     );
@@ -257,10 +246,10 @@ describe("servePlayerList", () => {
     assertFalse(bindings.match.hasMatch(roomId));
   });
 
-  it("should not assign game if room has already assigned a game", async () => {
+  it("should not assign a game if the room already has one.", async () => {
     const playerName = "faking";
     const players = ["a", "b", "c", "d", "e"];
-    const { app, bindings, roomId } = createAppWithHostedRoom(
+    const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
       ...players
     );
@@ -274,7 +263,7 @@ describe("servePlayerList", () => {
   });
 });
 
-describe("removeplayer", () => {
+describe("removePlayer", () => {
   it("should remove the player if matchId is valid", async () => {
     const playerName = "test1";
     const { app } = createAppWithHostedRoom(playerName);
@@ -288,7 +277,7 @@ describe("removeplayer", () => {
     assertEquals(response.status, 200);
     const data = await response.json();
 
-    assertEquals(data, { success: true });
+    assertEquals(data, { isRemoved: true });
   });
 
   it("should not remove the player if matchId is is not present", async () => {
@@ -304,6 +293,8 @@ describe("removeplayer", () => {
     assertEquals(response.status, 200);
     const data = await response.json();
 
-    assertEquals(data, { success: false });
+    assertEquals(data, {
+      isRemoved: false,
+    });
   });
 });

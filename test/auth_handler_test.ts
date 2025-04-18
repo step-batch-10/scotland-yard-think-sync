@@ -1,11 +1,11 @@
 import { createApp } from "../src/app.ts";
 import { describe, it } from "testing";
-import { assertEquals } from "jsr:@std/assert";
+import { assert, assertEquals } from "jsr:@std/assert";
 import { Bindings } from "../src/models/types.ts";
 import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
 import { Match } from "../src/models/match.ts";
-import { createAppWithPlayers } from "./authenticated_test.ts";
+import { createAppWithPlayers } from "./game_setup_test.ts";
 
 describe("login handler", () => {
   it("should create player stats", async () => {
@@ -23,6 +23,7 @@ describe("login handler", () => {
 
     assertEquals(res.status, 303);
     assertEquals(res.headers.get("location"), "/lobby");
+    assert(bindings.playerRegistry.isPlayerRegistered('akshay'))
   });
 });
 

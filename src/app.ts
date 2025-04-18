@@ -6,7 +6,7 @@ import {
   ensureAuthenticated,
   skipIfAuthenticated,
   loginHandler,
-} from "./handlers/auth-handler.ts";
+} from "./handlers/auth_handler.ts";
 import { Bindings } from "./models/types.ts";
 import { createGame as createGameRoutes } from "./game.ts";
 

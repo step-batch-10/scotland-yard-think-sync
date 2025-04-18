@@ -6,25 +6,25 @@ export class PlayerRegistry {
     this.players = new Map<string, PlayerStats>();
   }
 
-  createPlayer(playerName: string) {
-    this.players.set(playerName, {});
+  createPlayer(playerId: string) {
+    this.players.set(playerId, {});
   }
 
-  getPlayerStats(playerName: string): PlayerStats {
-    return this.players.get(playerName) || {};
+  getPlayerStats(playerId: string): PlayerStats {
+    return this.players.get(playerId) || {};
   }
 
-  isPlayerRegistered(playerName: string) {
-    return this.players.has(playerName);
+  isPlayerRegistered(playerId: string) {
+    return this.players.has(playerId);
   }
 
-  removePlayer(playerName: string) {
-    return this.players.delete(playerName);
+  removePlayer(playerId: string) {
+    return this.players.delete(playerId);
   }
 
-  assignRoom(playerName: string, roomID: string) {
-    const player = this.getPlayerStats(playerName);
-    player.matchID = roomID;
+  assignRoom(roomId: string, playerId: string) {
+    const player = this.getPlayerStats(playerId);
+    player.roomId = roomId;
     player.isPlaying = false;
   }
 
@@ -34,10 +34,10 @@ export class PlayerRegistry {
     });
   }
 
-  resetPlayer(playerName: string) {
-    if (!this.isPlayerRegistered(playerName)) return false;
+  resetPlayer(playerId: string) {
+    if (!this.isPlayerRegistered(playerId)) return false;
 
-    this.players.set(playerName, {});
+    this.players.set(playerId, {});
     return true;
   }
 }

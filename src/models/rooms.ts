@@ -29,7 +29,7 @@ export class Rooms {
     return roomId;
   }
 
-  addPlayer(player: string, roomId: string) {
+  addPlayer(roomId: string, player: string) {
     const lobby = this.lobbies.get(roomId);
     lobby?.add(player);
   }
@@ -46,7 +46,7 @@ export class Rooms {
     return this.lobbies.has(roomId);
   }
 
-  removePlayer(playerName: string, roomId: string) {
+  removePlayer(roomId: string, playerName: string) {
     const room = this.lobbies.get(roomId);
     room?.delete(playerName);
 

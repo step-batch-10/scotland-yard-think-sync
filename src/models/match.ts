@@ -11,7 +11,7 @@ export class Match {
     this.matches = new Map();
   }
 
-  private defaltMatchFormat(players: string[]) {
+  private defaultMatchFormat(players: string[]) {
     const game = new ScotlandYard(players);
     game.assignRole();
     game.distributeTickets();
@@ -25,7 +25,7 @@ export class Match {
   }
 
   setMatch(roomId: string, players: Set<string>) {
-    this.matches.set(roomId, this.defaltMatchFormat([...players]));
+    this.matches.set(roomId, this.defaultMatchFormat([...players]));
   }
 
   getMatch(roomId: string) {

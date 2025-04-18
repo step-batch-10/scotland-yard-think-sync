@@ -11,7 +11,7 @@ export const extractPlayerId = (context: GameContext): string => {
 const handleCreateRoom = (context: GameContext) => {
   const playerId = extractPlayerId(context);
   const roomId = context.env.rooms.addHost(playerId);
-  context.env.playerRegistry.assignRoom(playerId, roomId);
+  context.env.playerRegistry.assignRoom(roomId, playerId);
 
   return context.json({ success: true });
 };
@@ -35,13 +35,13 @@ const handleJoinRoom: GameHandler = async (context: GameContext) => {
     return context.json({ isJoined: false, message: "Room is full" }, 400);
   }
 
-  context.env.playerRegistry.assignRoom(playerId, roomId);
-  context.env.rooms.addPlayer(playerId, roomId);
+  context.env.playerRegistry.assignRoom(roomId, playerId);
+  context.env.rooms.addPlayer(roomId, playerId);
 
   return context.json({
     isJoined: true,
     location: "/html/waiting.html",
-    message: "Succesfully joined",
+    message: "Successfully joined",
   });
 };
 
@@ -49,21 +49,21 @@ const serveRoomId = (context: GameContext) => {
   const playerId = extractPlayerId(context);
   const player = context.env.playerRegistry.getPlayerStats(playerId);
 
-  return context.json({ roomId: player.matchID });
+  return context.json({ roomId: player.roomId });
 };
 
 const servePlayerList = (context: GameContext) => {
   const playerId = extractPlayerId(context);
   const player = context.env.playerRegistry.getPlayerStats(playerId);
-  const matchID = player.matchID || "";
+  const roomId = player.roomId || "";
 
-  const players = context.env.rooms.getPlayers(matchID);
-  if (!players) return context.json({ success: false }, 400);
+  const players = context.env.rooms.getPlayers(roomId);
+  if (!players) return context.json({ isValid: false }, 400);
 
-  const isRoomFull = context.env.rooms.isRoomFull(matchID);
+  const isRoomFull = context.env.rooms.isRoomFull(roomId);
 
   if (isRoomFull) {
-    context.env.rooms.assignGame(matchID, context.env.match);
+    context.env.rooms.assignGame(roomId, context.env.match);
   }
 
   return context.json({ isRoomFull, players: [...players] });
@@ -73,11 +73,11 @@ const removePlayer = (context: GameContext) => {
   const playerId = extractPlayerId(context);
   const player = context.env.playerRegistry.getPlayerStats(playerId);
 
-  if (!player.matchID) return context.json({ success: false });
+  if (!player.roomId) return context.json({ isRemoved: false });
 
-  context.env.rooms.removePlayer(playerId, player.matchID);
+  context.env.rooms.removePlayer(playerId, player.roomId);
 
-  return context.json({ success: true });
+  return context.json({ isRemoved: true });
 };
 
 export const createGameSetup = (): Hono<{ Bindings: Bindings }> => {

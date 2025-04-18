@@ -17,57 +17,56 @@ describe("Rooms", () => {
   });
 
   describe("getPlayers", () => {
-    it("should true if particular is there", () => {
+    it("should be true if particular player is present", () => {
       assert(rooms.getPlayers(roomId)?.has("a"));
     });
 
     it("should add player", () => {
-      rooms.addPlayer("b", roomId);
+      rooms.addPlayer(roomId, "b");
       assert(rooms.getPlayers(roomId)?.has("b"));
     });
   });
 
   describe("isRoomFull", () => {
-    it("should return false when room is not full", () => {
+    it("should be false when room is not full", () => {
       assertFalse(rooms.isRoomFull(roomId));
     });
 
-    it("should return true when room is full", () => {
-      rooms.addPlayer("b", roomId);
-      rooms.addPlayer("c", roomId);
-      rooms.addPlayer("d", roomId);
-      rooms.addPlayer("e", roomId);
-      rooms.addPlayer("f", roomId);
+    it("should be true when room is full", () => {
+      rooms.addPlayer(roomId, "b");
+      rooms.addPlayer(roomId, "c");
+      rooms.addPlayer(roomId, "d");
+      rooms.addPlayer(roomId, "e");
+      rooms.addPlayer(roomId, "f");
 
       assert(rooms.isRoomFull(roomId));
     });
   });
 
   describe("hasRoom", () => {
-    it("should give true if room is there", () => {
+    it("should be true if room is present", () => {
       assert(rooms.hasRoom(roomId));
     });
 
-    it("should give false if room is not there", () => {
+    it("should be false if room is not present", () => {
       assertFalse(rooms.hasRoom("9808"));
     });
   });
 
   describe("removePlayer", () => {
     it("should remove player from room if player present", () => {
-      rooms.addPlayer("test1", roomId);
-      rooms.addPlayer("test2", roomId);
-
-      rooms.removePlayer("test1", roomId);
+      rooms.addPlayer(roomId, "test1");
+      rooms.addPlayer(roomId, "test2");
+      rooms.removePlayer(roomId, "test1");
 
       const roomMembers = rooms.getPlayers(roomId) || [];
-
       const expected = ["a", "test2"];
+
       assertEquals([...roomMembers], expected);
     });
 
-    it("should remove player and lobby from room if player present and host left", () => {
-      rooms.removePlayer("a", roomId);
+    it("should remove the room if no players remain", () => {
+      rooms.removePlayer(roomId, "a");
 
       const roomMembers = rooms.getPlayers(roomId) || [];
 
@@ -77,12 +76,12 @@ describe("Rooms", () => {
   });
 
   describe("assignGame", () => {
-    it("should assign game if there roomId is valid", () => {
-      rooms.addPlayer("b", roomId);
-      rooms.addPlayer("c", roomId);
-      rooms.addPlayer("d", roomId);
-      rooms.addPlayer("e", roomId);
-      rooms.addPlayer("f", roomId);
+    it("should assign game if the roomId is valid", () => {
+      rooms.addPlayer(roomId, "b");
+      rooms.addPlayer(roomId, "c");
+      rooms.addPlayer(roomId, "d");
+      rooms.addPlayer(roomId, "e");
+      rooms.addPlayer(roomId, "f");
 
       const match = new Match();
 
@@ -98,11 +97,11 @@ describe("Rooms", () => {
     });
 
     it("should not assign game if there game is already assigned", () => {
-      rooms.addPlayer("b", roomId);
-      rooms.addPlayer("c", roomId);
-      rooms.addPlayer("d", roomId);
-      rooms.addPlayer("e", roomId);
-      rooms.addPlayer("f", roomId);
+      rooms.addPlayer(roomId, "b");
+      rooms.addPlayer(roomId, "c");
+      rooms.addPlayer(roomId, "d");
+      rooms.addPlayer(roomId, "e");
+      rooms.addPlayer(roomId, "f");
 
       const match = new Match();
 

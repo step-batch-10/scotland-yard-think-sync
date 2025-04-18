@@ -42,7 +42,7 @@ export interface RandomIndex {
 }
 
 export interface PlayerStats {
-  matchID?: string;
+  roomId?: string;
   isPlaying?: boolean;
 }
 
