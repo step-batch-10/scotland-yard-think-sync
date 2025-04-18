@@ -7,6 +7,10 @@
   padding: 10px 40px;
 }
 
+#ticket-show {
+  margin-left: 25rem;
+}
+
 td,
 th {
   padding: 8px;

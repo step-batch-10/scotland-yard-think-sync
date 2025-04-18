@@ -34,6 +34,7 @@ export type Tickets = Record<Ticket, number>;
 export interface RandomIndex {
   (x: number, y: number): number;
 }
+
 export class ScotlandYard {
   private readonly players;
   private readonly roles: Role[];

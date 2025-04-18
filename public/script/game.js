@@ -68,9 +68,8 @@ const fetchRoles = () => fetch("/game/info").then((res) => res.json());
 const main = async () => {
   const { roles } = await fetchRoles();
   renderPlayerInfo(roles);
-  document
-    .querySelector("#ticket-show")
-    .addEventListener("click", renderPlayerTickets);
+
+  renderPlayerTickets();
 };
 
 globalThis.onload = main;
