@@ -1,4 +1,4 @@
-import { Hono } from "hono";
+import { Hono, HonoRequest } from "hono";
 import { Bindings, GameContext, GameHandler } from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
@@ -45,10 +45,25 @@ const serveMatchState: GameHandler = (context: GameContext) => {
   return context.json(gameState);
 };
 
+async function getStation(request: HonoRequest): Promise<string> {
+  const fd = await request.formData();
+  const station = fd.get("station");
+  return String(station);
+}
+
+const servePossibleStations: GameHandler = async (context) => {
+  const station = await getStation(context.req);
+  const { match } = extractMatchAndPlayerId(context);
+  const nearbyStation = match?.game.possibleStations(+station);
+
+  return context.json(nearbyStation);
+};
+
 export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
   gameApp.get("/info", serveMatchInfo);
   gameApp.get("/state", serveMatchState);
+  gameApp.post("/possible-stations", servePossibleStations);
 
   return gameApp;
 };

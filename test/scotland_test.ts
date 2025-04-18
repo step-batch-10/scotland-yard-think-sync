@@ -3,10 +3,10 @@ import { assertEquals } from "assert";
 import { ScotlandYard } from "../src/models/scotland.ts";
 import { mapToObject } from "../src/game_play.ts";
 import {
-  Roles,
-  Role,
-  Tickets,
   RandomIndex,
+  Role,
+  Roles,
+  Tickets,
   Transport,
 } from "../src/models/types.ts";
 

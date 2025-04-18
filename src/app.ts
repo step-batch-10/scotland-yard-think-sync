@@ -6,9 +6,9 @@ import { createGameSetup } from "./game_setup.ts";
 import { Bindings } from "./models/types.ts";
 import { createGameRoutes } from "./game_play.ts";
 import {
-  skipIfAuthenticated,
-  loginHandler,
   ensureAuthenticated,
+  loginHandler,
+  skipIfAuthenticated,
 } from "./handlers/auth_handler.ts";
 
 const inject = (bindings: Bindings): MiddlewareHandler => {

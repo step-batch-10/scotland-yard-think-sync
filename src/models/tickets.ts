@@ -1,4 +1,4 @@
-import { Ticket, Role } from "./types.ts";
+import { Role, Ticket } from "./types.ts";
 
 const ticketsOfDetective = (): Record<Ticket, number> => ({
   [Ticket.Green]: 8,

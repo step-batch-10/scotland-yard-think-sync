@@ -117,3 +117,28 @@ describe("mapToObject", () => {
     assertEquals(mapToObject(), {});
   });
 });
+
+describe("servePossibleStations", () => {
+  it("should return all the possible station based on the givens station", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const fd = new FormData();
+    fd.append("station", "181");
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.match);
+
+    const response = await app.request("/game/possible-stations", {
+      method: "POST",
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+      body: fd,
+    });
+
+    const expected = [{ to: 182, mode: "Taxi" }];
+    const actual = await response.json();
+
+    assertEquals(actual, expected);
+  });
+});
