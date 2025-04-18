@@ -58,12 +58,19 @@ const renderPlayer = (rolesObject) => {
 
   setTimeout(() => {
     popup.remove();
-  }, 10000);
+  }, 3000);
 };
 
 const printStationDetails = (e) => {
-  alert(e.target.id);
-  console.log(e.target.getAttribute("x"));
+  const [_, id] = e.target.id.split("-");
+  const station = document.querySelector(`#station-${id}`);
+  const dimensions = station.getBoundingClientRect();
+  const pawn = document.querySelector(".pawn");
+  const pawnDimension = pawn.getBoundingClientRect();
+  console.log(pawnDimension);
+  pawn.style.left = `${dimensions.x}px`;
+  pawn.style.top = `${dimensions.y}px`;
+  console.log(dimensions);
 };
 
 const movePlayer = () => {
@@ -75,18 +82,27 @@ const movePlayer = () => {
 
 const renderPawns = (roles, tickets, positions) => {
   const stats = combineObjects(roles, tickets, positions);
-  const svg = document.querySelector("body");
-  const player = stats[1];
-  const position = player.at(-1);
-  const rect = document.querySelector(`#station-${position}`);
+  const root = document.querySelector("#pawns-display");
 
-  const pawn = cloneTemplate("#move-pawn");
-  pawn.style.border = "1px solid black";
-  pawn.style.position = "absolute";
-  pawn.style.left = `${rect.getAttribute("x")}px`;
-  pawn.style.top = `${rect.getAttribute("y")}px`;
+  const template = document.querySelector("#move-pawn");
+  const clone = template.content.cloneNode(true);
+  const pawns = [...clone.querySelectorAll(".pawn")];
 
-  svg.appendChild(pawn);
+  const playerPawns = pawns.map((pawn, index) => {
+    const player = stats[index];
+    const position = player.at(-1);
+    const rect = document.querySelector(`#station-${position}`);
+    const dimensions = rect.getBoundingClientRect();
+
+    const [_, color] = player[0].split(":");
+    pawn.style.backgroundColor = color;
+    pawn.style.left = `${dimensions.x + 10}px`;
+    pawn.style.top = `${dimensions.y - 10}px`;
+
+    return pawn;
+  });
+
+  root.replaceChildren(...playerPawns);
 };
 
 const whoseTurn = (currentRole, isYourTurn) => {
@@ -105,9 +121,9 @@ const main = async () => {
     const { tickets, positions, roles, currentRole, isYourTurn } =
       await fetchState();
     renderPlayerTickets(tickets, roles, positions);
-    renderPawns(roles, tickets, positions);
     whoseTurn(currentRole, isYourTurn);
-  }, 1000);
+    renderPawns(roles, tickets, positions);
+  }, 3000);
 
   movePlayer();
 };

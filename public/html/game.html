@@ -11,6 +11,7 @@
   </head>
   <body>
     <div id="turn-indicator"></div>
+    <div id="pawns-display"></div>
     <div>
       <button id="ticket-show" popovertarget="mypopover" class="player-panel">
         <img
@@ -23,9 +24,9 @@
 
       <svg
         version="1.1"
-        id="svg1"
-        width="100vw"
-        height="100vh"
+        id="game-map"
+        width="90vw"
+        height="90vh"
         viewBox="0 0 1536 1024"
         xmlns:xlink="http://www.w3.org/1999/xlink"
         xmlns="http://www.w3.org/2000/svg"
@@ -1317,6 +1318,11 @@
     <template id="distribute-tickets"> </template>
 
     <template id="move-pawn">
+      <div class="pawn"></div>
+      <div class="pawn"></div>
+      <div class="pawn"></div>
+      <div class="pawn"></div>
+      <div class="pawn"></div>
       <div class="pawn"></div>
     </template>
   </body>
