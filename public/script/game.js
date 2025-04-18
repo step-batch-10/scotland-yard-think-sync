@@ -77,10 +77,13 @@ const renderPlayer = (rolesObject) => {
 
 const main = async () => {
   const { roles } = await fetchRoles();
-  const { tickets, positions } = await fetchState();
-
   renderPlayer(roles);
-  renderPlayerTickets(tickets, roles, positions);
+
+  setInterval(async () => {
+    const { tickets, positions, currentRole, isYourTurn } = await fetchState();
+    renderPlayerTickets(tickets, roles, positions);
+    console.log(currentRole, isYourTurn);
+  }, 3000);
 };
 
 globalThis.onload = main;

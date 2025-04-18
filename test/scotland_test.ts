@@ -90,7 +90,7 @@ describe("assignStartingPositions", () => {
     const game = new ScotlandYard([...players]);
     game.assignRole();
     game.assignStartingPositions(random);
-    const actual = game.getCurrentPostion();
+    const actual = game.getCurrentPosition();
 
     const expected = {
       MrX: 181,
@@ -119,7 +119,7 @@ describe("assignStartingPositions", () => {
     const game = new ScotlandYard([...players]);
     game.assignRole();
     game.assignStartingPositions(random);
-    const actual = game.getCurrentPostion();
+    const actual = game.getCurrentPosition();
 
     const expected = {
       "Detective:Blue": 193,
@@ -180,7 +180,7 @@ describe("game state", () => {
     assertEquals(positions, expected);
   });
 
-  it("should provide empty starting postions if starting position is not assigned", () => {
+  it("should provide empty starting positions if starting position is not assigned", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     sy.assignRole();
@@ -188,5 +188,44 @@ describe("game state", () => {
 
     const { positions } = sy.getGameState();
     assertEquals(positions, {});
+  });
+
+  it("should have current role", () => {
+    const players = new Set(["a", "b", "c", "d", "e", "f"]);
+    const sy = new ScotlandYard([...players]);
+    sy.assignRole();
+    sy.distributeTickets();
+
+    const { currentRole } = sy.getGameState();
+    assertEquals(currentRole, "MrX");
+  });
+});
+
+describe("change turn", () => {
+  it("should be next player", () => {
+    const players = new Set(["a", "b", "c", "d", "e", "f"]);
+    const sy = new ScotlandYard([...players]);
+    sy.assignRole();
+    sy.distributeTickets();
+    sy.assignStartingPositions();
+    const nextPlayer = sy.changeTurn();
+
+    assertEquals(nextPlayer, "Detective:Red");
+  });
+
+  it("should rotate the turn to the next player in circular order", () => {
+    const players = new Set(["a", "b", "c", "d", "e", "f"]);
+    const sy = new ScotlandYard([...players]);
+    sy.assignRole();
+    sy.distributeTickets();
+    sy.assignStartingPositions();
+    sy.changeTurn()
+    sy.changeTurn()
+    sy.changeTurn()
+    sy.changeTurn()
+    sy.changeTurn()
+    const nextPlayer = sy.changeTurn();
+
+    assertEquals(nextPlayer, "MrX");
   });
 });

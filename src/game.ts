@@ -1,6 +1,7 @@
 import { Hono } from "hono";
 import { Bindings, GameContext, GameHandler } from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
+import { ScotlandYard } from "./models/scotland.ts";
 
 export function mapToObject<T>(map?: Map<string, T>) {
   if (!map) return {};
@@ -8,12 +9,16 @@ export function mapToObject<T>(map?: Map<string, T>) {
   return Object.fromEntries([...map.entries()]);
 }
 
-const serveMatchInfo: GameHandler = (context: GameContext) => {
+const extractMatchAndPlayerId = (context: GameContext) => {
   const playerId = extractPlayerId(context);
-  const { roomId: matchID = "" } =
-    context.env.playerRegistry.getPlayerStats(playerId);
+  const { roomId = "" } = context.env.playerRegistry.getPlayerStats(playerId);
+  const match = context.env.match.getMatch(roomId);
+  return { match, playerId, roomId };
+};
 
-  const match = context.env.match.getMatch(matchID);
+const serveMatchInfo: GameHandler = (context: GameContext) => {
+  const { match } = extractMatchAndPlayerId(context);
+
   if (!match) return context.json({ message: "Game not found" }, 404);
 
   const rolesMap = match.game.getRoles();
@@ -22,17 +27,22 @@ const serveMatchInfo: GameHandler = (context: GameContext) => {
   return context.json({ roles });
 };
 
-const serveMatchState: GameHandler = (context: GameContext) => {
-  const playerId = extractPlayerId(context);
-  const { roomId: matchID = "" } =
-    context.env.playerRegistry.getPlayerStats(playerId);
+const getGameState = (game: ScotlandYard, playerId: string) => {
+  const state = game.getGameState();
+  const { roles, currentRole } = state;
+  const isYourTurn = roles[currentRole] === playerId;
 
-  const match = context.env.match.getMatch(matchID);
+  return { ...state, isYourTurn };
+};
+
+const serveMatchState: GameHandler = (context: GameContext) => {
+  const { match, playerId } = extractMatchAndPlayerId(context);
+
   if (!match) return context.json({ message: "Game not found" }, 404);
 
-  const state = match.game.getGameState();
+  const gameState = getGameState(match.game, playerId);
 
-  return context.json(state);
+  return context.json(gameState);
 };
 
 export const createGame = (): Hono<{ Bindings: Bindings }> => {

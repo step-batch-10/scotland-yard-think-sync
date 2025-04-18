@@ -11,15 +11,15 @@ export class ScotlandYard {
   private assignedRoles: Map<string, string>;
   private tickets: Map<Role, Tickets>;
   private startingStations: number[];
-  private currentPostion: Map<Role, number>;
+  private currentPosition: Map<Role, number>;
+  private currentRole: Role;
 
   constructor(players: string[], map: GameMap = basicMap) {
     this.players = [...players];
     this.assignedRoles = new Map();
     this.tickets = new Map();
-    this.currentPostion = new Map();
+    this.currentPosition = new Map();
     this.startingStations = map.startingPositions;
-
     this.roles = [
       Role.MrX,
       Role.Red,
@@ -28,6 +28,7 @@ export class ScotlandYard {
       Role.Yellow,
       Role.Purple,
     ];
+    this.currentRole = this.roles[0];
   }
 
   private defaultAssignment(): void {
@@ -60,20 +61,28 @@ export class ScotlandYard {
 
       const randomIndex = random(0, 6) % positions.length;
       const [start] = positions.splice(randomIndex, 1);
-      this.currentPostion.set(role, start);
+      this.currentPosition.set(role, start);
     }
+  }
+
+  changeTurn() {
+    const nextPlayerIndex = (this.roles.indexOf(this.currentRole) + 1) % 6;
+    this.currentRole = this.roles[nextPlayerIndex];
+
+    return this.currentRole;
   }
 
   getGameState() {
     return {
       tickets: mapToObject<Tickets>(this.tickets),
       roles: mapToObject<string>(this.assignedRoles),
-      positions: mapToObject(this.currentPostion),
+      positions: mapToObject(this.currentPosition),
+      currentRole: this.currentRole,
     };
   }
 
-  getCurrentPostion() {
-    return this.currentPostion;
+  getCurrentPosition() {
+    return this.currentPosition;
   }
 
   getPlayers(): string[] {
