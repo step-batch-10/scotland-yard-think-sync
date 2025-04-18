@@ -119,7 +119,7 @@ describe("mapToObject", () => {
 });
 
 describe("servePossibleStations", () => {
-  it("should return all the possible station based on the givens station", async () => {
+  it("should return all the possible station based on the given station", async () => {
     const allPlayers = ["a", "b", "c", "d", "e", "f"];
     const [host, ...players] = allPlayers;
 
@@ -140,5 +140,51 @@ describe("servePossibleStations", () => {
     const actual = await response.json();
 
     assertEquals(actual, expected);
+  });
+
+  it("should return all possible station and modes based on station", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const fd = new FormData();
+    fd.append("station", "187");
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.match);
+
+    const response = await app.request("/game/possible-stations", {
+      method: "POST",
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+      body: fd,
+    });
+
+    const expected = [
+      { to: 188, mode: "Metro" },
+      { to: 188, mode: "Taxi" },
+    ];
+    const actual = await response.json();
+    assertEquals(actual, expected);
+  });
+
+  it("should return empty Array", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const fd = new FormData();
+    fd.append("station", "171");
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.match);
+
+    const response = await app.request("/game/possible-stations", {
+      method: "POST",
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+      body: fd,
+    });
+
+    const actual = await response.json();
+    assertEquals(actual, []);
   });
 });
