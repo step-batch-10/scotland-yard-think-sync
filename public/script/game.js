@@ -89,14 +89,24 @@ const renderPawns = (roles, tickets, positions) => {
   svg.appendChild(pawn);
 };
 
+const whoseTurn = (currentRole, isYourTurn) => {
+  const turn = isYourTurn ? "your turn" : "opponent turn";
+
+  const turnIndicator = document.querySelector("#turn-indicator");
+
+  turnIndicator.textContent = `${turn} : ${currentRole}`;
+};
+
 const main = async () => {
   const { roles } = await fetchRoles();
   renderPlayer(roles);
 
   setInterval(async () => {
-    const { tickets, positions } = await fetchState();
+    const { tickets, positions, roles, currentRole, isYourTurn } =
+      await fetchState();
     renderPlayerTickets(tickets, roles, positions);
     renderPawns(roles, tickets, positions);
+    whoseTurn(currentRole, isYourTurn);
   }, 1000);
 
   movePlayer();
