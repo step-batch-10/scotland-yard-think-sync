@@ -63,6 +63,10 @@ export interface Route {
   mode: Transport;
 }
 
-export interface GameMap {
+export interface MapRoute {
   [key: number]: Route[];
+}
+export interface GameMap {
+  startingPositions: number[];
+  routes: MapRoute;
 }

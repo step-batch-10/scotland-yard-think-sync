@@ -1,6 +1,6 @@
-import { GameMap, Transport } from "../models/types.ts";
+import { GameMap, MapRoute, Transport } from "../models/types.ts";
 
-export const basicMap: GameMap = {
+const routes: MapRoute = {
   181: [{ to: 182, mode: Transport.Taxi }],
   182: [
     { to: 183, mode: Transport.Taxi },
@@ -40,4 +40,11 @@ export const basicMap: GameMap = {
     { to: 185, mode: Transport.Metro },
     { to: 192, mode: Transport.Taxi },
   ],
+};
+
+export const basicMap: GameMap = {
+  startingPositions: [
+    181, 182, 183, 184, 185, 186, 187, 188, 189, 190, 191, 192, 193,
+  ],
+  routes,
 };
