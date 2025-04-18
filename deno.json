@@ -5,7 +5,7 @@
     "hono": "npm:hono@^4.7.5"
   },
   "test": {
-    "include": ["**/*.ts"],
+    "include": ["**/*.ts", "public/script/game_utils.js"],
     "exclude": ["main.ts", "src/"]
   },
   "lint": {
