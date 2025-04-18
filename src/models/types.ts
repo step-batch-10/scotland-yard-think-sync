@@ -57,3 +57,12 @@ export type GameHandler = Handler<{ Bindings: Bindings }>;
 export type GameMiddleWare = MiddlewareHandler<{ Bindings: Bindings }>;
 
 export type App = Hono<{ Bindings: Bindings }>;
+
+export interface Route {
+  to: number;
+  mode: Transport;
+}
+
+export interface GameMap {
+  [key: number]: Route[];
+}
