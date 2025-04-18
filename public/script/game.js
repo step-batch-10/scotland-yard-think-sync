@@ -96,10 +96,8 @@ const main = async () => {
   const { roles } = await fetchRoles();
   renderPlayer(roles);
 
-  setInterval(async () => {
-    const { tickets, positions } = await fetchState();
-    renderPlayerTickets(tickets, roles, positions);
-  }, 3000);
+  const { tickets, positions } = await fetchState();
+  renderPlayerTickets(tickets, roles, positions);
 
   renderPawns(roles, tickets, positions);
   movePlayer();

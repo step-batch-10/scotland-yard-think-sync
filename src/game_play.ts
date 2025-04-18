@@ -45,7 +45,7 @@ const serveMatchState: GameHandler = (context: GameContext) => {
   return context.json(gameState);
 };
 
-export const createGame = (): Hono<{ Bindings: Bindings }> => {
+export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
   gameApp.get("/info", serveMatchInfo);
   gameApp.get("/state", serveMatchState);

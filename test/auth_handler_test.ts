@@ -23,7 +23,7 @@ describe("login handler", () => {
 
     assertEquals(res.status, 303);
     assertEquals(res.headers.get("location"), "/lobby");
-    assert(bindings.playerRegistry.isPlayerRegistered('akshay'))
+    assert(bindings.playerRegistry.isPlayerRegistered("akshay"));
   });
 });
 
