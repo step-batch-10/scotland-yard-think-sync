@@ -31,11 +31,11 @@
   "tasks": {
     "deploy-qa": {
       "description": "Deploy in the QA environment for testing",
-      "command": "deployctl deploy --project=scotland-yard-qa --entrypoint=main.ts --org=ThinkSync"
+      "command": "deployctl deploy --prod -p=scotland-yard-qa main.ts"
     },
     "deploy-pro": {
       "description": "Deploy in the production environment",
-      "command": "deployctl deploy --project=scotland-yard --entrypoint=main.ts --org=ThinkSync"
+      "command": "deployctl deploy --prod -p=scotland-yard main.ts --"
     },
     "test": {
       "description": "Runs test with coverage",
