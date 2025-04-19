@@ -18,21 +18,26 @@ const inject = (bindings: Bindings): MiddlewareHandler => {
   };
 };
 
+const serveLoginPage = serveStatic({ path: "./public/html/login.html" });
+const serveAssets = serveStatic({ root: "./public/" });
+const serveLobbyPage = serveStatic({ path: "./public/html/lobby.html" });
+
 export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   const app = new Hono<{ Bindings: Bindings }>();
 
   app.use(logger());
-
   app.use(inject(bindings));
 
   app.use("/login", skipIfAuthenticated);
   app.post("/login", loginHandler);
-  app.get("/login", serveStatic({ path: "./public/html/login.html" }));
-  app.get("/assets/*", serveStatic({ root: "./public" }));
-  app.get("/css/*", serveStatic({ root: "./public" }));
+  app.get("/login", serveLoginPage);
+
+  app.get("/favicon.icon", serveAssets);
+  app.get("/assets/*", serveAssets);
+  app.get("/css/*", serveAssets);
 
   app.use(ensureAuthenticated);
-  app.get("/lobby", serveStatic({ path: "./public/html/lobby.html" }));
+  app.get("/lobby", serveLobbyPage);
 
   app.route("/setup", createGameSetup());
   app.route("/game", createGameRoutes());
