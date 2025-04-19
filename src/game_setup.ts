@@ -83,7 +83,7 @@ const removePlayer = (context: GameContext) => {
 export const createGameSetup = (): Hono<{ Bindings: Bindings }> => {
   const gameSetup = new Hono<{ Bindings: Bindings }>();
 
-  gameSetup.get("/create-room", handleCreateRoom);
+  gameSetup.post("/create-room", handleCreateRoom);
   gameSetup.get("/room-id", serveRoomId);
   gameSetup.get("/player-list", servePlayerList);
   gameSetup.post("/join-room", handleJoinRoom);

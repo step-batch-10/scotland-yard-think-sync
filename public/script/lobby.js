@@ -1,7 +1,7 @@
 import { redirectTo } from "./waiting.js";
 
 const hostGame = async () => {
-  const response = await fetch("/setup/create-room");
+  const response = await fetch("/setup/create-room", { method: "POST" });
 
   if (response.ok) {
     redirectTo("/html/waiting.html");

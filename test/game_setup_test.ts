@@ -53,6 +53,7 @@ describe("create room", () => {
   it("should get success if room created", async () => {
     const { app } = createAppWithHostedRoom("a");
     const res = await app.request("/setup/create-room", {
+      method: "POST",
       headers: { cookie: "playerId=a" },
     });
 
@@ -221,7 +222,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d", "e"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players,
+      ...players
     );
 
     await app.request("/setup/player-list", {
@@ -236,7 +237,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players,
+      ...players
     );
 
     await app.request("/setup/player-list", {
@@ -251,7 +252,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d", "e"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players,
+      ...players
     );
 
     await app.request("/setup/player-list", {
