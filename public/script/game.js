@@ -66,11 +66,9 @@ const printStationDetails = (e) => {
   const station = document.querySelector(`#station-${id}`);
   const dimensions = station.getBoundingClientRect();
   const pawn = document.querySelector(".pawn");
-  const pawnDimension = pawn.getBoundingClientRect();
-  console.log(pawnDimension);
+
   pawn.style.left = `${dimensions.x}px`;
   pawn.style.top = `${dimensions.y}px`;
-  console.log(dimensions);
 };
 
 const movePlayer = () => {
