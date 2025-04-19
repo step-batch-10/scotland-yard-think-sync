@@ -124,7 +124,7 @@ const renderPawns = (stats) => {
 };
 
 const showTurn = (currentRole, isYourTurn) => {
-  const turn = isYourTurn ? "your turn" : "opponent turn";
+  const turn = isYourTurn ? "Your Turn" : "Opponent Turn";
   const turnIndicator = document.querySelector("#turn-indicator");
   turnIndicator.textContent = `${turn} : ${currentRole}`;
 };
@@ -142,9 +142,31 @@ const startPolling = () => {
   }, 3000);
 };
 
+const playAudio = () => {
+  const bgAudio = new Audio("/assets/audio/theme-song.mp3");
+
+  bgAudio.autoplay = true;
+  bgAudio.loop = true;
+
+  bgAudio.volume = 0.5;
+
+  bgAudio.play().catch(() => {
+    alert("Autoplay was blocked. Waiting for user interaction...");
+
+    document.addEventListener(
+      "click",
+      () => {
+        bgAudio.play();
+      },
+      { once: true }
+    );
+  });
+};
+
 const main = async () => {
   const { roles } = await fetchRoles();
 
+  playAudio();
   renderPlayer(roles);
   startPolling();
   movePlayer();
