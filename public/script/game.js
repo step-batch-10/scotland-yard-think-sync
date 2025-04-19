@@ -1,7 +1,9 @@
 import { combineObjects } from "./game_utils.js";
 
-const fetchState = () => fetch("/game/state").then((res) => res.json());
-const fetchRoles = () => fetch("/game/info").then((res) => res.json());
+const fetchJson = (route) => fetch(route).then((res) => res.json());
+
+const fetchState = () => fetchJson("/game/state");
+const fetchRoles = () => fetchJson("/game/info");
 
 const cloneTemplate = (targetId) => {
   const template = document.querySelector(targetId);
@@ -34,10 +36,9 @@ const playerStats = (trElement, [role, playerName, tickets, station]) => {
   return trElement;
 };
 
-const renderPlayerTickets = (tickets, roles, positions) => {
+const renderPlayerTickets = (stats) => {
   const playerStatTable = document.querySelector(".player-stats");
   const tbody = playerStatTable.querySelector("tbody");
-  const stats = combineObjects(roles, tickets, positions);
   const rows = tbody.children;
 
   for (let index = 0; index < stats.length; index++) {
@@ -61,14 +62,18 @@ const renderPlayer = (rolesObject) => {
   }, 3000);
 };
 
+const addCoordinate = (pawn, dimensions) => {
+  pawn.style.left = `${dimensions.x + 65}px`;
+  pawn.style.top = `${dimensions.y - 65}px`;
+};
+
 const printStationDetails = (e) => {
   const [_, id] = e.target.id.split("-");
   const station = document.querySelector(`#station-${id}`);
   const dimensions = station.getBoundingClientRect();
   const pawn = document.querySelector(".pawn");
 
-  pawn.style.left = `${dimensions.x}px`;
-  pawn.style.top = `${dimensions.y}px`;
+  addCoordinate(pawn, dimensions);
 };
 
 const movePlayer = () => {
@@ -78,51 +83,63 @@ const movePlayer = () => {
   });
 };
 
-const renderPawns = (roles, tickets, positions) => {
-  const stats = combineObjects(roles, tickets, positions);
-  const root = document.querySelector("#pawns-display");
+const generateStationId = (station) => `#station-${station}`;
 
-  const template = document.querySelector("#move-pawn");
-  const clone = template.content.cloneNode(true);
-  const pawns = [...clone.querySelectorAll(".pawn")];
+const movePawnToStation = (pawn, stationId, color) => {
+  const tspan = document.querySelector(stationId);
+  const dimensions = tspan.getBoundingClientRect();
 
-  const playerPawns = pawns.map((pawn, index) => {
-    const player = stats[index];
-    const position = player.at(-1);
-    const rect = document.querySelector(`#station-${position}`);
-    const dimensions = rect.getBoundingClientRect();
+  pawn.style.backgroundColor = color;
+  addCoordinate(pawn, dimensions);
 
-    const [_, color] = player[0].split(":");
-    pawn.style.backgroundColor = color;
-    pawn.style.left = `${dimensions.x + 10}px`;
-    pawn.style.top = `${dimensions.y - 10}px`;
-
-    return pawn;
-  });
-
-  root.replaceChildren(...playerPawns);
+  return pawn;
 };
 
-const whoseTurn = (currentRole, isYourTurn) => {
+const findColor = (name) => name.split(":").at(-1);
+
+const alignPawns = (stats) => (pawn, index) => {
+  const player = stats[index];
+  const position = player.at(-1);
+  const stationId = generateStationId(position);
+  const color = findColor(player[0]);
+
+  return movePawnToStation(pawn, stationId, color);
+};
+
+const renderPawns = (stats) => {
+  const root = document.querySelector("#pawns-display");
+  const clone = cloneTemplate("#move-pawn");
+
+  const pawns = Array.from(clone.querySelectorAll(".pawn"));
+  const alignedPawns = pawns.map(alignPawns(stats));
+
+  root.replaceChildren(...alignedPawns);
+};
+
+const showTurn = (currentRole, isYourTurn) => {
   const turn = isYourTurn ? "your turn" : "opponent turn";
-
   const turnIndicator = document.querySelector("#turn-indicator");
-
   turnIndicator.textContent = `${turn} : ${currentRole}`;
+};
+
+const startPolling = () => {
+  setInterval(async () => {
+    const { tickets, positions, roles, currentRole, isYourTurn } =
+      await fetchState();
+
+    const stats = combineObjects(roles, tickets, positions);
+
+    showTurn(currentRole, isYourTurn);
+    renderPlayerTickets(stats);
+    renderPawns(stats);
+  }, 3000);
 };
 
 const main = async () => {
   const { roles } = await fetchRoles();
+
   renderPlayer(roles);
-
-  setInterval(async () => {
-    const { tickets, positions, roles, currentRole, isYourTurn } =
-      await fetchState();
-    renderPlayerTickets(tickets, roles, positions);
-    whoseTurn(currentRole, isYourTurn);
-    renderPawns(roles, tickets, positions);
-  }, 3000);
-
+  startPolling();
   movePlayer();
 };
 
