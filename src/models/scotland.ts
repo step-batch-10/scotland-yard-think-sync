@@ -11,7 +11,7 @@ export class ScotlandYard {
   private assignedRoles: Map<string, string>;
   private tickets: Map<Role, Tickets>;
   private startingStations: number[];
-  private currentPosition: Map<Role, number>;
+  private currentStations: Map<Role, number>;
   private currentRole: Role;
   private gameMap: GameMap;
 
@@ -19,7 +19,7 @@ export class ScotlandYard {
     this.players = [...players];
     this.assignedRoles = new Map();
     this.tickets = new Map();
-    this.currentPosition = new Map();
+    this.currentStations = new Map();
     this.startingStations = map.startingPositions;
     this.gameMap = map;
 
@@ -64,7 +64,7 @@ export class ScotlandYard {
 
       const randomIndex = random(0, 6) % positions.length;
       const [start] = positions.splice(randomIndex, 1);
-      this.currentPosition.set(role, start);
+      this.currentStations.set(role, start);
     }
   }
 
@@ -75,21 +75,39 @@ export class ScotlandYard {
     return this.currentRole;
   }
 
-  possibleStations(station: number): Route[] {
-    return this.gameMap.routes[station] || [];
+  getDetectivePositions() {
+    const playerEntries = this.currentStations.entries();
+    const detectiveEntries = [...playerEntries].filter(
+      ([role]) => role !== "MrX"
+    );
+
+    return detectiveEntries.map(([, position]) => position);
+  }
+
+  private getValidRoutes = (station: number) => {
+    const availableRoutes = this.gameMap.routes[station] || [];
+    const detectivesPos = this.getDetectivePositions();
+
+    return availableRoutes.filter(({ to }) => !detectivesPos.includes(to));
+  };
+
+  possibleStations(): Route[] {
+    const station: number = this.currentStations.get(this.currentRole) || 0;
+
+    return this.getValidRoutes(station);
   }
 
   getGameState() {
     return {
       tickets: mapToObject<Tickets>(this.tickets),
       roles: mapToObject<string>(this.assignedRoles),
-      positions: mapToObject(this.currentPosition),
+      positions: mapToObject(this.currentStations),
       currentRole: this.currentRole,
     };
   }
 
   getCurrentPosition() {
-    return this.currentPosition;
+    return this.currentStations;
   }
 
   getPlayers(): string[] {

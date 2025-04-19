@@ -6,6 +6,7 @@ import {
   RandomIndex,
   Role,
   Roles,
+  Route,
   Tickets,
   Transport,
 } from "../src/models/types.ts";
@@ -14,6 +15,7 @@ describe("test playerNames", () => {
   it("should provide playerNames", () => {
     const players = new Set(["a", "b", "c", "d", "e", "d"]);
     const sy = new ScotlandYard([...players]);
+
     assertEquals(sy.getPlayers(), [...players]);
   });
 });
@@ -32,9 +34,10 @@ describe("test assignRole", () => {
     };
 
     sy.assignRole(roles);
-    assertEquals(sy.getPlayers(), [...players]);
 
     const assignedRoles = sy.getRoles();
+
+    assertEquals(sy.getPlayers(), [...players]);
     assertEquals(mapToObject(assignedRoles), roles);
   });
 
@@ -44,8 +47,8 @@ describe("test assignRole", () => {
     const roles: Roles = { MrX: "b", "Detective:Blue": "a" };
 
     sy.assignRole(roles);
-    const assignedRoles = sy.getRoles();
 
+    const assignedRoles = sy.getRoles();
     const expected = {
       MrX: "b",
       "Detective:Blue": "a",
@@ -64,8 +67,10 @@ describe("ticket distribution", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     const roles: Roles = { [Role.Red]: "a" };
+
     sy.assignRole(roles);
     sy.distributeTickets();
+
     const expected = {
       MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
       "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
@@ -76,6 +81,7 @@ describe("ticket distribution", () => {
     };
 
     const assignedTickets = sy.getTickets();
+
     assertEquals(mapToObject<Tickets>(assignedTickets), expected);
   });
 });
@@ -94,8 +100,10 @@ describe("assignStartingPositions", () => {
     ]);
 
     const game = new ScotlandYard([...players]);
+
     game.assignRole();
     game.assignStartingPositions(random);
+
     const actual = game.getCurrentPosition();
 
     const expected = {
@@ -123,8 +131,10 @@ describe("assignStartingPositions", () => {
     ]);
 
     const game = new ScotlandYard([...players]);
+
     game.assignRole();
     game.assignStartingPositions(random);
+
     const actual = game.getCurrentPosition();
 
     const expected = {
@@ -155,6 +165,7 @@ describe("game state", () => {
 
     sy.assignRole(roles);
     sy.distributeTickets();
+
     const expected = {
       MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
       "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
@@ -165,10 +176,11 @@ describe("game state", () => {
     };
 
     const { tickets } = sy.getGameState();
+
     assertEquals(tickets, expected);
   });
 
-  it("should provide starting postions in game state", () => {
+  it("should provide starting positions in game state", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     sy.assignRole();
@@ -183,6 +195,7 @@ describe("game state", () => {
       "Detective:Green": 185,
     };
     const { positions } = sy.getGameState();
+
     assertEquals(positions, expected);
   });
 
@@ -193,6 +206,7 @@ describe("game state", () => {
     sy.distributeTickets();
 
     const { positions } = sy.getGameState();
+
     assertEquals(positions, {});
   });
 
@@ -203,6 +217,7 @@ describe("game state", () => {
     sy.distributeTickets();
 
     const { currentRole } = sy.getGameState();
+
     assertEquals(currentRole, "MrX");
   });
 });
@@ -246,14 +261,36 @@ describe("possible stations", () => {
       "test5",
       "test6",
     ]);
-
-    const actual = game.possibleStations(181);
-    const expected = [{ to: 182, mode: Transport.Taxi }];
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+    const actual = game.possibleStations();
+    const expected = [
+      { to: 181, mode: Transport.Taxi },
+      { to: 192, mode: Transport.Taxi },
+    ];
 
     assertEquals(actual, expected);
   });
 
-  it("should return empty array if station is not valid", () => {
+  it("should return no station if not possible", () => {
+    const game = new ScotlandYard([
+      "test1",
+      "test2",
+      "test3",
+      "test4",
+      "test5",
+      "test6",
+    ]);
+    const actual = game.possibleStations();
+    const expected: Route[] = [];
+
+    assertEquals(actual, expected);
+  });
+});
+
+describe("positionOfDetectives", () => {
+  it("should provide positions of all detectives", () => {
     const game = new ScotlandYard([
       "test1",
       "test2",
@@ -263,8 +300,23 @@ describe("possible stations", () => {
       "test6",
     ]);
 
-    const actual = game.possibleStations(0);
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
 
-    assertEquals(actual, []);
+    assertEquals(game.getDetectivePositions(), [183, 184, 185, 186, 187]);
+  });
+
+  it("should not provide positions of all detectives when station is not assigned", () => {
+    const game = new ScotlandYard([
+      "test1",
+      "test2",
+      "test3",
+      "test4",
+      "test5",
+      "test6",
+    ]);
+
+    assertEquals(game.getDetectivePositions(), []);
   });
 });

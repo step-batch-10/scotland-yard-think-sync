@@ -32,7 +32,7 @@ export type Roles = {
   [key in Role]?: string;
 };
 
-export type Postions = {
+export type Positions = {
   [key in Role]?: number;
 };
 
