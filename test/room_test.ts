@@ -73,6 +73,11 @@ describe("Rooms", () => {
       assertEquals([...roomMembers], []);
       assertFalse(rooms.hasRoom(roomId));
     });
+
+    it("should return false if there is no room", () => {
+      const actual = rooms.removePlayer("9", "test1");
+      assertFalse(actual);
+    });
   });
 
   describe("assignGame", () => {

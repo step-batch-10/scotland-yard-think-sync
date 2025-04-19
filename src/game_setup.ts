@@ -75,9 +75,9 @@ const removePlayer = (context: GameContext) => {
 
   if (!player.roomId) return context.json({ isRemoved: false });
 
-  context.env.rooms.removePlayer(playerId, player.roomId);
+  const isRemoved = context.env.rooms.removePlayer(player.roomId, playerId);
 
-  return context.json({ isRemoved: true });
+  return context.json({ isRemoved });
 };
 
 export const createGameSetup = (): Hono<{ Bindings: Bindings }> => {

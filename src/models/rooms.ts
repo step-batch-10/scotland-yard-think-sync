@@ -46,13 +46,17 @@ export class Rooms {
     return this.lobbies.has(roomId);
   }
 
-  removePlayer(roomId: string, playerName: string) {
+  removePlayer(roomId: string, playerName: string): boolean {
     const room = this.lobbies.get(roomId);
-    room?.delete(playerName);
+    if (!room) return false;
 
-    if (room?.size === 0) {
+    room.delete(playerName);
+
+    if (room.size === 0) {
       this.lobbies.delete(roomId);
     }
+
+    return true;
   }
 
   assignGame(roomId: string, match: Match) {
