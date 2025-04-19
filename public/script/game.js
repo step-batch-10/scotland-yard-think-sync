@@ -85,11 +85,10 @@ const movePlayer = () => {
 
 const generateStationId = (station) => `#station-${station}`;
 
-const movePawnToStation = (pawn, stationId, color) => {
+const movePawnToStation = (pawn, stationId) => {
   const tspan = document.querySelector(stationId);
   const dimensions = tspan.getBoundingClientRect();
 
-  pawn.style.backgroundColor = color;
   addCoordinate(pawn, dimensions);
 
   return pawn;
@@ -97,23 +96,31 @@ const movePawnToStation = (pawn, stationId, color) => {
 
 const findColor = (name) => name.split(":").at(-1);
 
-const alignPawns = (stats) => (pawn, index) => {
-  const player = stats[index];
+const makePawn = (color) => {
+  const pawn = cloneTemplate("#pawn");
+  const bodyParts = pawn.querySelectorAll(".body-parts");
+
+  bodyParts.forEach((part) => {
+    part.setAttribute("fill", color);
+  });
+
+  return pawn;
+};
+
+const createPawn = (player) => {
   const position = player.at(-1);
   const stationId = generateStationId(position);
   const color = findColor(player[0]);
+  const pawn = makePawn(color);
 
   return movePawnToStation(pawn, stationId, color);
 };
 
 const renderPawns = (stats) => {
   const root = document.querySelector("#pawns-display");
-  const clone = cloneTemplate("#move-pawn");
+  const pawns = stats.map(createPawn);
 
-  const pawns = Array.from(clone.querySelectorAll(".pawn"));
-  const alignedPawns = pawns.map(alignPawns(stats));
-
-  root.replaceChildren(...alignedPawns);
+  root.replaceChildren(...pawns);
 };
 
 const showTurn = (currentRole, isYourTurn) => {
