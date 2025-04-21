@@ -3,6 +3,7 @@ import { assertEquals } from "assert";
 import { ScotlandYard } from "../src/models/scotland.ts";
 import { mapToObject } from "../src/game_play.ts";
 import {
+  GameMap,
   RandomIndex,
   Role,
   Roles,
@@ -318,5 +319,40 @@ describe("positionOfDetectives", () => {
     ]);
 
     assertEquals(game.getDetectivePositions(), []);
+  });
+});
+
+describe("getValidRoutes", () => {
+  it("it should return valid routes", () => {
+    const players = ["test1", "test2", "test3", "test4", "test5", "test6"];
+    const route = [{ to: 1, mode: Transport.Bus }];
+    const fakeMap: GameMap = {
+      startingPositions: [1, 2],
+      routes: {
+        1: [{ to: 1, mode: Transport.Bus }],
+      },
+    };
+    const game = new ScotlandYard(players, fakeMap);
+    game.assignRole();
+    game.distributeTickets();
+
+    assertEquals(game.validRoutes(1), route);
+  });
+
+  it("it should return empty array if there is no valid route", () => {
+    const players = ["test1", "test2", "test3", "test4", "test5", "test6"];
+
+    const fakeMap: GameMap = {
+      startingPositions: [1, 2],
+      routes: {
+        1: [{ to: 1, mode: Transport.Bus }],
+      },
+    };
+
+    const game = new ScotlandYard(players, fakeMap);
+    game.assignRole();
+    game.distributeTickets();
+
+    assertEquals(game.validRoutes(10), []);
   });
 });

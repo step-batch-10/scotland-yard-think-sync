@@ -84,17 +84,18 @@ export class ScotlandYard {
     return detectiveEntries.map(([, position]) => position);
   }
 
-  private getValidRoutes = (station: number) => {
-    const availableRoutes = this.gameMap.routes[station] || [];
-    const detectivesPos = this.getDetectivePositions();
+  validRoutes = (station: number) => {
+    const availableRoutes = this.gameMap.routes[station];
+    if (!availableRoutes) return [];
 
+    const detectivesPos = this.getDetectivePositions();
     return availableRoutes.filter(({ to }) => !detectivesPos.includes(to));
   };
 
   possibleStations(): Route[] {
-    const station: number = this.currentStations.get(this.currentRole) || 0;
+    const station = this.currentStations.get(this.currentRole) || 0;
 
-    return this.getValidRoutes(station);
+    return this.validRoutes(station);
   }
 
   getGameState() {
