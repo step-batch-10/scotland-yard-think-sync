@@ -126,7 +126,6 @@ describe("servePossibleStations", () => {
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
     bindings.rooms.assignGame(roomId, bindings.match);
-
     const response = await app.request("/game/possible-stations", {
       headers: { cookie: `playerId=${host}` },
     });
@@ -136,6 +135,58 @@ describe("servePossibleStations", () => {
       { to: 192, mode: Transport.Taxi },
     ];
     const actual = await response.json();
+
+    assertEquals(actual, expected);
+  });
+});
+
+describe("handleMovement", () => {
+  it("should be able to move if i have used valid ticket and destination", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.match);
+
+    const response = await app.request("/game/move/181/ticket/Taxi", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const actual = await response.json();
+    const expected = { success: true };
+
+    assertEquals(actual, expected);
+  });
+
+  it("should not be able to move if i have used Invalid ticket or destination", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.match);
+
+    const response = await app.request("/game/move/ /ticket/Metro", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const actual = await response.json();
+    const expected = { success: false };
+
+    assertEquals(actual, expected);
+  });
+
+  it("should not be able to move match is not there", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e"];
+    const [host, ...players] = allPlayers;
+
+    const { app } = createAppWithHostedRoom(host, ...players);
+
+    const response = await app.request("/game/move/123/ticket/Metro", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const actual = await response.json();
+    const expected = { success: false };
 
     assertEquals(actual, expected);
   });

@@ -1,5 +1,5 @@
 import { Hono } from "hono";
-import { Bindings, GameContext, GameHandler } from "./models/types.ts";
+import { Bindings, GameContext, GameHandler, Ticket } from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
 
@@ -27,7 +27,7 @@ const serveMatchInfo: GameHandler = (context: GameContext) => {
   return context.json({ roles });
 };
 
-const getGameState = (game: ScotlandYard, playerId: string) => {
+const fetchGameState = (game: ScotlandYard, playerId: string) => {
   const state = game.getGameState();
   const { roles, currentRole } = state;
   const isYourTurn = roles[currentRole] === playerId;
@@ -40,16 +40,27 @@ const serveMatchState: GameHandler = (context: GameContext) => {
 
   if (!match) return context.json({ message: "Game not found" }, 404);
 
-  const gameState = getGameState(match.game, playerId);
+  const gameState = fetchGameState(match.game, playerId);
 
   return context.json(gameState);
 };
 
-const servePossibleStations: GameHandler = (context) => {
+const servePossibleStations: GameHandler = (context: GameContext) => {
   const { match } = extractMatchAndPlayerId(context);
   const nearbyStations = match?.game.possibleStations();
 
   return context.json(nearbyStations);
+};
+
+const handleMovement: GameHandler = (context: GameContext) => {
+  const { match } = extractMatchAndPlayerId(context);
+  const { to, mode } = context.req.param() as { to: string; mode: Ticket };
+
+  if (!mode || !to || !match) return context.json({ success: false });
+
+  const success = match.game.useTicket(mode, Number(to));
+
+  return context.json({ success });
 };
 
 export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
@@ -57,6 +68,7 @@ export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   gameApp.get("/info", serveMatchInfo);
   gameApp.get("/state", serveMatchState);
   gameApp.get("/possible-stations", servePossibleStations);
+  gameApp.get("/move/:to/ticket/:mode", handleMovement);
 
   return gameApp;
 };

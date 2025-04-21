@@ -85,8 +85,8 @@ export class ScotlandYard {
   }
 
   getDetectivePositions() {
-    const playerEntries = this.currentStations.entries();
-    const detectiveEntries = [...playerEntries].filter(
+    const playerIterator = this.currentStations.entries();
+    const detectiveEntries = [...playerIterator].filter(
       ([role]) => role !== "MrX"
     );
 
