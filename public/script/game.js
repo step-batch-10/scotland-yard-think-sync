@@ -105,22 +105,32 @@ const getDimensions = (e) => {
   return station.getBoundingClientRect();
 };
 
-const renderTickets = (mode) => (e) => {
+const renderTickets = (options) => (e) => {
   const cardsContainer = cloneTemplate("#ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
   closeBtn.addEventListener("click", (e) => e.target.parentNode.remove());
   alignCard(cardsContainer, getDimensions(e));
 
-  card.textContent = mode;
+  options.forEach(({ mode }) => {
+    card.textContent += mode;
+  });
+
   document.body.appendChild(cardsContainer);
+};
+
+const pairTicketToStaiton = (map) => {
+  const pair = Object.groupBy(map, ({ to }) => to);
+  return Object.entries(pair);
 };
 
 const showTickets = async () => {
   const possibleStation = await fetchPossiblStations();
-  possibleStation.forEach(({ to, mode }) => {
+  const pairs = pairTicketToStaiton(possibleStation);
+
+  pairs.forEach(([to, options]) => {
     const station = document.getElementById(`station-${to}`);
-    station.addEventListener("click", renderTickets(mode));
+    station.addEventListener("click", renderTickets(options));
   });
 };
 
