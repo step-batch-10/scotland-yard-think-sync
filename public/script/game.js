@@ -43,7 +43,7 @@ const mrXStats = (trElement, [role, playerName, tickets, station]) => {
   cells[2].textContent = tickets.Taxi;
   cells[3].textContent = tickets.Bus;
   cells[4].textContent = tickets.Metro;
-  cells[5].textContent = tickets.All;
+  cells[5].textContent = tickets.Wild;
   cells[6].textContent = tickets["2x"];
   cells[7].textContent = station;
 

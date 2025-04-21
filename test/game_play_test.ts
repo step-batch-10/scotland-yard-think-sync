@@ -72,12 +72,12 @@ describe("gameState", () => {
 
     const actual = await response.json();
     const expected = {
-      MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
-      Red: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      Blue: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      Green: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      Yellow: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      Purple: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      MrX: { Bus: 3, Taxi: 4, Metro: 3, Wild: 5, "2x": 2 },
+      Red: { Bus: 8, Taxi: 10, Metro: 4, Wild: 0, "2x": 0 },
+      Blue: { Bus: 8, Taxi: 10, Metro: 4, Wild: 0, "2x": 0 },
+      Green: { Bus: 8, Taxi: 10, Metro: 4, Wild: 0, "2x": 0 },
+      Yellow: { Bus: 8, Taxi: 10, Metro: 4, Wild: 0, "2x": 0 },
+      Purple: { Bus: 8, Taxi: 10, Metro: 4, Wild: 0, "2x": 0 },
     };
 
     assertEquals(actual.tickets, expected);

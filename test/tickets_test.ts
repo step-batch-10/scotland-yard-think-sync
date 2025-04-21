@@ -10,7 +10,7 @@ describe("Distribute tickets based on roles", () => {
       Bus: 8,
       Taxi: 10,
       Metro: 4,
-      All: 0,
+      Wild: 0,
       "2x": 0,
     };
 
@@ -23,7 +23,7 @@ describe("Distribute tickets based on roles", () => {
       Bus: 3,
       Taxi: 4,
       Metro: 3,
-      All: 5,
+      Wild: 5,
       "2x": 2,
     };
 

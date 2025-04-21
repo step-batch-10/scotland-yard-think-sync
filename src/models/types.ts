@@ -24,7 +24,7 @@ export enum Ticket {
   Green = "Bus",
   Yellow = "Taxi",
   Red = "Metro",
-  Black = "All",
+  Black = "Wild",
   "2x" = "2x",
 }
 

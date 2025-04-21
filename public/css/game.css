@@ -40,7 +40,7 @@ th {
 }
 
 .icon {
-  width: 60px;
+  width: 70px;
 }
 
 .player-stats {
@@ -54,7 +54,7 @@ th {
   position: absolute;
 
   left: 66vw;
-  top: 12vh;
+  top: 15vh;
 }
 
 .pawn {
@@ -78,7 +78,7 @@ th {
 .mrx-panel {
   position: absolute;
   right: 1vw;
-  top: 10vh;
+  top: 12vh;
   border: 1px solid black;
   background-color: aliceblue;
 }
@@ -86,6 +86,7 @@ th {
 .mrX-stats table {
   margin-bottom: 4px;
   border: 1px solid black;
+  margin: 4px;
 }
 
 .transport-modes-log {
@@ -99,4 +100,12 @@ th {
   text-align: center;
   border: 1px solid black;
   height: 6vh;
+  margin: 4px;
+}
+
+.mrX-stats p {
+  margin-top: 10px;
+  margin-bottom: 5px;
+  font-weight: 700;
+  text-align: center;
 }
