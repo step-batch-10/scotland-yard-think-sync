@@ -82,3 +82,21 @@ th {
   border: 1px solid black;
   background-color: aliceblue;
 }
+
+.mrX-stats table {
+  margin-bottom: 4px;
+  border: 1px solid black;
+}
+
+.transport-modes-log {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: repeat(6, 1fr);
+  border: 1px solid black;
+}
+
+.transport-modes-log .log {
+  text-align: center;
+  border: 1px solid black;
+  height: 6vh;
+}

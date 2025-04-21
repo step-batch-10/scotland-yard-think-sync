@@ -5,11 +5,11 @@ import { Rooms } from "./rooms.ts";
 import { Match } from "./match.ts";
 
 export enum Role {
-  Red = "Detective:Red",
-  Blue = "Detective:Blue",
-  Green = "Detective:Green",
-  Yellow = "Detective:Yellow",
-  Purple = "Detective:Purple",
+  Red = "Red",
+  Blue = "Blue",
+  Green = "Green",
+  Yellow = "Yellow",
+  Purple = "Purple",
   MrX = "MrX",
 }
 

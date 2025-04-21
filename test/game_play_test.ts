@@ -26,11 +26,11 @@ describe("serveMatchInfo", () => {
     const actual = await response.json();
     const expected = {
       MrX: "tes1",
-      "Detective:Red": "test2",
-      "Detective:Blue": "test3",
-      "Detective:Green": "test4",
-      "Detective:Yellow": "test5",
-      "Detective:Purple": "test6",
+      Red: "test2",
+      Blue: "test3",
+      Green: "test4",
+      Yellow: "test5",
+      Purple: "test6",
     };
 
     assertEquals(actual.roles, expected);
@@ -73,11 +73,11 @@ describe("gameState", () => {
     const actual = await response.json();
     const expected = {
       MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
-      "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Blue": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Green": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Yellow": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Purple": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Red: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Blue: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Green: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Yellow: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Purple: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
     };
 
     assertEquals(actual.tickets, expected);

@@ -25,12 +25,12 @@ describe("test assignRole", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     const roles = {
-      "Detective:Red": "b",
+      Red: "b",
       MrX: "a",
-      "Detective:Blue": "c",
-      "Detective:Yellow": "d",
-      "Detective:Purple": "e",
-      "Detective:Green": "f",
+      Blue: "c",
+      Yellow: "d",
+      Purple: "e",
+      Green: "f",
     };
 
     sy.assignRole(roles);
@@ -44,18 +44,18 @@ describe("test assignRole", () => {
   it("should assign multiple role to a player", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
-    const roles: Roles = { MrX: "b", "Detective:Blue": "a" };
+    const roles: Roles = { MrX: "b", Blue: "a" };
 
     sy.assignRole(roles);
 
     const assignedRoles = sy.getRoles();
     const expected = {
       MrX: "b",
-      "Detective:Blue": "a",
-      "Detective:Red": "b",
-      "Detective:Green": "d",
-      "Detective:Yellow": "e",
-      "Detective:Purple": "f",
+      Blue: "a",
+      Red: "b",
+      Green: "d",
+      Yellow: "e",
+      Purple: "f",
     };
 
     assertEquals(mapToObject(assignedRoles), expected);
@@ -73,11 +73,11 @@ describe("ticket distribution", () => {
 
     const expected = {
       MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
-      "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Blue": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Green": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Yellow": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Purple": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Red: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Blue: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Green: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Yellow: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Purple: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
     };
 
     const assignedTickets = sy.getTickets();
@@ -108,11 +108,11 @@ describe("assignStartingPositions", () => {
 
     const expected = {
       MrX: 181,
-      "Detective:Red": 182,
-      "Detective:Blue": 183,
-      "Detective:Green": 184,
-      "Detective:Yellow": 185,
-      "Detective:Purple": 186,
+      Red: 182,
+      Blue: 183,
+      Green: 184,
+      Yellow: 185,
+      Purple: 186,
     };
 
     assertEquals(mapToObject(actual), expected);
@@ -138,11 +138,11 @@ describe("assignStartingPositions", () => {
     const actual = game.getCurrentPosition();
 
     const expected = {
-      "Detective:Blue": 193,
-      "Detective:Green": 181,
-      "Detective:Purple": 185,
-      "Detective:Red": 192,
-      "Detective:Yellow": 183,
+      Blue: 193,
+      Green: 181,
+      Purple: 185,
+      Red: 192,
+      Yellow: 183,
       MrX: 191,
     };
 
@@ -155,12 +155,12 @@ describe("game state", () => {
     const players = new Set(["a", "b", "c", "d", "e", "f"]);
     const sy = new ScotlandYard([...players]);
     const roles = {
-      "Detective:Red": "b",
+      Red: "b",
       MrX: "a",
-      "Detective:Blue": "c",
-      "Detective:Yellow": "d",
-      "Detective:Purple": "e",
-      "Detective:Green": "f",
+      Blue: "c",
+      Yellow: "d",
+      Purple: "e",
+      Green: "f",
     };
 
     sy.assignRole(roles);
@@ -168,11 +168,11 @@ describe("game state", () => {
 
     const expected = {
       MrX: { Bus: 3, Taxi: 4, Metro: 3, All: 5, "2x": 2 },
-      "Detective:Red": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Blue": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Green": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Yellow": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
-      "Detective:Purple": { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Red: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Blue: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Green: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Yellow: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
+      Purple: { Bus: 8, Taxi: 10, Metro: 4, All: 0, "2x": 0 },
     };
 
     const { tickets } = sy.getGameState();
@@ -188,11 +188,11 @@ describe("game state", () => {
     sy.assignStartingPositions();
     const expected = {
       MrX: 182,
-      "Detective:Red": 183,
-      "Detective:Blue": 184,
-      "Detective:Yellow": 186,
-      "Detective:Purple": 187,
-      "Detective:Green": 185,
+      Red: 183,
+      Blue: 184,
+      Yellow: 186,
+      Purple: 187,
+      Green: 185,
     };
     const { positions } = sy.getGameState();
 
@@ -231,7 +231,7 @@ describe("change turn", () => {
     sy.assignStartingPositions();
     const nextPlayer = sy.changeTurn();
 
-    assertEquals(nextPlayer, "Detective:Red");
+    assertEquals(nextPlayer, "Red");
   });
 
   it("should rotate the turn to the next player in circular order", () => {
