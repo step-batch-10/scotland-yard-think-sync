@@ -22,6 +22,14 @@
         />
       </button>
 
+      <button id="ticket-show" popovertarget="mrX-Panel" class="mrx-panel">
+        <img
+          class="icon"
+          src="/assets/images/player-panel-icon.png"
+          popovertarget="mrx-panel"
+        />
+      </button>
+
       <svg
         class="svg"
         version="1.1"
@@ -1184,85 +1192,96 @@
       </svg>
     </div>
     <div id="pop-up"></div>
-    <div id="ticket-table">
-      <div class="player-stats" id="mypopover" popover="">
-        <table>
-          <thead>
-            <tr>
-              <th>Role</th>
-              <th>player</th>
-              <th>Taxi</th>
-              <th>Bus</th>
-              <th>Metro</th>
-              <th>Black</th>
-              <th>2X</th>
-              <th>Current Station</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>MrX</td>
-              <td>Pruthvi</td>
-              <td>4</td>
-              <td>3</td>
-              <td>3</td>
-              <td>5</td>
-              <td>2</td>
-              <td>182</td>
-            </tr>
-            <tr>
-              <td>Detective:Red</td>
-              <td>akshay</td>
-              <td>10</td>
-              <td>8</td>
-              <td>4</td>
-              <td>0</td>
-              <td>0</td>
-              <td>183</td>
-            </tr>
-            <tr>
-              <td>Detective:Blue</td>
-              <td>Atul</td>
-              <td>10</td>
-              <td>8</td>
-              <td>4</td>
-              <td>0</td>
-              <td>0</td>
-              <td>184</td>
-            </tr>
-            <tr>
-              <td>Detective:Green</td>
-              <td>Pappa</td>
-              <td>10</td>
-              <td>8</td>
-              <td>4</td>
-              <td>0</td>
-              <td>0</td>
-              <td>185</td>
-            </tr>
-            <tr>
-              <td>Detective:Yellow</td>
-              <td>fjslfj</td>
-              <td>10</td>
-              <td>8</td>
-              <td>4</td>
-              <td>0</td>
-              <td>0</td>
-              <td>186</td>
-            </tr>
-            <tr>
-              <td>Detective:Purple</td>
-              <td>Akash</td>
-              <td>10</td>
-              <td>8</td>
-              <td>4</td>
-              <td>0</td>
-              <td>0</td>
-              <td>187</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+
+    <div class="player-stats" id="mypopover" popover="">
+      <table>
+        <thead>
+          <tr>
+            <th>Indicator</th>
+            <th>Player</th>
+            <th>Taxi</th>
+            <th>Bus</th>
+            <th>Metro</th>
+
+            <th>Current Station</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="mrX-stats" id="mrX-Panel" popover="">
+      <table>
+        <thead>
+          <tr>
+            <th>Role</th>
+            <th>player</th>
+            <th>Taxi</th>
+            <th>Bus</th>
+            <th>Metro</th>
+            <th>Black</th>
+            <th>2X</th>
+            <th>Current Station</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
+      </table>
     </div>
 
     <template id="role-row">

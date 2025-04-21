@@ -29,6 +29,19 @@ const playerStats = (trElement, [role, playerName, tickets, station]) => {
   cells[2].textContent = tickets.Taxi;
   cells[3].textContent = tickets.Bus;
   cells[4].textContent = tickets.Metro;
+  cells[5].textContent = station;
+
+  return trElement;
+};
+
+const mrXStats = (trElement, [role, playerName, tickets, station]) => {
+  const cells = trElement.querySelectorAll("td");
+
+  cells[0].textContent = role;
+  cells[1].textContent = playerName;
+  cells[2].textContent = tickets.Taxi;
+  cells[3].textContent = tickets.Bus;
+  cells[4].textContent = tickets.Metro;
   cells[5].textContent = tickets.All;
   cells[6].textContent = tickets["2x"];
   cells[7].textContent = station;
@@ -36,13 +49,23 @@ const playerStats = (trElement, [role, playerName, tickets, station]) => {
   return trElement;
 };
 
+const renderMrxTickets = (stats) => {
+  const mrXStatTable = document.querySelector(".mrX-stats table");
+  const tbody = mrXStatTable.querySelector("tbody");
+  const row = tbody.children;
+
+  mrXStats(row[0], stats);
+};
+
 const renderPlayerTickets = (stats) => {
   const playerStatTable = document.querySelector(".player-stats");
   const tbody = playerStatTable.querySelector("tbody");
   const rows = tbody.children;
 
-  for (let index = 0; index < stats.length; index++) {
-    playerStats(rows[index], stats[index]);
+  renderMrxTickets(stats[0]);
+
+  for (let index = 1; index < stats.length; index++) {
+    playerStats(rows[index - 1], stats[index]);
   }
 };
 
