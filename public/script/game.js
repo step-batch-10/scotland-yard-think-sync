@@ -24,7 +24,8 @@ const makeRoleRow = (data) => {
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
 
-  cells[0].textContent = role;
+  cells[0].style.backgroundColor = role;
+
   cells[1].textContent = playerName;
   cells[2].textContent = tickets.Taxi;
   cells[3].textContent = tickets.Bus;

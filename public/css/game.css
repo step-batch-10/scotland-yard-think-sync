@@ -45,15 +45,15 @@ th {
 
 .player-stats {
   position: absolute;
-
-  left: 66vw;
+  text-align: center;
+  left: 70vw;
   top: 6vh;
 }
 
 .mrX-stats {
   position: absolute;
 
-  left: 64vw;
+  left: 66vw;
   top: 12vh;
 }
 
