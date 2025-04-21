@@ -1,7 +1,16 @@
 import { mapToObject } from "../game_play.ts";
 import { basicMap } from "../maps/game_map.ts";
 import { ticketsOf } from "./tickets.ts";
-import { GameMap, RandomIndex, Role, Roles, Route, Tickets } from "./types.ts";
+import {
+  GameMap,
+  RandomIndex,
+  Role,
+  Roles,
+  Route,
+  Ticket,
+  Tickets,
+  Transport,
+} from "./types.ts";
 
 const randomNumber: RandomIndex = () => 1;
 
@@ -96,6 +105,66 @@ export class ScotlandYard {
     const station = this.currentStations.get(this.currentRole) || 0;
 
     return this.validRoutes(station);
+  }
+
+  isMrXTurn(): boolean {
+    return this.currentRole === Role.MrX;
+  }
+
+  static validTicket(ticket: Ticket, mode: Transport): boolean {
+    const allTransport: Transport[] = [
+      Transport.Bus,
+      Transport.Ferry,
+      Transport.Metro,
+      Transport.Taxi,
+    ];
+
+    switch (ticket) {
+      case Ticket.Yellow:
+        return Transport.Taxi === mode;
+      case Ticket.Green:
+        return Transport.Bus === mode;
+      case Ticket.Red:
+        return Transport.Metro === mode;
+      case Ticket.Black:
+        return allTransport.includes(mode);
+      default:
+        return false;
+    }
+  }
+
+  static canTravel(ticket: Ticket, destination: number) {
+    return ({ to, mode }: Route) =>
+      to === destination && ScotlandYard.validTicket(ticket, mode);
+  }
+
+  private movePlayer(destination: number) {
+    this.currentStations.set(this.currentRole, destination);
+  }
+
+  private isPossibleStation(mode: Ticket, destination: number) {
+    const possibleDestinations = this.possibleStations();
+    const isPossible = possibleDestinations.some(
+      ScotlandYard.canTravel(mode, destination)
+    );
+    return isPossible;
+  }
+
+  useTicket(mode: Ticket, destination: number): boolean {
+    const availableTickets = this.tickets.get(this.currentRole);
+    if (!availableTickets) return false;
+
+    const numberOfTicket = availableTickets[mode];
+
+    if (!numberOfTicket) return false;
+
+    if (!this.isPossibleStation(mode, destination)) return false;
+
+    this.movePlayer(destination);
+    availableTickets[mode] = numberOfTicket - 1;
+    this.changeTurn();
+
+    return true;
   }
 
   getGameState() {
