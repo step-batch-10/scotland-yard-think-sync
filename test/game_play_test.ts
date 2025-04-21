@@ -132,6 +132,7 @@ describe("servePossibleStations", () => {
 
     const expected = [
       { to: 181, mode: Transport.Taxi },
+      { to: 181, mode: Transport.Bus },
       { to: 192, mode: Transport.Taxi },
     ];
     const actual = await response.json();

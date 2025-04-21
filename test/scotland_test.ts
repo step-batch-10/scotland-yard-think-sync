@@ -269,6 +269,7 @@ describe("possible stations", () => {
     const actual = game.possibleStations();
     const expected = [
       { to: 181, mode: Transport.Taxi },
+      { to: 181, mode: Transport.Bus },
       { to: 192, mode: Transport.Taxi },
     ];
 
