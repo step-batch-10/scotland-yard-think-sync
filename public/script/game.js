@@ -113,7 +113,9 @@ const renderTickets = (options) => (e) => {
   alignCard(cardsContainer, getDimensions(e));
 
   options.forEach(({ mode }) => {
-    card.textContent += mode;
+    const clonedCard = cloneTemplate(`#${mode}`);
+
+    card.appendChild(clonedCard);
   });
 
   document.body.appendChild(cardsContainer);

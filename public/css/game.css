@@ -111,10 +111,20 @@ th {
 }
 
 .cards-container {
-  border: 1px solid black;
   font-size: 24px;
 }
 
 .card {
+  display: flex;
+}
+
+.ticket-card {
+  border: 1px solid black;
   font-size: 24px;
+}
+
+.bus-card {
+  height: 2rem;
+  width: 1rem;
+  color: aquamarine;
 }
