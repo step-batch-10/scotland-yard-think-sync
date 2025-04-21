@@ -49,6 +49,15 @@
     "start": {
       "command": "deno run -A --watch main.ts",
       "description": "Runs the project"
+    },
+    "add-4-player-local": {
+      "command": "sh bin/add-4-players.sh http://localhost:8000"
+    },
+    "add-4-player-dev": {
+      "command": "sh bin/add-4-players.sh https://scotland-yard-dev.deno.dev"
+    },
+    "add-4-player-qa": {
+      "command": "sh bin/add-4-players.sh https://scotland-yard-qa.deno.dev"
     }
   },
   "deploy": {
