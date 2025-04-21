@@ -109,3 +109,11 @@ th {
   font-weight: 700;
   text-align: center;
 }
+.cards-container {
+  border: 1px solid black;
+  font-size: 24px;
+}
+
+.card {
+  font-size: 24px;
+}

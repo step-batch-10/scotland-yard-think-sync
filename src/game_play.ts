@@ -46,6 +46,8 @@ const serveMatchState: GameHandler = (context: GameContext) => {
 };
 
 const servePossibleStations: GameHandler = (context) => {
+  console.log("Inside the servePossibleStations", context);
+
   const { match } = extractMatchAndPlayerId(context);
   const nearbyStations = match?.game.possibleStations();
 

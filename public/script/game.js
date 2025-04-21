@@ -4,6 +4,7 @@ const fetchJson = (route) => fetch(route).then((res) => res.json());
 
 const fetchState = () => fetchJson("/game/state");
 const fetchRoles = () => fetchJson("/game/info");
+const fetchPossiblStations = () => fetchJson("/game/possible-stations");
 
 const cloneTemplate = (targetId) => {
   const template = document.querySelector(targetId);
@@ -91,19 +92,35 @@ const addCoordinate = (pawn, dimensions) => {
   pawn.style.top = `${dimensions.y - 65}px`;
 };
 
-const printStationDetails = (e) => {
-  const [_, id] = e.target.id.split("-");
-  const station = document.querySelector(`#station-${id}`);
-  const dimensions = station.getBoundingClientRect();
-  const pawn = document.querySelector(".pawn");
-
-  addCoordinate(pawn, dimensions);
+const alignCard = (cardsContainer, { x, y }) => {
+  cardsContainer.style.position = "absolute";
+  cardsContainer.style.left = `${x}px`;
+  cardsContainer.style.top = `${y}px`;
 };
 
-const movePlayer = () => {
-  const stations = document.querySelectorAll("tspan");
-  stations.forEach((station) => {
-    station.addEventListener("click", printStationDetails);
+const getDimensions = (e) => {
+  const stationId = e.target.id;
+  const station = document.getElementById(stationId);
+
+  return station.getBoundingClientRect();
+};
+
+const renderTickets = (mode) => (e) => {
+  const cardsContainer = cloneTemplate("#ticket-hover-card");
+  const closeBtn = cardsContainer.querySelector("#close-btn");
+  const card = cardsContainer.querySelector(".card");
+  closeBtn.addEventListener("click", (e) => e.target.parentNode.remove());
+  alignCard(cardsContainer, getDimensions(e));
+
+  card.textContent = mode;
+  document.body.appendChild(cardsContainer);
+};
+
+const showTickets = async () => {
+  const possibleStation = await fetchPossiblStations();
+  possibleStation.forEach(({ to, mode }) => {
+    const station = document.getElementById(`station-${to}`);
+    station.addEventListener("click", renderTickets(mode));
   });
 };
 
@@ -154,6 +171,7 @@ const showTurn = (currentRole, isYourTurn) => {
 };
 
 const startPolling = () => {
+  let turn = false;
   setInterval(async () => {
     const { tickets, positions, roles, currentRole, isYourTurn } =
       await fetchState();
@@ -163,6 +181,12 @@ const startPolling = () => {
     showTurn(currentRole, isYourTurn);
     renderPlayerTickets(stats);
     renderPawns(stats);
+
+    if (isYourTurn && !turn) {
+      showTickets();
+    }
+
+    turn = isYourTurn;
   }, 3000);
 };
 
@@ -193,7 +217,6 @@ const main = async () => {
   playAudio();
   renderPlayer(roles);
   startPolling();
-  movePlayer();
 };
 
 globalThis.onload = main;
