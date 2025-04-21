@@ -87,15 +87,15 @@ const renderPlayer = (rolesObject) => {
   }, 3000);
 };
 
-const addCoordinate = (pawn, dimensions) => {
-  pawn.style.left = `${dimensions.x + 65}px`;
-  pawn.style.top = `${dimensions.y - 65}px`;
+const alignePiece = (piece, { x, y }) => {
+  piece.style.left = `${x + 65}px`;
+  piece.style.top = `${y - 65}px`;
 };
 
 const alignCard = (cardsContainer, { x, y }) => {
   cardsContainer.style.position = "absolute";
-  cardsContainer.style.left = `${x}px`;
-  cardsContainer.style.top = `${y}px`;
+  cardsContainer.style.left = `${x + 40}px`;
+  cardsContainer.style.top = `${y - 80}px`;
 };
 
 const getDimensions = (e) => {
@@ -142,7 +142,7 @@ const movePawnToStation = (pawn, stationId) => {
   const tspan = document.querySelector(stationId);
   const dimensions = tspan.getBoundingClientRect();
 
-  addCoordinate(pawn, dimensions);
+  alignePiece(pawn, dimensions);
 
   return pawn;
 };

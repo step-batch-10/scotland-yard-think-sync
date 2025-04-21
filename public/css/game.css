@@ -116,6 +116,7 @@ th {
 
 .card {
   display: flex;
+  gap: 6px;
 }
 
 .ticket-card {
@@ -127,4 +128,9 @@ th {
   height: 2rem;
   width: 1rem;
   color: aquamarine;
+}
+
+#close-btn {
+  color: red;
+  font-weight: 600;
 }
