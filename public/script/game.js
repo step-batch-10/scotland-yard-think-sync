@@ -88,7 +88,6 @@ const removeContainer = (e) => e.target.parentNode.remove();
 const removeListners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
-    console.log(to);
     station.onclick = () => {};
   });
 };
@@ -100,6 +99,9 @@ const ticketSelection = (to, elements, pairs) => (e) => {
   elements.forEach(({ clonedCard }) => {
     clonedCard.parentNode.parentNode.remove();
   });
+  const continers = document.querySelectorAll(".cards-container");
+  continers.forEach((continer) => continer.remove());
+
   removeListners(pairs);
 };
 
