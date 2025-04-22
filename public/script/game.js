@@ -92,6 +92,11 @@ const removeListners = (pairs) => {
   });
 };
 
+const removeAllContainers = () => {
+  const continers = document.querySelectorAll(".cards-container");
+  continers.forEach((continer) => continer.remove());
+};
+
 const ticketSelection = (to, elements, pairs) => (e) => {
   const type = e.target.id;
   fetch(`/game/move/${to}/ticket/${type}`);
@@ -99,9 +104,7 @@ const ticketSelection = (to, elements, pairs) => (e) => {
   elements.forEach(({ clonedCard }) => {
     clonedCard.parentNode.parentNode.remove();
   });
-  const continers = document.querySelectorAll(".cards-container");
-  continers.forEach((continer) => continer.remove());
-
+  removeAllContainers();
   removeListners(pairs);
 };
 
@@ -121,6 +124,7 @@ const addListners = (elements, card, pairs) => {
 };
 
 const renderTickets = (options, pairs) => (e) => {
+  removeAllContainers();
   const cardsContainer = cloneTemplate("#ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
