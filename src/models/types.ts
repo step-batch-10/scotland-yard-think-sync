@@ -71,3 +71,5 @@ export interface GameMap {
   startingPositions: number[];
   routes: MapRoute;
 }
+
+export type Winner = null | "Detective" | "MrX";

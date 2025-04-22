@@ -494,17 +494,16 @@ describe("canTravel", () => {
   });
 });
 
+const makeGame = (map?: GameMap) => {
+  const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"], map);
+
+  game.assignRole();
+  game.assignStartingPositions();
+  game.distributeTickets();
+
+  return game;
+};
 describe("useTicket", () => {
-  const makeGame = (map?: GameMap) => {
-    const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"], map);
-
-    game.assignRole();
-    game.assignStartingPositions();
-    game.distributeTickets();
-
-    return game;
-  };
-
   it("using a valid ticket and destination should change the turn", () => {
     const game = makeGame();
 
@@ -549,5 +548,91 @@ describe("useTicket", () => {
     const game = makeGame();
 
     assertFalse(game.useTicket(Ticket.Yellow, 999));
+  });
+});
+
+describe("isMrXCaught", () => {
+  it("should provide true if MrX caught", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    const destination = 2;
+    game.useTicket(Ticket.Yellow, destination); // MrX
+    game.useTicket(Ticket.Yellow, destination); // Detective 1
+    assert(game.isMrXCaught());
+  });
+
+  it("should provide true if MrX caught by second detective", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 8, mode: Transport.Taxi }],
+        4: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    const destination = 2;
+    game.useTicket(Ticket.Yellow, destination); // MrX
+    game.useTicket(Ticket.Yellow, 8); // Detective 1
+    game.useTicket(Ticket.Yellow, destination); // Detective 2
+    assert(game.isMrXCaught());
+  });
+
+  it("should provide false if MrX not caught", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    game.useTicket(Ticket.Yellow, 2); // MrX
+    assertFalse(game.isMrXCaught());
+  });
+});
+
+describe("checkWinner", () => {
+  it("should return true if a detective caught MrX", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    const destination = 2;
+    game.useTicket(Ticket.Yellow, destination); // MrX
+    game.useTicket(Ticket.Yellow, destination); // Detective 1
+    assert(game.isGameOver());
+    assertEquals(game.getWinner(), "Detective");
+  });
+
+  it("should return false if detective not caught mr X", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    const destination = 2;
+    game.useTicket(Ticket.Yellow, destination); // MrX
+    game.useTicket(Ticket.Yellow, 6); // Detective 1
+    assertFalse(game.isGameOver());
+    assertEquals(game.getWinner(), null);
   });
 });

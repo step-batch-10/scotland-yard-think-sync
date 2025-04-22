@@ -10,6 +10,7 @@ import {
   Ticket,
   Tickets,
   Transport,
+  Winner,
 } from "./types.ts";
 
 const randomNumber: RandomIndex = () => 1;
@@ -23,6 +24,7 @@ export class ScotlandYard {
   private currentStations: Map<Role, number>;
   private currentRole: Role;
   private gameMap: GameMap;
+  private winner: Winner;
 
   constructor(players: string[], map: GameMap = basicMap) {
     this.players = [...players];
@@ -31,6 +33,7 @@ export class ScotlandYard {
     this.currentStations = new Map();
     this.startingStations = map.startingPositions;
     this.gameMap = map;
+    this.winner = null;
 
     this.roles = [
       Role.MrX,
@@ -106,6 +109,21 @@ export class ScotlandYard {
     return this.validRoutes(station);
   }
 
+  isMrXCaught() {
+    const detectivesPos = this.getDetectivePositions();
+    const MrXPosition = this.getCurrentPosition().get(Role.MrX) || 0;
+
+    return detectivesPos.includes(MrXPosition);
+  }
+
+  isGameOver() {
+    const hasDetectivesWon = this.isMrXCaught();
+    if (hasDetectivesWon) this.winner = "Detective";
+    const hasMrXWon = false;
+
+    return hasMrXWon || hasDetectivesWon;
+  }
+
   isMrXTurn(): boolean {
     return this.currentRole === Role.MrX;
   }
@@ -150,6 +168,8 @@ export class ScotlandYard {
       roles: mapToObject<string>(this.assignedRoles),
       positions: mapToObject(this.currentStations),
       currentRole: this.currentRole,
+      isGameOver: this.isGameOver(),
+      winner: this.getWinner(),
     };
   }
 
@@ -167,5 +187,9 @@ export class ScotlandYard {
 
   getTickets() {
     return this.tickets;
+  }
+
+  getWinner() {
+    return this.winner;
   }
 }
