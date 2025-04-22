@@ -225,8 +225,7 @@ const showTurn = (currentRole, isYourTurn) => {
   const turn = isYourTurn ? "Your Turn" : `${currentRole}'s Turn`;
 
   alertUser(turn, "#turn-indicator");
-
-  if (isYourTurn) highlightPawn(currentRole);
+  highlightPawn(currentRole);
 };
 
 const startPolling = () => {
