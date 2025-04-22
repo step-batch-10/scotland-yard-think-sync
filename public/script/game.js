@@ -3,23 +3,11 @@ import { combineObjects } from "./game_utils.js";
 const fetchJson = (route) => fetch(route).then((res) => res.json());
 
 const fetchState = () => fetchJson("/game/state");
-const fetchRoles = () => fetchJson("/game/info");
 const fetchPossiblStations = () => fetchJson("/game/possible-stations");
 
 const cloneTemplate = (targetId) => {
   const template = document.querySelector(targetId);
   return template.content.firstElementChild.cloneNode(true);
-};
-
-const makeRoleRow = (data) => {
-  const trElement = cloneTemplate("#role-row");
-  const rows = trElement.querySelectorAll("td");
-
-  for (const index in data) {
-    rows[index].textContent = data[index];
-  }
-
-  return trElement;
 };
 
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
@@ -68,22 +56,6 @@ const renderPlayerTickets = (stats) => {
   for (let index = 1; index < stats.length; index++) {
     playerStats(rows[index - 1], stats[index]);
   }
-};
-
-const renderPlayer = (rolesObject) => {
-  const table = cloneTemplate("#roles-table");
-  const tbody = table.querySelector("tbody");
-  const popup = document.querySelector("#pop-up");
-
-  const roles = Object.entries(rolesObject);
-  const tableRoleRows = roles.map(makeRoleRow);
-
-  tbody.append(...tableRoleRows);
-  popup.appendChild(table);
-
-  setTimeout(() => {
-    popup.remove();
-  }, 3000);
 };
 
 const addCoordinate = (pawn, station) => {
@@ -152,7 +124,7 @@ const renderTickets = (options, pairs) => (e) => {
   const card = cardsContainer.querySelector(".card");
   const elements = options.map(createCard);
 
-  closeBtn.addEventListener("click", removeContainer);
+  closeBtn.onclick = removeContainer;
   alignCard(cardsContainer, getDimensions(e.currentTarget));
   addListners(elements, card, pairs);
 
@@ -265,8 +237,6 @@ const playAudio = () => {
   bgAudio.volume = 0.5;
 
   bgAudio.play().catch(() => {
-    alert("Autoplay was blocked. Waiting for user interaction...");
-
     document.addEventListener(
       "click",
       () => {
@@ -277,11 +247,8 @@ const playAudio = () => {
   });
 };
 
-const main = async () => {
-  const { roles } = await fetchRoles();
-
+const main = () => {
   playAudio();
-  renderPlayer(roles);
   startPolling();
 };
 
