@@ -100,8 +100,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset || document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -110,17 +112,36 @@ const getDimensions = (element) => {
   return [absoluteX, absoluteY];
 };
 
+const removeContainer = (e) => e.target.parentNode.remove();
+
+const ticketSelection = (to, elements) => (e) => {
+  const type = e.target.id;
+  fetch(`/game/move/${to}/ticket/${type}`);
+
+  elements.forEach(({ clonedCard }) => {
+    // clonedCard.removeEventListener();
+    clonedCard.parentNode.parentNode.remove();
+  });
+};
+
 const renderTickets = (options) => (e) => {
   const cardsContainer = cloneTemplate("#ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
 
-  closeBtn.addEventListener("click", (e) => e.target.parentNode.remove());
+  closeBtn.addEventListener("click", removeContainer);
+
   alignCard(cardsContainer, getDimensions(e.currentTarget));
 
-  options.forEach(({ mode }) => {
-    const clonedCard = cloneTemplate(`#${mode}`);
+  const elements = options.map(({ to, mode }) => {
+    const card = document.createElement("div");
+    card.id = mode;
+    card.textContent = mode;
+    return { clonedCard: card, to };
+  });
 
+  elements.forEach(({ clonedCard, to }) => {
+    clonedCard.addEventListener("click", ticketSelection(to, elements));
     card.appendChild(clonedCard);
   });
 
@@ -135,6 +156,7 @@ const pairTicketToStaiton = (map) => {
 const showTickets = async () => {
   const possibleStation = await fetchPossiblStations();
   const pairs = pairTicketToStaiton(possibleStation);
+  console.log("Possible", possibleStation);
 
   pairs.forEach(([to, options]) => {
     const station = document.getElementById(`station-${to}`);
@@ -243,7 +265,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };

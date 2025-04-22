@@ -37,7 +37,8 @@ th {
 }
 
 .player-panel {
-  position: absolute;
+  /* position: absolute; */
+  position: fixed;
   right: 1vw;
   top: 4vh;
   border: 1px solid black;
@@ -127,7 +128,7 @@ th {
 }
 
 .mrx-panel {
-  position: absolute;
+  position: fixed;
   right: 1vw;
   top: 12vh;
   border: 1px solid black;
