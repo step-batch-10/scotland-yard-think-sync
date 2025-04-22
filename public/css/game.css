@@ -49,9 +49,9 @@ th {
 }
 
 .player-stats {
-  position: absolute;
+  position: fixed;
   text-align: center;
-  left: 70vw;
+  left: 68vw;
   top: 6vh;
 }
 
@@ -103,9 +103,9 @@ th {
 }
 
 .mrX-stats {
-  position: absolute;
+  position: fixed;
 
-  left: 66vw;
+  left: 64vw;
   top: 15vh;
 }
 

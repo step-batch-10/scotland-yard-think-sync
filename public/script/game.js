@@ -94,7 +94,6 @@ const addCoordinate = (pawn, station) => {
 
 const alignCard = (cardsContainer, [x, y]) => {
   cardsContainer.style.position = "absolute";
-
   cardsContainer.style.left = `${x}px`;
   cardsContainer.style.top = `${y - 54}px`;
 };
@@ -118,8 +117,9 @@ const ticketSelection = (to, elements) => (e) => {
   const type = e.target.id;
   fetch(`/game/move/${to}/ticket/${type}`);
 
-  elements.forEach(({ clonedCard }) => {
-    // clonedCard.removeEventListener();
+  elements.forEach(({ to, clonedCard }) => {
+    const station = document.getElementById(`station-${to}`);
+    station.onclick = () => {};
     clonedCard.parentNode.parentNode.remove();
   });
 };
@@ -160,7 +160,7 @@ const showTickets = async () => {
 
   pairs.forEach(([to, options]) => {
     const station = document.getElementById(`station-${to}`);
-    station.addEventListener("click", renderTickets(options));
+    station.onclick = renderTickets(options);
   });
 };
 
