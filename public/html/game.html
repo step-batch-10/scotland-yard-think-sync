@@ -12,23 +12,15 @@
   <body>
     <div id="turn-indicator"></div>
     <div id="pawns-display"></div>
-    <div>
-      <button id="ticket-show" popovertarget="mypopover" class="player-panel">
-        <img
-          class="icon"
-          src="/assets/images/detective-icon.png"
-          alt="icon"
-          popovertarget="mypopover"
-        />
-      </button>
 
-      <button id="ticket-show" popovertarget="mrX-Panel" class="mrx-panel">
-        <img
-          class="icon"
-          src="/assets/images/mrX-icon-2.png"
-          popovertarget="mrx-panel"
-        />
-      </button>
+    <button id="show-ticket" popovertarget="player-panel" class="player-panel">
+      <img
+        class="icon"
+        src="/assets/images/detective-icon.png"
+        alt="icon"
+        popovertarget="player-panel"
+      />
+    </button>
 
       <svg
         width="1920"
@@ -32094,9 +32086,17 @@
         </g>
       </svg>
     </div>
+    <button id="show-ticket" popovertarget="mrX-Panel" class="mrx-panel">
+      <img
+        class="icon"
+        src="/assets/images/mrX-icon-2.png"
+        popovertarget="mrx-panel"
+      />
+    </button>
+
     <div id="pop-up"></div>
 
-    <div class="player-stats" id="mypopover" popover="">
+    <div class="player-stats" id="player-panel" popover="">
       <table>
         <thead>
           <tr>
@@ -32105,7 +32105,6 @@
             <th>Taxi</th>
             <th>Bus</th>
             <th>Metro</th>
-
             <th>Current Station</th>
           </tr>
         </thead>
@@ -32116,25 +32115,6 @@
             <td></td>
             <td></td>
             <td></td>
-
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-
-            <td></td>
-          </tr>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-
             <td></td>
           </tr>
           <tr>
@@ -32151,7 +32131,22 @@
             <td></td>
             <td></td>
             <td></td>
-
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+          <tr>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
             <td></td>
           </tr>
         </tbody>
@@ -32221,18 +32216,7 @@
         <td></td>
       </tr>
     </template>
-    <template id="ticket-row">
-      <tr>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-      </tr>
-    </template>
+
     <template id="roles-table">
       <div class="pop-up-1">
         <table>
@@ -32246,27 +32230,9 @@
         </table>
       </div>
     </template>
-    <template id="stats">
-      <div class="player-stats" id="mypopover" popover>
-        <table>
-          <thead>
-            <tr>
-              <th>Role</th>
-              <th>player</th>
-              <th>Taxi</th>
-              <th>Bus</th>
-              <th>Metro</th>
-              <th>Black</th>
-              <th>2X</th>
-              <th>Current Station</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-      </div>
-    </template>
 
     <template id="distribute-tickets"> </template>
+
     <template id="pawn">
       <div class="pawn">
         <svg

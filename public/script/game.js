@@ -26,7 +26,6 @@ const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
 
   cells[0].style.backgroundColor = role;
-
   cells[1].textContent = playerName;
   cells[2].textContent = tickets.Taxi;
   cells[3].textContent = tickets.Bus;
@@ -153,8 +152,6 @@ const movePawnToStation = (pawn, stationId) => {
   return pawn;
 };
 
-const findColor = (name) => name.split(":").at(-1);
-
 const makePawn = (color) => {
   const pawn = cloneTemplate("#pawn");
   const bodyParts = pawn.querySelectorAll(".body-parts");
@@ -169,7 +166,7 @@ const makePawn = (color) => {
 const createPawn = (player) => {
   const position = player.at(-1);
   const stationId = generateStationId(position);
-  const color = findColor(player[0]);
+  const color = player[0];
   const pawn = makePawn(color);
   return movePawnToStation(pawn, stationId, color);
 };
@@ -223,7 +220,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true }
+      { once: true },
     );
   });
 };

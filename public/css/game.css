@@ -1,6 +1,7 @@
 * {
   font-family: "Gill Sans", "Gill Sans MT", Calibri, "Trebuchet MS", sans-serif;
 }
+
 body {
   background-color: aliceblue;
 }
@@ -16,7 +17,7 @@ body {
   padding: 10px 40px;
 }
 
-#ticket-show {
+#show-ticket {
   background-color: transparent;
   border: none;
   padding: 0px;
@@ -48,6 +49,52 @@ th {
   text-align: center;
   left: 70vw;
   top: 6vh;
+}
+.players-panel {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.player-card {
+  background: #f8f9fa;
+  border: 1px solid #ddd;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.indicator {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: #555;
+  margin-right: 1rem;
+}
+
+.player-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+.name {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.tickets {
+  display: flex;
+  gap: 0.5rem;
+  font-size: 1rem;
+}
+
+.station {
+  font-size: 0.95rem;
+  color: #444;
 }
 
 .mrX-stats {
