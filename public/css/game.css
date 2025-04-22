@@ -24,8 +24,11 @@ body {
 }
 
 #turn-indicator {
-  position: absolute;
-  margin: 3rem;
+  position: fixed;
+  left: 0%;
+  border: 0.5px solid black;
+  padding: 10px 20px;
+  background-color: greenyellow;
 }
 
 td,
@@ -106,7 +109,8 @@ th {
 
 .pawn {
   position: absolute;
-  width: 40px;
+  width: 30px;
+  height: 10px;
 }
 
 .svg {
@@ -184,4 +188,13 @@ th {
 
 g tspan {
   white-space: normal;
+}
+
+.highlight {
+  width: 60px;
+  aspect-ratio: 1;
+  position: absolute;
+  transform: translate(-30%, -80%);
+  border-radius: 50%;
+  border: 5px solid red;
 }

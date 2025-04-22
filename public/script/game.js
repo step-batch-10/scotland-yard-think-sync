@@ -88,8 +88,8 @@ const renderPlayer = (rolesObject) => {
 
 const addCoordinate = (pawn, station) => {
   const [x, y] = getDimensions(station);
-  pawn.style.left = `${x - 8}px`;
-  pawn.style.top = `${y - 60}px`;
+  pawn.style.left = `${x}px`;
+  pawn.style.top = `${y - 45}px`;
 };
 
 const alignCard = (cardsContainer, [x, y]) => {
@@ -155,6 +155,7 @@ const movePawnToStation = (pawn, stationId) => {
 const makePawn = (color) => {
   const pawn = cloneTemplate("#pawn");
   const bodyParts = pawn.querySelectorAll(".body-parts");
+  pawn.id = color;
 
   bodyParts.forEach((part) => {
     part.setAttribute("fill", color);
@@ -168,6 +169,7 @@ const createPawn = (player) => {
   const stationId = generateStationId(position);
   const color = player[0];
   const pawn = makePawn(color);
+
   return movePawnToStation(pawn, stationId, color);
 };
 
@@ -178,31 +180,52 @@ const renderPawns = (stats) => {
   root.replaceChildren(...pawns);
 };
 
-const showTurn = (currentRole, isYourTurn) => {
-  const turn = isYourTurn ? "Your Turn" : "Opponent Turn";
-  const turnIndicator = document.querySelector("#turn-indicator");
-  turnIndicator.textContent = `${turn} : ${currentRole}`;
+const alertUser = (msg, id) => {
+  const turnIndicator = document.querySelector(id);
+  turnIndicator.textContent = msg;
 };
 
-const startPolling = () => {
+const createHighlighter = () => {
+  const element = document.createElement("div");
+  element.classList.add("highlight");
+
+  return element;
+};
+
+const highlightPawn = (role) => {
+  const pawn = document.querySelector(`#${role}`);
+
+  const highlighter = createHighlighter();
+  pawn.appendChild(highlighter);
+};
+
+const showTurn = (currentRole, isYourTurn) => {
+  const turn = isYourTurn ? "Your Turn" : `${currentRole}'s Turn`;
+
+  alertUser(turn, "#turn-indicator");
+
+  if (isYourTurn) highlightPawn(currentRole);
+};
+
+const startPolling = async () => {
   let turn = false;
 
-  setInterval(async () => {
-    const { tickets, positions, roles, currentRole, isYourTurn } =
-      await fetchState();
+  // setInterval(async () => {
+  const { tickets, positions, roles, currentRole, isYourTurn } =
+    await fetchState();
 
-    const stats = combineObjects(roles, tickets, positions);
+  const stats = combineObjects(roles, tickets, positions);
 
-    showTurn(currentRole, isYourTurn);
-    renderPlayerTickets(stats);
-    renderPawns(stats);
+  renderPlayerTickets(stats);
+  renderPawns(stats);
+  showTurn(currentRole, isYourTurn);
 
-    if (isYourTurn && !turn) {
-      showTickets();
-    }
+  if (isYourTurn && !turn) {
+    showTickets();
+  }
 
-    turn = isYourTurn;
-  }, 3000);
+  turn = isYourTurn;
+  // }, 3000);
 };
 
 const playAudio = () => {
