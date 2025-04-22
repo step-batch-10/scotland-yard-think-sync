@@ -115,6 +115,7 @@ const renderTickets = (options) => (e) => {
   const cardsContainer = cloneTemplate("#ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
+
   closeBtn.addEventListener("click", (e) => e.target.parentNode.remove());
   alignCard(cardsContainer, getDimensions(e.currentTarget));
 
@@ -188,6 +189,7 @@ const showTurn = (currentRole, isYourTurn) => {
 
 const startPolling = () => {
   let turn = false;
+
   setInterval(async () => {
     const { tickets, positions, roles, currentRole, isYourTurn } =
       await fetchState();
@@ -211,7 +213,6 @@ const playAudio = () => {
 
   bgAudio.autoplay = true;
   bgAudio.loop = true;
-
   bgAudio.volume = 0.5;
 
   bgAudio.play().catch(() => {

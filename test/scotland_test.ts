@@ -7,7 +7,6 @@ import {
   RandomIndex,
   Role,
   Roles,
-  Route,
   Ticket,
   Tickets,
   Transport,
@@ -183,20 +182,31 @@ describe("game state", () => {
   });
 
   it("should provide starting positions in game state", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
-    sy.assignRole();
-    sy.distributeTickets();
-    sy.assignStartingPositions();
-    const expected = {
-      MrX: 182,
-      Red: 183,
-      Blue: 184,
-      Yellow: 186,
-      Purple: 187,
-      Green: 185,
+    const fakeMap: GameMap = {
+      startingPositions: [1, 2, 3, 4, 5, 6],
+      routes: {
+        1: [{ to: 1, mode: Transport.Bus }],
+      },
     };
-    const { positions } = sy.getGameState();
+
+    const game = new ScotlandYard(
+      ["test1", "test2", "test3", "test4", "test5", "test6"],
+      fakeMap
+    );
+
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    const expected = {
+      MrX: 2,
+      Red: 3,
+      Blue: 4,
+      Green: 5,
+      Yellow: 6,
+      Purple: 1,
+    };
+    const { positions } = game.getGameState();
 
     assertEquals(positions, expected);
   });
@@ -247,6 +257,7 @@ describe("change turn", () => {
     sy.changeTurn();
     sy.changeTurn();
     sy.changeTurn();
+
     const nextPlayer = sy.changeTurn();
 
     assertEquals(nextPlayer, "MrX");
@@ -255,77 +266,87 @@ describe("change turn", () => {
 
 describe("possible stations", () => {
   it("should return possible stations if possible", () => {
-    const game = new ScotlandYard([
-      "test1",
-      "test2",
-      "test3",
-      "test4",
-      "test5",
-      "test6",
-    ]);
+    const fakeMap: GameMap = {
+      startingPositions: [1, 2, 3, 4, 5, 6, 7],
+      routes: {
+        2: [{ to: 1, mode: Transport.Bus }],
+      },
+    };
+
+    const game = new ScotlandYard(
+      ["test1", "test2", "test3", "test4", "test5", "test6"],
+      fakeMap
+    );
+
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();
+
     const actual = game.possibleStations();
-    const expected = [
-      { to: 181, mode: Transport.Taxi },
-      { to: 181, mode: Transport.Bus },
-      { to: 195, mode: Transport.Taxi },
-    ];
+
+    const expected = [{ to: 1, mode: Transport.Bus }];
 
     assertEquals(actual, expected);
   });
 
   it("should return no station if not possible", () => {
-    const game = new ScotlandYard([
-      "test1",
-      "test2",
-      "test3",
-      "test4",
-      "test5",
-      "test6",
-    ]);
-    const actual = game.possibleStations();
-    const expected: Route[] = [];
+    const fakeMap: GameMap = {
+      startingPositions: [1, 2, 3, 4, 5, 6],
+      routes: {
+        1: [{ to: 1, mode: Transport.Bus }],
+      },
+    };
 
-    assertEquals(actual, expected);
+    const game = new ScotlandYard(
+      ["test1", "test2", "test3", "test4", "test5", "test6"],
+      fakeMap
+    );
+
+    const actual = game.possibleStations();
+
+    assertEquals(actual, []);
   });
 });
 
 describe("positionOfDetectives", () => {
   it("should provide positions of all detectives", () => {
-    const game = new ScotlandYard([
-      "test1",
-      "test2",
-      "test3",
-      "test4",
-      "test5",
-      "test6",
-    ]);
+    const fakeMap: GameMap = {
+      startingPositions: [1, 2, 3, 4, 5, 6],
+      routes: {
+        1: [{ to: 1, mode: Transport.Bus }],
+      },
+    };
+
+    const game = new ScotlandYard(
+      ["test1", "test2", "test3", "test4", "test5", "test6"],
+      fakeMap
+    );
 
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();
 
-    assertEquals(game.getDetectivePositions(), [183, 184, 185, 186, 187]);
+    assertEquals(game.getDetectivePositions(), [3, 4, 5, 6, 1]);
   });
 
   it("should not provide positions of all detectives when station is not assigned", () => {
-    const game = new ScotlandYard([
-      "test1",
-      "test2",
-      "test3",
-      "test4",
-      "test5",
-      "test6",
-    ]);
+    const fakeMap: GameMap = {
+      startingPositions: [1, 2, 3, 4, 5, 6],
+      routes: {
+        1: [{ to: 1, mode: Transport.Bus }],
+      },
+    };
+    const game = new ScotlandYard(
+      ["test1", "test2", "test3", "test4", "test5", "test6"],
+      fakeMap
+    );
 
     assertEquals(game.getDetectivePositions(), []);
   });
 });
 
 describe("getValidRoutes", () => {
-  it("it should return valid routes", () => {
+  it("should return valid routes", () => {
     const players = ["test1", "test2", "test3", "test4", "test5", "test6"];
     const route = [{ to: 1, mode: Transport.Bus }];
     const fakeMap: GameMap = {
@@ -341,7 +362,7 @@ describe("getValidRoutes", () => {
     assertEquals(game.validRoutes(1), route);
   });
 
-  it("it should return empty array if there is no valid route", () => {
+  it("should return empty array if there is no valid route", () => {
     const players = ["test1", "test2", "test3", "test4", "test5", "test6"];
 
     const fakeMap: GameMap = {
@@ -389,11 +410,12 @@ describe("isMrXTurn", () => {
     game.assignStartingPositions();
     assert(game.isMrXTurn());
     game.changeTurn();
+
     assertFalse(game.isMrXTurn());
   });
 });
 
-describe("canTravel", () => {
+describe("validTicket", () => {
   it("should provide true if travel is possible to travel using a ticket", () => {
     assert(ScotlandYard.validTicket(Ticket.Yellow, Transport.Taxi));
 
@@ -407,7 +429,7 @@ describe("canTravel", () => {
     assert(ScotlandYard.validTicket(Ticket.Black, Transport.Ferry));
   });
 
-  it("should provide true if travel is not possible to travel using a ticket", () => {
+  it("should provide false if travel is not possible to travel using a ticket", () => {
     assertFalse(ScotlandYard.validTicket(Ticket.Yellow, Transport.Bus));
     assertFalse(ScotlandYard.validTicket(Ticket.Yellow, Transport.Metro));
     assertFalse(ScotlandYard.validTicket(Ticket.Yellow, Transport.Ferry));
@@ -421,7 +443,7 @@ describe("canTravel", () => {
     assertFalse(ScotlandYard.validTicket(Ticket.Red, Transport.Ferry));
   });
 
-  it("should provide true if travel is not possible to travel using a ticket", () => {
+  it("should provide false if travel is not possible", () => {
     assertFalse(ScotlandYard.validTicket(Ticket["2x"], Transport.Bus));
   });
 });
@@ -473,11 +495,19 @@ describe("canTravel", () => {
 });
 
 describe("useTicket", () => {
-  it("should provide true if using ticket to go is possible", () => {
-    const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"]);
+  const makeGame = (map?: GameMap) => {
+    const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"], map);
+
     game.assignRole();
     game.assignStartingPositions();
     game.distributeTickets();
+
+    return game;
+  };
+
+  it("using a valid ticket and destination should change the turn", () => {
+    const game = makeGame();
+
     assert(game.useTicket(Ticket.Yellow, 181));
     const expected = {
       MrX: 181,
@@ -487,32 +517,37 @@ describe("useTicket", () => {
       Yellow: 186,
       Purple: 187,
     };
+
     const positions = game.getCurrentPosition();
+    const gameState = game.getGameState();
+
     assertEquals(mapToObject(positions), expected);
+    assertEquals(gameState.currentRole, "Red");
+    assertEquals(gameState.tickets.MrX.Taxi, 3);
   });
 
-  it("should provide false if using ticket to go is not possible", () => {
-    const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"]);
-    game.assignRole();
-    game.assignStartingPositions();
-    game.distributeTickets();
-    assertFalse(game.useTicket(Ticket.Red, 185));
+  it("should reject move when ticket type does not match route", () => {
+    const game = makeGame();
+    assertFalse(game.useTicket(Ticket.Red, 182));
   });
 
-  it("should provide false if there is no ticket", () => {
-    const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"]);
-    game.assignRole();
-    game.assignStartingPositions();
-    assertFalse(game.useTicket(Ticket.Red, 185));
-  });
+  it("should not allow player to use a ticket they don't own", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [1, 1, 1, 1, 1, 1],
+      routes: {
+        1: [{ to: 2, mode: Transport.Ferry }],
+      },
+    };
 
-  it("should provide false if number of ticket is zero for detective there is no black ticket", () => {
-    const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"]);
-    game.assignRole();
-    game.assignStartingPositions();
-    game.distributeTickets();
+    const game = makeGame(fakeMap);
     game.changeTurn();
 
-    assertFalse(game.useTicket(Ticket.Black, 185));
+    assertFalse(game.useTicket(Ticket.Black, 2));
+  });
+
+  it("should not allow moving to a non-adjacent location", () => {
+    const game = makeGame();
+
+    assertFalse(game.useTicket(Ticket.Yellow, 999));
   });
 });

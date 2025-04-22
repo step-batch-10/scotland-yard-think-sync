@@ -46,10 +46,9 @@ export class ScotlandYard {
   private defaultAssignment(): void {
     for (const index in this.players) {
       const role = this.roles[index];
+      const player = this.assignedRoles.get(role) || this.players[index];
 
-      if (!this.assignedRoles.has(role)) {
-        this.assignedRoles.set(role, this.players[index]);
-      }
+      this.assignedRoles.set(role, player);
     }
   }
 
@@ -112,30 +111,15 @@ export class ScotlandYard {
   }
 
   static validTicket(ticket: Ticket, mode: Transport): boolean {
-    const allTransport: Transport[] = [
-      Transport.Bus,
-      Transport.Ferry,
-      Transport.Metro,
-      Transport.Taxi,
-    ];
+    if (Ticket.Black === ticket) return mode in Transport;
 
-    switch (ticket) {
-      case Ticket.Yellow:
-        return Transport.Taxi === mode;
-      case Ticket.Green:
-        return Transport.Bus === mode;
-      case Ticket.Red:
-        return Transport.Metro === mode;
-      case Ticket.Black:
-        return allTransport.includes(mode);
-      default:
-        return false;
-    }
+    return ticket.toString() === mode.toString();
   }
 
   static canTravel(ticket: Ticket, destination: number) {
-    return ({ to, mode }: Route) =>
-      to === destination && ScotlandYard.validTicket(ticket, mode);
+    return function ({ to, mode }: Route) {
+      return to === destination && ScotlandYard.validTicket(ticket, mode);
+    };
   }
 
   private movePlayer(destination: number) {
@@ -143,25 +127,18 @@ export class ScotlandYard {
   }
 
   private isPossibleStation(mode: Ticket, destination: number) {
-    const possibleDestinations = this.possibleStations();
-    const isPossible = possibleDestinations.some(
-      ScotlandYard.canTravel(mode, destination)
-    );
-    return isPossible;
+    const possibleStations = this.possibleStations();
+    return possibleStations.some(ScotlandYard.canTravel(mode, destination));
   }
 
   useTicket(mode: Ticket, destination: number): boolean {
-    const availableTickets = this.tickets.get(this.currentRole);
-    if (!availableTickets) return false;
-
-    const numberOfTicket = availableTickets[mode];
-
-    if (!numberOfTicket) return false;
-
     if (!this.isPossibleStation(mode, destination)) return false;
 
+    const tickets = this.tickets.get(this.currentRole);
+    if (!tickets || !tickets[mode]) return false;
+
     this.movePlayer(destination);
-    availableTickets[mode] = numberOfTicket - 1;
+    tickets[mode] -= 1;
     this.changeTurn();
 
     return true;
