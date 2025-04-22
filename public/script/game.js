@@ -210,23 +210,35 @@ const showTurn = (currentRole, isYourTurn) => {
   highlightPawn(currentRole);
 };
 
-const renderGameOver = ({ winner }) => alert(winner);
+const winningMessage = (winner) =>
+  winner === "MrX" ? "Mr. X is the winner" : "Detectives are the winner";
+
+const renderGameOver = ({ winner }, id) => {
+  clearInterval(id);
+
+  const banner = cloneTemplate("#winner-banner");
+  banner.querySelector("p").textContent = winningMessage(winner);
+
+  document.body.appendChild(banner);
+};
+
+const playGame = ({ tickets, positions, roles, currentRole, isYourTurn }) => {
+  const stats = combineObjects(roles, tickets, positions);
+
+  renderPlayerTickets(stats);
+  renderPawns(stats);
+  showTurn(currentRole, isYourTurn);
+
+  if (isYourTurn) showTickets();
+};
 
 const startPolling = () => {
-  setInterval(async () => {
+  const intervelId = setInterval(async () => {
     const data = await fetchState();
 
-    if (data.isGameOver) return renderGameOver(data);
+    if (data.isGameOver) return renderGameOver(data, intervelId);
 
-    const { tickets, positions, roles, currentRole, isYourTurn } = data;
-
-    const stats = combineObjects(roles, tickets, positions);
-
-    renderPlayerTickets(stats);
-    renderPawns(stats);
-    showTurn(currentRole, isYourTurn);
-
-    if (isYourTurn) showTickets();
+    return playGame(data);
   }, 3000);
 };
 const playAudio = () => {

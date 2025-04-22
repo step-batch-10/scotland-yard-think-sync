@@ -224,3 +224,21 @@ g {
   border: 5px solid black;
   opacity: 0.7;
 }
+
+.banner {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  backdrop-filter: blur(10px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.banner p {
+  text-align: center;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-size: 6rem;
+}
