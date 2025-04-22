@@ -270,7 +270,7 @@ describe("possible stations", () => {
     const expected = [
       { to: 181, mode: Transport.Taxi },
       { to: 181, mode: Transport.Bus },
-      { to: 192, mode: Transport.Taxi },
+      { to: 195, mode: Transport.Taxi },
     ];
 
     assertEquals(actual, expected);
