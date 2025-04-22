@@ -2,8 +2,7 @@ import { combineObjects } from "./game_utils.js";
 
 const fetchJson = (route) => fetch(route).then((res) => res.json());
 
-const fetchState = () =>
-  ({ isGameOver: true, winner: "MrX" } || fetchJson("/game/state"));
+const fetchState = () => fetchJson("/game/state");
 const fetchPossiblStations = () => fetchJson("/game/possible-stations");
 
 const cloneTemplate = (targetId) => {
