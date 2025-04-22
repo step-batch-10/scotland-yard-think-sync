@@ -1,67 +1,67 @@
 import { GameMap, MapRoute, Transport } from "../models/types.ts";
 
 const routes: MapRoute = {
-  "1": [
+  1: [
     { to: 8, mode: Transport.Taxi },
     { to: 9, mode: Transport.Taxi },
     { to: 46, mode: Transport.Bus },
     { to: 58, mode: Transport.Bus },
     { to: 46, mode: Transport.Metro },
   ],
-  "2": [
+  2: [
     { to: 10, mode: Transport.Taxi },
     { to: 20, mode: Transport.Taxi },
   ],
-  "3": [
+  3: [
     { to: 11, mode: Transport.Taxi },
     { to: 4, mode: Transport.Taxi },
     { to: 12, mode: Transport.Taxi },
     { to: 22, mode: Transport.Bus },
     { to: 23, mode: Transport.Bus },
   ],
-  "4": [
+  4: [
     { to: 3, mode: Transport.Taxi },
     { to: 13, mode: Transport.Taxi },
   ],
-  "5": [
+  5: [
     { to: 15, mode: Transport.Taxi },
     { to: 16, mode: Transport.Taxi },
   ],
-  "6": [
+  6: [
     { to: 7, mode: Transport.Taxi },
     { to: 29, mode: Transport.Taxi },
   ],
-  "7": [
+  7: [
     { to: 6, mode: Transport.Taxi },
     { to: 17, mode: Transport.Taxi },
     { to: 42, mode: Transport.Bus },
   ],
-  "8": [
+  8: [
     { to: 18, mode: Transport.Taxi },
     { to: 1, mode: Transport.Taxi },
     { to: 19, mode: Transport.Taxi },
   ],
-  "9": [
+  9: [
     { to: 1, mode: Transport.Taxi },
     { to: 20, mode: Transport.Taxi },
     { to: 19, mode: Transport.Taxi },
   ],
-  "10": [
+  10: [
     { to: 2, mode: Transport.Taxi },
     { to: 11, mode: Transport.Taxi },
     { to: 21, mode: Transport.Taxi },
     { to: 34, mode: Transport.Taxi },
   ],
-  "11": [
+  11: [
     { to: 3, mode: Transport.Taxi },
     { to: 10, mode: Transport.Taxi },
     { to: 22, mode: Transport.Taxi },
   ],
-  "12": [
+  12: [
     { to: 23, mode: Transport.Taxi },
     { to: 3, mode: Transport.Taxi },
   ],
-  "13": [
+  13: [
     { to: 4, mode: Transport.Taxi },
     { to: 23, mode: Transport.Taxi },
     { to: 24, mode: Transport.Taxi },
@@ -72,13 +72,13 @@ const routes: MapRoute = {
     { to: 67, mode: Transport.Metro },
     { to: 89, mode: Transport.Metro },
   ],
-  "14": [
+  14: [
     { to: 25, mode: Transport.Taxi },
     { to: 15, mode: Transport.Taxi },
     { to: 13, mode: Transport.Bus },
     { to: 15, mode: Transport.Bus },
   ],
-  "15": [
+  15: [
     { to: 14, mode: Transport.Taxi },
     { to: 26, mode: Transport.Taxi },
     { to: 28, mode: Transport.Taxi },
@@ -88,37 +88,37 @@ const routes: MapRoute = {
     { to: 29, mode: Transport.Bus },
     { to: 41, mode: Transport.Bus },
   ],
-  "16": [
+  16: [
     { to: 15, mode: Transport.Taxi },
     { to: 5, mode: Transport.Taxi },
     { to: 28, mode: Transport.Taxi },
     { to: 29, mode: Transport.Taxi },
   ],
-  "17": [
+  17: [
     { to: 7, mode: Transport.Taxi },
     { to: 30, mode: Transport.Taxi },
     { to: 29, mode: Transport.Taxi },
   ],
-  "18": [
+  18: [
     { to: 8, mode: Transport.Taxi },
     { to: 31, mode: Transport.Taxi },
     { to: 43, mode: Transport.Taxi },
   ],
-  "19": [
+  19: [
     { to: 8, mode: Transport.Taxi },
     { to: 9, mode: Transport.Taxi },
     { to: 32, mode: Transport.Taxi },
   ],
-  "20": [
+  20: [
     { to: 2, mode: Transport.Taxi },
     { to: 9, mode: Transport.Taxi },
     { to: 33, mode: Transport.Taxi },
   ],
-  "21": [
+  21: [
     { to: 10, mode: Transport.Taxi },
     { to: 33, mode: Transport.Taxi },
   ],
-  "22": [
+  22: [
     { to: 11, mode: Transport.Taxi },
     { to: 23, mode: Transport.Taxi },
     { to: 34, mode: Transport.Taxi },
@@ -128,7 +128,7 @@ const routes: MapRoute = {
     { to: 34, mode: Transport.Bus },
     { to: 65, mode: Transport.Bus },
   ],
-  "23": [
+  23: [
     { to: 12, mode: Transport.Taxi },
     { to: 13, mode: Transport.Taxi },
     { to: 22, mode: Transport.Taxi },
@@ -138,32 +138,32 @@ const routes: MapRoute = {
     { to: 13, mode: Transport.Bus },
     { to: 67, mode: Transport.Bus },
   ],
-  "24": [
+  24: [
     { to: 13, mode: Transport.Taxi },
     { to: 37, mode: Transport.Taxi },
     { to: 38, mode: Transport.Taxi },
   ],
-  "25": [
+  25: [
     { to: 14, mode: Transport.Taxi },
     { to: 39, mode: Transport.Taxi },
   ],
-  "26": [
+  26: [
     { to: 15, mode: Transport.Taxi },
     { to: 27, mode: Transport.Taxi },
     { to: 39, mode: Transport.Taxi },
   ],
-  "27": [
+  27: [
     { to: 26, mode: Transport.Taxi },
     { to: 28, mode: Transport.Taxi },
     { to: 40, mode: Transport.Taxi },
   ],
-  "28": [
+  28: [
     { to: 15, mode: Transport.Taxi },
     { to: 16, mode: Transport.Taxi },
     { to: 27, mode: Transport.Taxi },
     { to: 41, mode: Transport.Taxi },
   ],
-  "29": [
+  29: [
     { to: 6, mode: Transport.Taxi },
     { to: 16, mode: Transport.Taxi },
     { to: 17, mode: Transport.Taxi },
@@ -174,28 +174,28 @@ const routes: MapRoute = {
     { to: 42, mode: Transport.Bus },
     { to: 55, mode: Transport.Bus },
   ],
-  "30": [
+  30: [
     { to: 17, mode: Transport.Taxi },
     { to: 42, mode: Transport.Taxi },
   ],
-  "31": [
+  31: [
     { to: 18, mode: Transport.Taxi },
     { to: 43, mode: Transport.Taxi },
     { to: 44, mode: Transport.Taxi },
   ],
-  "32": [
+  32: [
     { to: 19, mode: Transport.Taxi },
     { to: 33, mode: Transport.Taxi },
     { to: 44, mode: Transport.Taxi },
     { to: 45, mode: Transport.Taxi },
   ],
-  "33": [
+  33: [
     { to: 20, mode: Transport.Taxi },
     { to: 21, mode: Transport.Taxi },
     { to: 32, mode: Transport.Taxi },
     { to: 46, mode: Transport.Taxi },
   ],
-  "34": [
+  34: [
     { to: 10, mode: Transport.Taxi },
     { to: 22, mode: Transport.Taxi },
     { to: 47, mode: Transport.Taxi },
@@ -204,41 +204,41 @@ const routes: MapRoute = {
     { to: 46, mode: Transport.Bus },
     { to: 63, mode: Transport.Bus },
   ],
-  "35": [
+  35: [
     { to: 22, mode: Transport.Taxi },
     { to: 36, mode: Transport.Taxi },
     { to: 48, mode: Transport.Taxi },
     { to: 65, mode: Transport.Taxi },
   ],
-  "36": [
+  36: [
     { to: 35, mode: Transport.Taxi },
     { to: 37, mode: Transport.Taxi },
     { to: 49, mode: Transport.Taxi },
   ],
-  "37": [
+  37: [
     { to: 23, mode: Transport.Taxi },
     { to: 24, mode: Transport.Taxi },
     { to: 36, mode: Transport.Taxi },
     { to: 50, mode: Transport.Taxi },
   ],
-  "38": [
+  38: [
     { to: 24, mode: Transport.Taxi },
     { to: 50, mode: Transport.Taxi },
     { to: 51, mode: Transport.Taxi },
   ],
-  "39": [
+  39: [
     { to: 25, mode: Transport.Taxi },
     { to: 26, mode: Transport.Taxi },
     { to: 51, mode: Transport.Taxi },
     { to: 52, mode: Transport.Taxi },
   ],
-  "40": [
+  40: [
     { to: 27, mode: Transport.Taxi },
     { to: 41, mode: Transport.Taxi },
     { to: 52, mode: Transport.Taxi },
     { to: 53, mode: Transport.Taxi },
   ],
-  "41": [
+  41: [
     { to: 40, mode: Transport.Taxi },
     { to: 54, mode: Transport.Taxi },
     { to: 29, mode: Transport.Taxi },
@@ -248,7 +248,7 @@ const routes: MapRoute = {
     { to: 52, mode: Transport.Bus },
     { to: 87, mode: Transport.Bus },
   ],
-  "42": [
+  42: [
     { to: 29, mode: Transport.Taxi },
     { to: 30, mode: Transport.Taxi },
     { to: 56, mode: Transport.Taxi },
@@ -257,24 +257,24 @@ const routes: MapRoute = {
     { to: 29, mode: Transport.Bus },
     { to: 72, mode: Transport.Bus },
   ],
-  "43": [
+  43: [
     { to: 18, mode: Transport.Taxi },
     { to: 31, mode: Transport.Taxi },
     { to: 57, mode: Transport.Taxi },
   ],
-  "44": [
+  44: [
     { to: 31, mode: Transport.Taxi },
     { to: 32, mode: Transport.Taxi },
     { to: 58, mode: Transport.Taxi },
   ],
-  "45": [
+  45: [
     { to: 32, mode: Transport.Taxi },
     { to: 46, mode: Transport.Taxi },
     { to: 58, mode: Transport.Taxi },
     { to: 59, mode: Transport.Taxi },
     { to: 60, mode: Transport.Taxi },
   ],
-  "46": [
+  46: [
     { to: 33, mode: Transport.Taxi },
     { to: 45, mode: Transport.Taxi },
     { to: 47, mode: Transport.Taxi },
@@ -288,35 +288,35 @@ const routes: MapRoute = {
     { to: 74, mode: Transport.Metro },
     { to: 79, mode: Transport.Metro },
   ],
-  "47": [
+  47: [
     { to: 46, mode: Transport.Taxi },
     { to: 34, mode: Transport.Taxi },
     { to: 62, mode: Transport.Taxi },
   ],
-  "48": [
+  48: [
     { to: 34, mode: Transport.Taxi },
     { to: 35, mode: Transport.Taxi },
     { to: 62, mode: Transport.Taxi },
     { to: 63, mode: Transport.Taxi },
   ],
-  "49": [
+  49: [
     { to: 36, mode: Transport.Taxi },
     { to: 50, mode: Transport.Taxi },
     { to: 66, mode: Transport.Taxi },
   ],
-  "50": [
+  50: [
     { to: 37, mode: Transport.Taxi },
     { to: 38, mode: Transport.Taxi },
     { to: 49, mode: Transport.Taxi },
   ],
-  "51": [
+  51: [
     { to: 38, mode: Transport.Taxi },
     { to: 39, mode: Transport.Taxi },
     { to: 52, mode: Transport.Taxi },
     { to: 67, mode: Transport.Taxi },
     { to: 68, mode: Transport.Taxi },
   ],
-  "52": [
+  52: [
     { to: 39, mode: Transport.Taxi },
     { to: 40, mode: Transport.Taxi },
     { to: 51, mode: Transport.Taxi },
@@ -326,33 +326,33 @@ const routes: MapRoute = {
     { to: 67, mode: Transport.Bus },
     { to: 86, mode: Transport.Bus },
   ],
-  "53": [
+  53: [
     { to: 40, mode: Transport.Taxi },
     { to: 54, mode: Transport.Taxi },
     { to: 69, mode: Transport.Taxi },
   ],
-  "54": [
+  54: [
     { to: 41, mode: Transport.Taxi },
     { to: 53, mode: Transport.Taxi },
     { to: 55, mode: Transport.Taxi },
     { to: 70, mode: Transport.Taxi },
   ],
-  "55": [
+  55: [
     { to: 54, mode: Transport.Taxi },
     { to: 71, mode: Transport.Taxi },
     { to: 29, mode: Transport.Bus },
     { to: 89, mode: Transport.Bus },
   ],
-  "56": [
+  56: [
     { to: 42, mode: Transport.Taxi },
     { to: 91, mode: Transport.Taxi },
   ],
-  "57": [
+  57: [
     { to: 43, mode: Transport.Taxi },
     { to: 58, mode: Transport.Taxi },
     { to: 73, mode: Transport.Taxi },
   ],
-  "58": [
+  58: [
     { to: 44, mode: Transport.Taxi },
     { to: 45, mode: Transport.Taxi },
     { to: 57, mode: Transport.Taxi },
@@ -364,31 +364,31 @@ const routes: MapRoute = {
     { to: 74, mode: Transport.Bus },
     { to: 77, mode: Transport.Bus },
   ],
-  "59": [
+  59: [
     { to: 45, mode: Transport.Taxi },
     { to: 58, mode: Transport.Taxi },
     { to: 75, mode: Transport.Taxi },
     { to: 76, mode: Transport.Taxi },
   ],
-  "60": [
+  60: [
     { to: 45, mode: Transport.Taxi },
     { to: 61, mode: Transport.Taxi },
     { to: 76, mode: Transport.Taxi },
   ],
-  "61": [
+  61: [
     { to: 46, mode: Transport.Taxi },
     { to: 60, mode: Transport.Taxi },
     { to: 62, mode: Transport.Taxi },
     { to: 76, mode: Transport.Taxi },
     { to: 78, mode: Transport.Taxi },
   ],
-  "62": [
+  62: [
     { to: 47, mode: Transport.Taxi },
     { to: 48, mode: Transport.Taxi },
     { to: 61, mode: Transport.Taxi },
     { to: 79, mode: Transport.Taxi },
   ],
-  "63": [
+  63: [
     { to: 48, mode: Transport.Taxi },
     { to: 64, mode: Transport.Taxi },
     { to: 79, mode: Transport.Taxi },
@@ -398,12 +398,12 @@ const routes: MapRoute = {
     { to: 79, mode: Transport.Bus },
     { to: 100, mode: Transport.Bus },
   ],
-  "64": [
+  64: [
     { to: 63, mode: Transport.Taxi },
     { to: 65, mode: Transport.Taxi },
     { to: 81, mode: Transport.Taxi },
   ],
-  "65": [
+  65: [
     { to: 35, mode: Transport.Taxi },
     { to: 64, mode: Transport.Taxi },
     { to: 82, mode: Transport.Taxi },
@@ -412,12 +412,12 @@ const routes: MapRoute = {
     { to: 63, mode: Transport.Bus },
     { to: 82, mode: Transport.Bus },
   ],
-  "66": [
+  66: [
     { to: 49, mode: Transport.Taxi },
     { to: 67, mode: Transport.Taxi },
     { to: 82, mode: Transport.Taxi },
   ],
-  "67": [
+  67: [
     { to: 51, mode: Transport.Taxi },
     { to: 66, mode: Transport.Taxi },
     { to: 68, mode: Transport.Taxi },
@@ -432,30 +432,30 @@ const routes: MapRoute = {
     { to: 89, mode: Transport.Metro },
     { to: 111, mode: Transport.Metro },
   ],
-  "68": [
+  68: [
     { to: 51, mode: Transport.Taxi },
     { to: 67, mode: Transport.Taxi },
     { to: 69, mode: Transport.Taxi },
     { to: 85, mode: Transport.Taxi },
   ],
-  "69": [
+  69: [
     { to: 52, mode: Transport.Taxi },
     { to: 53, mode: Transport.Taxi },
     { to: 68, mode: Transport.Taxi },
     { to: 86, mode: Transport.Taxi },
   ],
-  "70": [
+  70: [
     { to: 54, mode: Transport.Taxi },
     { to: 71, mode: Transport.Taxi },
     { to: 87, mode: Transport.Taxi },
   ],
-  "71": [
+  71: [
     { to: 55, mode: Transport.Taxi },
     { to: 70, mode: Transport.Taxi },
     { to: 72, mode: Transport.Taxi },
     { to: 89, mode: Transport.Taxi },
   ],
-  "72": [
+  72: [
     { to: 42, mode: Transport.Taxi },
     { to: 71, mode: Transport.Taxi },
     { to: 90, mode: Transport.Taxi },
@@ -464,12 +464,12 @@ const routes: MapRoute = {
     { to: 105, mode: Transport.Bus },
     { to: 107, mode: Transport.Bus },
   ],
-  "73": [
+  73: [
     { to: 57, mode: Transport.Taxi },
     { to: 74, mode: Transport.Taxi },
     { to: 92, mode: Transport.Taxi },
   ],
-  "74": [
+  74: [
     { to: 58, mode: Transport.Taxi },
     { to: 73, mode: Transport.Taxi },
     { to: 75, mode: Transport.Taxi },
@@ -478,25 +478,25 @@ const routes: MapRoute = {
     { to: 94, mode: Transport.Bus },
     { to: 46, mode: Transport.Metro },
   ],
-  "75": [
+  75: [
     { to: 58, mode: Transport.Taxi },
     { to: 59, mode: Transport.Taxi },
     { to: 74, mode: Transport.Taxi },
     { to: 94, mode: Transport.Taxi },
   ],
-  "76": [
+  76: [
     { to: 59, mode: Transport.Taxi },
     { to: 60, mode: Transport.Taxi },
     { to: 61, mode: Transport.Taxi },
     { to: 77, mode: Transport.Taxi },
   ],
-  "77": [
+  77: [
     { to: 76, mode: Transport.Taxi },
     { to: 78, mode: Transport.Taxi },
     { to: 95, mode: Transport.Taxi },
     { to: 96, mode: Transport.Taxi },
   ],
-  "78": [
+  78: [
     { to: 61, mode: Transport.Taxi },
     { to: 77, mode: Transport.Taxi },
     { to: 79, mode: Transport.Taxi },
@@ -505,7 +505,7 @@ const routes: MapRoute = {
     { to: 58, mode: Transport.Bus },
     { to: 79, mode: Transport.Bus },
   ],
-  "79": [
+  79: [
     { to: 62, mode: Transport.Taxi },
     { to: 63, mode: Transport.Taxi },
     { to: 78, mode: Transport.Taxi },
@@ -517,17 +517,17 @@ const routes: MapRoute = {
     { to: 93, mode: Transport.Metro },
     { to: 111, mode: Transport.Metro },
   ],
-  "80": [
+  80: [
     { to: 63, mode: Transport.Taxi },
     { to: 99, mode: Transport.Taxi },
     { to: 100, mode: Transport.Taxi },
   ],
-  "81": [
+  81: [
     { to: 64, mode: Transport.Taxi },
     { to: 82, mode: Transport.Taxi },
     { to: 100, mode: Transport.Taxi },
   ],
-  "82": [
+  82: [
     { to: 65, mode: Transport.Taxi },
     { to: 66, mode: Transport.Taxi },
     { to: 81, mode: Transport.Taxi },
@@ -537,20 +537,20 @@ const routes: MapRoute = {
     { to: 100, mode: Transport.Bus },
     { to: 140, mode: Transport.Bus },
   ],
-  "83": [
+  83: [
     { to: 101, mode: Transport.Taxi },
     { to: 102, mode: Transport.Taxi },
   ],
-  "84": [
+  84: [
     { to: 67, mode: Transport.Taxi },
     { to: 85, mode: Transport.Taxi },
   ],
-  "85": [
+  85: [
     { to: 68, mode: Transport.Taxi },
     { to: 84, mode: Transport.Taxi },
     { to: 103, mode: Transport.Taxi },
   ],
-  "86": [
+  86: [
     { to: 69, mode: Transport.Taxi },
     { to: 103, mode: Transport.Taxi },
     { to: 104, mode: Transport.Taxi },
@@ -559,19 +559,19 @@ const routes: MapRoute = {
     { to: 102, mode: Transport.Bus },
     { to: 116, mode: Transport.Bus },
   ],
-  "87": [
+  87: [
     { to: 70, mode: Transport.Taxi },
     { to: 88, mode: Transport.Taxi },
     { to: 41, mode: Transport.Bus },
     { to: 86, mode: Transport.Bus },
     { to: 105, mode: Transport.Bus },
   ],
-  "88": [
+  88: [
     { to: 87, mode: Transport.Taxi },
     { to: 89, mode: Transport.Taxi },
     { to: 117, mode: Transport.Taxi },
   ],
-  "89": [
+  89: [
     { to: 71, mode: Transport.Taxi },
     { to: 88, mode: Transport.Taxi },
     { to: 105, mode: Transport.Taxi },
@@ -582,30 +582,30 @@ const routes: MapRoute = {
     { to: 140, mode: Transport.Metro },
     { to: 159, mode: Transport.Metro },
   ],
-  "90": [
+  90: [
     { to: 72, mode: Transport.Taxi },
     { to: 91, mode: Transport.Taxi },
     { to: 105, mode: Transport.Taxi },
   ],
-  "91": [
+  91: [
     { to: 56, mode: Transport.Taxi },
     { to: 72, mode: Transport.Taxi },
     { to: 90, mode: Transport.Taxi },
     { to: 105, mode: Transport.Taxi },
     { to: 107, mode: Transport.Taxi },
   ],
-  "92": [
+  92: [
     { to: 73, mode: Transport.Taxi },
     { to: 74, mode: Transport.Taxi },
     { to: 93, mode: Transport.Taxi },
   ],
-  "93": [
+  93: [
     { to: 92, mode: Transport.Taxi },
     { to: 94, mode: Transport.Taxi },
     { to: 94, mode: Transport.Bus },
     { to: 79, mode: Transport.Metro },
   ],
-  "94": [
+  94: [
     { to: 93, mode: Transport.Taxi },
     { to: 75, mode: Transport.Taxi },
     { to: 95, mode: Transport.Taxi },
@@ -613,34 +613,34 @@ const routes: MapRoute = {
     { to: 78, mode: Transport.Bus },
     { to: 93, mode: Transport.Bus },
   ],
-  "95": [
+  95: [
     { to: 94, mode: Transport.Taxi },
     { to: 77, mode: Transport.Taxi },
     { to: 122, mode: Transport.Taxi },
   ],
-  "96": [
+  96: [
     { to: 77, mode: Transport.Taxi },
     { to: 97, mode: Transport.Taxi },
     { to: 109, mode: Transport.Taxi },
   ],
-  "97": [
+  97: [
     { to: 96, mode: Transport.Taxi },
     { to: 78, mode: Transport.Taxi },
     { to: 98, mode: Transport.Taxi },
     { to: 109, mode: Transport.Taxi },
   ],
-  "98": [
+  98: [
     { to: 97, mode: Transport.Taxi },
     { to: 79, mode: Transport.Taxi },
     { to: 99, mode: Transport.Taxi },
     { to: 110, mode: Transport.Taxi },
   ],
-  "99": [
+  99: [
     { to: 98, mode: Transport.Taxi },
     { to: 80, mode: Transport.Taxi },
     { to: 110, mode: Transport.Taxi },
   ],
-  "100": [
+  100: [
     { to: 80, mode: Transport.Taxi },
     { to: 81, mode: Transport.Taxi },
     { to: 101, mode: Transport.Taxi },
@@ -650,13 +650,13 @@ const routes: MapRoute = {
     { to: 111, mode: Transport.Bus },
     { to: 82, mode: Transport.Bus },
   ],
-  "101": [
+  101: [
     { to: 100, mode: Transport.Taxi },
     { to: 82, mode: Transport.Taxi },
     { to: 114, mode: Transport.Taxi },
     { to: 83, mode: Transport.Taxi },
   ],
-  "102": [
+  102: [
     { to: 83, mode: Transport.Taxi },
     { to: 115, mode: Transport.Taxi },
     { to: 103, mode: Transport.Taxi },
@@ -664,16 +664,16 @@ const routes: MapRoute = {
     { to: 127, mode: Transport.Bus },
     { to: 86, mode: Transport.Bus },
   ],
-  "103": [
+  103: [
     { to: 102, mode: Transport.Taxi },
     { to: 85, mode: Transport.Taxi },
     { to: 86, mode: Transport.Taxi },
   ],
-  "104": [
+  104: [
     { to: 86, mode: Transport.Taxi },
     { to: 116, mode: Transport.Taxi },
   ],
-  "105": [
+  105: [
     { to: 89, mode: Transport.Taxi },
     { to: 90, mode: Transport.Taxi },
     { to: 91, mode: Transport.Taxi },
@@ -685,11 +685,11 @@ const routes: MapRoute = {
     { to: 107, mode: Transport.Bus },
     { to: 118, mode: Transport.Bus },
   ],
-  "106": [
+  106: [
     { to: 105, mode: Transport.Taxi },
     { to: 107, mode: Transport.Taxi },
   ],
-  "107": [
+  107: [
     { to: 91, mode: Transport.Taxi },
     { to: 106, mode: Transport.Taxi },
     { to: 119, mode: Transport.Taxi },
@@ -697,19 +697,19 @@ const routes: MapRoute = {
     { to: 72, mode: Transport.Bus },
     { to: 161, mode: Transport.Bus },
   ],
-  "109": [
+  109: [
     { to: 96, mode: Transport.Taxi },
     { to: 97, mode: Transport.Taxi },
     { to: 110, mode: Transport.Taxi },
     { to: 124, mode: Transport.Taxi },
   ],
-  "110": [
+  110: [
     { to: 98, mode: Transport.Taxi },
     { to: 99, mode: Transport.Taxi },
     { to: 109, mode: Transport.Taxi },
     { to: 111, mode: Transport.Taxi },
   ],
-  "111": [
+  111: [
     { to: 124, mode: Transport.Taxi },
     { to: 110, mode: Transport.Taxi },
     { to: 112, mode: Transport.Taxi },
@@ -720,17 +720,17 @@ const routes: MapRoute = {
     { to: 163, mode: Transport.Metro },
     { to: 153, mode: Transport.Metro },
   ],
-  "112": [
+  112: [
     { to: 111, mode: Transport.Taxi },
     { to: 125, mode: Transport.Taxi },
     { to: 100, mode: Transport.Taxi },
   ],
-  "113": [
+  113: [
     { to: 125, mode: Transport.Taxi },
     { to: 100, mode: Transport.Taxi },
     { to: 114, mode: Transport.Taxi },
   ],
-  "114": [
+  114: [
     { to: 101, mode: Transport.Taxi },
     { to: 113, mode: Transport.Taxi },
     { to: 115, mode: Transport.Taxi },
@@ -738,14 +738,14 @@ const routes: MapRoute = {
     { to: 132, mode: Transport.Taxi },
     { to: 131, mode: Transport.Taxi },
   ],
-  "115": [
+  115: [
     { to: 114, mode: Transport.Taxi },
     { to: 102, mode: Transport.Taxi },
     { to: 127, mode: Transport.Taxi },
     { to: 118, mode: Transport.Ferry },
     { to: 157, mode: Transport.Ferry },
   ],
-  "116": [
+  116: [
     { to: 104, mode: Transport.Taxi },
     { to: 117, mode: Transport.Taxi },
     { to: 128, mode: Transport.Taxi },
@@ -755,13 +755,13 @@ const routes: MapRoute = {
     { to: 127, mode: Transport.Bus },
     { to: 128, mode: Transport.Bus },
   ],
-  "117": [
+  117: [
     { to: 88, mode: Transport.Taxi },
     { to: 116, mode: Transport.Taxi },
     { to: 118, mode: Transport.Taxi },
     { to: 129, mode: Transport.Taxi },
   ],
-  "118": [
+  118: [
     { to: 105, mode: Transport.Taxi },
     { to: 117, mode: Transport.Taxi },
     { to: 119, mode: Transport.Taxi },
@@ -770,21 +770,21 @@ const routes: MapRoute = {
     { to: 135, mode: Transport.Bus },
     { to: 115, mode: Transport.Ferry },
   ],
-  "119": [
+  119: [
     { to: 118, mode: Transport.Taxi },
     { to: 107, mode: Transport.Taxi },
     { to: 136, mode: Transport.Taxi },
   ],
-  "120": [
+  120: [
     { to: 121, mode: Transport.Taxi },
     { to: 144, mode: Transport.Taxi },
   ],
-  "121": [
+  121: [
     { to: 120, mode: Transport.Taxi },
     { to: 122, mode: Transport.Taxi },
     { to: 145, mode: Transport.Taxi },
   ],
-  "122": [
+  122: [
     { to: 95, mode: Transport.Taxi },
     { to: 121, mode: Transport.Taxi },
     { to: 123, mode: Transport.Taxi },
@@ -792,7 +792,7 @@ const routes: MapRoute = {
     { to: 123, mode: Transport.Bus },
     { to: 144, mode: Transport.Bus },
   ],
-  "123": [
+  123: [
     { to: 122, mode: Transport.Taxi },
     { to: 124, mode: Transport.Taxi },
     { to: 137, mode: Transport.Taxi },
@@ -803,7 +803,7 @@ const routes: MapRoute = {
     { to: 144, mode: Transport.Bus },
     { to: 165, mode: Transport.Bus },
   ],
-  "124": [
+  124: [
     { to: 109, mode: Transport.Taxi },
     { to: 111, mode: Transport.Taxi },
     { to: 123, mode: Transport.Taxi },
@@ -813,16 +813,16 @@ const routes: MapRoute = {
     { to: 123, mode: Transport.Bus },
     { to: 153, mode: Transport.Bus },
   ],
-  "125": [
+  125: [
     { to: 112, mode: Transport.Taxi },
     { to: 113, mode: Transport.Taxi },
     { to: 131, mode: Transport.Taxi },
   ],
-  "126": [
+  126: [
     { to: 114, mode: Transport.Taxi },
     { to: 127, mode: Transport.Taxi },
   ],
-  "127": [
+  127: [
     { to: 115, mode: Transport.Taxi },
     { to: 116, mode: Transport.Taxi },
     { to: 126, mode: Transport.Taxi },
@@ -832,7 +832,7 @@ const routes: MapRoute = {
     { to: 116, mode: Transport.Bus },
     { to: 133, mode: Transport.Bus },
   ],
-  "128": [
+  128: [
     { to: 116, mode: Transport.Taxi },
     { to: 129, mode: Transport.Taxi },
     { to: 134, mode: Transport.Taxi },
@@ -840,28 +840,28 @@ const routes: MapRoute = {
     { to: 116, mode: Transport.Bus },
     { to: 142, mode: Transport.Bus },
   ],
-  "129": [
+  129: [
     { to: 117, mode: Transport.Taxi },
     { to: 128, mode: Transport.Taxi },
     { to: 135, mode: Transport.Taxi },
     { to: 142, mode: Transport.Taxi },
     { to: 143, mode: Transport.Taxi },
   ],
-  "130": [
+  130: [
     { to: 124, mode: Transport.Taxi },
     { to: 131, mode: Transport.Taxi },
     { to: 139, mode: Transport.Taxi },
   ],
-  "131": [
+  131: [
     { to: 114, mode: Transport.Taxi },
     { to: 125, mode: Transport.Taxi },
     { to: 130, mode: Transport.Taxi },
   ],
-  "132": [
+  132: [
     { to: 114, mode: Transport.Taxi },
     { to: 140, mode: Transport.Taxi },
   ],
-  "133": [
+  133: [
     { to: 127, mode: Transport.Taxi },
     { to: 140, mode: Transport.Taxi },
     { to: 141, mode: Transport.Taxi },
@@ -869,13 +869,13 @@ const routes: MapRoute = {
     { to: 140, mode: Transport.Bus },
     { to: 157, mode: Transport.Bus },
   ],
-  "134": [
+  134: [
     { to: 127, mode: Transport.Taxi },
     { to: 128, mode: Transport.Taxi },
     { to: 141, mode: Transport.Taxi },
     { to: 142, mode: Transport.Taxi },
   ],
-  "135": [
+  135: [
     { to: 129, mode: Transport.Taxi },
     { to: 136, mode: Transport.Taxi },
     { to: 143, mode: Transport.Taxi },
@@ -884,27 +884,27 @@ const routes: MapRoute = {
     { to: 159, mode: Transport.Bus },
     { to: 161, mode: Transport.Bus },
   ],
-  "136": [
+  136: [
     { to: 119, mode: Transport.Taxi },
     { to: 135, mode: Transport.Taxi },
     { to: 162, mode: Transport.Taxi },
   ],
-  "137": [
+  137: [
     { to: 123, mode: Transport.Taxi },
     { to: 147, mode: Transport.Taxi },
   ],
-  "138": [
+  138: [
     { to: 124, mode: Transport.Taxi },
     { to: 150, mode: Transport.Taxi },
     { to: 152, mode: Transport.Taxi },
   ],
-  "139": [
+  139: [
     { to: 130, mode: Transport.Taxi },
     { to: 140, mode: Transport.Taxi },
     { to: 153, mode: Transport.Taxi },
     { to: 154, mode: Transport.Taxi },
   ],
-  "140": [
+  140: [
     { to: 132, mode: Transport.Taxi },
     { to: 133, mode: Transport.Taxi },
     { to: 139, mode: Transport.Taxi },
@@ -918,13 +918,13 @@ const routes: MapRoute = {
     { to: 153, mode: Transport.Metro },
     { to: 159, mode: Transport.Metro },
   ],
-  "141": [
+  141: [
     { to: 133, mode: Transport.Taxi },
     { to: 134, mode: Transport.Taxi },
     { to: 142, mode: Transport.Taxi },
     { to: 158, mode: Transport.Taxi },
   ],
-  "142": [
+  142: [
     { to: 128, mode: Transport.Taxi },
     { to: 129, mode: Transport.Taxi },
     { to: 134, mode: Transport.Taxi },
@@ -936,14 +936,14 @@ const routes: MapRoute = {
     { to: 157, mode: Transport.Bus },
     { to: 159, mode: Transport.Bus },
   ],
-  "143": [
+  143: [
     { to: 129, mode: Transport.Taxi },
     { to: 135, mode: Transport.Taxi },
     { to: 142, mode: Transport.Taxi },
     { to: 159, mode: Transport.Taxi },
     { to: 160, mode: Transport.Taxi },
   ],
-  "144": [
+  144: [
     { to: 120, mode: Transport.Taxi },
     { to: 145, mode: Transport.Taxi },
     { to: 177, mode: Transport.Taxi },
@@ -951,50 +951,50 @@ const routes: MapRoute = {
     { to: 123, mode: Transport.Bus },
     { to: 163, mode: Transport.Bus },
   ],
-  "145": [
+  145: [
     { to: 121, mode: Transport.Taxi },
     { to: 144, mode: Transport.Taxi },
     { to: 146, mode: Transport.Taxi },
   ],
-  "146": [
+  146: [
     { to: 122, mode: Transport.Taxi },
     { to: 145, mode: Transport.Taxi },
     { to: 147, mode: Transport.Taxi },
     { to: 163, mode: Transport.Taxi },
   ],
-  "147": [
+  147: [
     { to: 137, mode: Transport.Taxi },
     { to: 146, mode: Transport.Taxi },
     { to: 164, mode: Transport.Taxi },
   ],
-  "148": [
+  148: [
     { to: 123, mode: Transport.Taxi },
     { to: 149, mode: Transport.Taxi },
     { to: 164, mode: Transport.Taxi },
   ],
-  "149": [
+  149: [
     { to: 123, mode: Transport.Taxi },
     { to: 148, mode: Transport.Taxi },
     { to: 150, mode: Transport.Taxi },
     { to: 165, mode: Transport.Taxi },
   ],
-  "150": [
+  150: [
     { to: 138, mode: Transport.Taxi },
     { to: 149, mode: Transport.Taxi },
     { to: 151, mode: Transport.Taxi },
   ],
-  "151": [
+  151: [
     { to: 150, mode: Transport.Taxi },
     { to: 152, mode: Transport.Taxi },
     { to: 165, mode: Transport.Taxi },
     { to: 166, mode: Transport.Taxi },
   ],
-  "152": [
+  152: [
     { to: 138, mode: Transport.Taxi },
     { to: 151, mode: Transport.Taxi },
     { to: 153, mode: Transport.Taxi },
   ],
-  "153": [
+  153: [
     { to: 139, mode: Transport.Taxi },
     { to: 152, mode: Transport.Taxi },
     { to: 154, mode: Transport.Taxi },
@@ -1009,7 +1009,7 @@ const routes: MapRoute = {
     { to: 163, mode: Transport.Metro },
     { to: 185, mode: Transport.Metro },
   ],
-  "154": [
+  154: [
     { to: 139, mode: Transport.Taxi },
     { to: 140, mode: Transport.Taxi },
     { to: 153, mode: Transport.Taxi },
@@ -1018,13 +1018,13 @@ const routes: MapRoute = {
     { to: 153, mode: Transport.Bus },
     { to: 156, mode: Transport.Bus },
   ],
-  "155": [
+  155: [
     { to: 154, mode: Transport.Taxi },
     { to: 156, mode: Transport.Taxi },
     { to: 167, mode: Transport.Taxi },
     { to: 168, mode: Transport.Taxi },
   ],
-  "156": [
+  156: [
     { to: 140, mode: Transport.Taxi },
     { to: 155, mode: Transport.Taxi },
     { to: 157, mode: Transport.Taxi },
@@ -1034,7 +1034,7 @@ const routes: MapRoute = {
     { to: 157, mode: Transport.Bus },
     { to: 184, mode: Transport.Bus },
   ],
-  "157": [
+  157: [
     { to: 156, mode: Transport.Taxi },
     { to: 158, mode: Transport.Taxi },
     { to: 170, mode: Transport.Taxi },
@@ -1045,13 +1045,13 @@ const routes: MapRoute = {
     { to: 115, mode: Transport.Ferry },
     { to: 194, mode: Transport.Ferry },
   ],
-  "158": [
+  158: [
     { to: 141, mode: Transport.Taxi },
     { to: 142, mode: Transport.Taxi },
     { to: 157, mode: Transport.Taxi },
     { to: 171, mode: Transport.Taxi },
   ],
-  "159": [
+  159: [
     { to: 142, mode: Transport.Taxi },
     { to: 143, mode: Transport.Taxi },
     { to: 160, mode: Transport.Taxi },
@@ -1066,13 +1066,13 @@ const routes: MapRoute = {
     { to: 140, mode: Transport.Metro },
     { to: 185, mode: Transport.Metro },
   ],
-  "160": [
+  160: [
     { to: 143, mode: Transport.Taxi },
     { to: 159, mode: Transport.Taxi },
     { to: 161, mode: Transport.Taxi },
     { to: 173, mode: Transport.Taxi },
   ],
-  "161": [
+  161: [
     { to: 135, mode: Transport.Taxi },
     { to: 160, mode: Transport.Taxi },
     { to: 174, mode: Transport.Taxi },
@@ -1081,11 +1081,11 @@ const routes: MapRoute = {
     { to: 159, mode: Transport.Bus },
     { to: 199, mode: Transport.Bus },
   ],
-  "162": [
+  162: [
     { to: 136, mode: Transport.Taxi },
     { to: 175, mode: Transport.Taxi },
   ],
-  "163": [
+  163: [
     { to: 146, mode: Transport.Taxi },
     { to: 177, mode: Transport.Taxi },
     { to: 144, mode: Transport.Bus },
@@ -1094,13 +1094,13 @@ const routes: MapRoute = {
     { to: 111, mode: Transport.Metro },
     { to: 153, mode: Transport.Metro },
   ],
-  "164": [
+  164: [
     { to: 147, mode: Transport.Taxi },
     { to: 148, mode: Transport.Taxi },
     { to: 178, mode: Transport.Taxi },
     { to: 179, mode: Transport.Taxi },
   ],
-  "165": [
+  165: [
     { to: 149, mode: Transport.Taxi },
     { to: 151, mode: Transport.Taxi },
     { to: 179, mode: Transport.Taxi },
@@ -1109,82 +1109,82 @@ const routes: MapRoute = {
     { to: 180, mode: Transport.Bus },
     { to: 191, mode: Transport.Bus },
   ],
-  "166": [
+  166: [
     { to: 151, mode: Transport.Taxi },
     { to: 153, mode: Transport.Taxi },
     { to: 181, mode: Transport.Taxi },
     { to: 183, mode: Transport.Taxi },
   ],
-  "167": [
+  167: [
     { to: 153, mode: Transport.Taxi },
     { to: 155, mode: Transport.Taxi },
     { to: 168, mode: Transport.Taxi },
     { to: 183, mode: Transport.Taxi },
   ],
-  "168": [
+  168: [
     { to: 155, mode: Transport.Taxi },
     { to: 167, mode: Transport.Taxi },
     { to: 184, mode: Transport.Taxi },
   ],
-  "169": [
+  169: [
     { to: 156, mode: Transport.Taxi },
     { to: 184, mode: Transport.Taxi },
   ],
-  "170": [
+  170: [
     { to: 157, mode: Transport.Taxi },
     { to: 171, mode: Transport.Taxi },
     { to: 185, mode: Transport.Taxi },
   ],
-  "171": [
+  171: [
     { to: 158, mode: Transport.Taxi },
     { to: 170, mode: Transport.Taxi },
     { to: 172, mode: Transport.Taxi },
     { to: 186, mode: Transport.Taxi },
     { to: 198, mode: Transport.Taxi },
   ],
-  "172": [
+  172: [
     { to: 159, mode: Transport.Taxi },
     { to: 171, mode: Transport.Taxi },
     { to: 187, mode: Transport.Taxi },
   ],
-  "173": [
+  173: [
     { to: 160, mode: Transport.Taxi },
     { to: 174, mode: Transport.Taxi },
     { to: 188, mode: Transport.Taxi },
     { to: 200, mode: Transport.Taxi },
   ],
-  "174": [
+  174: [
     { to: 161, mode: Transport.Taxi },
     { to: 173, mode: Transport.Taxi },
     { to: 175, mode: Transport.Taxi },
   ],
-  "175": [
+  175: [
     { to: 162, mode: Transport.Taxi },
     { to: 174, mode: Transport.Taxi },
     { to: 200, mode: Transport.Taxi },
   ],
-  "176": [
+  176: [
     { to: 177, mode: Transport.Taxi },
     { to: 189, mode: Transport.Taxi },
     { to: 163, mode: Transport.Bus },
     { to: 190, mode: Transport.Bus },
   ],
-  "177": [
+  177: [
     { to: 144, mode: Transport.Taxi },
     { to: 163, mode: Transport.Taxi },
     { to: 176, mode: Transport.Taxi },
   ],
-  "178": [
+  178: [
     { to: 164, mode: Transport.Taxi },
     { to: 189, mode: Transport.Taxi },
     { to: 191, mode: Transport.Taxi },
   ],
-  "179": [
+  179: [
     { to: 164, mode: Transport.Taxi },
     { to: 165, mode: Transport.Taxi },
     { to: 191, mode: Transport.Taxi },
   ],
-  "180": [
+  180: [
     { to: 165, mode: Transport.Taxi },
     { to: 181, mode: Transport.Taxi },
     { to: 193, mode: Transport.Taxi },
@@ -1193,24 +1193,24 @@ const routes: MapRoute = {
     { to: 184, mode: Transport.Bus },
     { to: 190, mode: Transport.Bus },
   ],
-  "181": [
+  181: [
     { to: 166, mode: Transport.Taxi },
     { to: 180, mode: Transport.Taxi },
     { to: 182, mode: Transport.Taxi },
     { to: 193, mode: Transport.Taxi },
   ],
-  "182": [
+  182: [
     { to: 181, mode: Transport.Taxi },
     { to: 183, mode: Transport.Taxi },
     { to: 195, mode: Transport.Taxi },
   ],
-  "183": [
+  183: [
     { to: 166, mode: Transport.Taxi },
     { to: 167, mode: Transport.Taxi },
     { to: 182, mode: Transport.Taxi },
     { to: 196, mode: Transport.Taxi },
   ],
-  "184": [
+  184: [
     { to: 168, mode: Transport.Taxi },
     { to: 169, mode: Transport.Taxi },
     { to: 196, mode: Transport.Taxi },
@@ -1221,7 +1221,7 @@ const routes: MapRoute = {
     { to: 180, mode: Transport.Bus },
     { to: 185, mode: Transport.Bus },
   ],
-  "185": [
+  185: [
     { to: 170, mode: Transport.Taxi },
     { to: 184, mode: Transport.Taxi },
     { to: 186, mode: Transport.Taxi },
@@ -1231,30 +1231,30 @@ const routes: MapRoute = {
     { to: 153, mode: Transport.Metro },
     { to: 159, mode: Transport.Metro },
   ],
-  "186": [
+  186: [
     { to: 171, mode: Transport.Taxi },
     { to: 185, mode: Transport.Taxi },
     { to: 198, mode: Transport.Taxi },
   ],
-  "187": [
+  187: [
     { to: 172, mode: Transport.Taxi },
     { to: 188, mode: Transport.Taxi },
     { to: 198, mode: Transport.Taxi },
     { to: 159, mode: Transport.Bus },
     { to: 185, mode: Transport.Bus },
   ],
-  "188": [
+  188: [
     { to: 159, mode: Transport.Taxi },
     { to: 173, mode: Transport.Taxi },
     { to: 187, mode: Transport.Taxi },
     { to: 199, mode: Transport.Taxi },
   ],
-  "189": [
+  189: [
     { to: 176, mode: Transport.Taxi },
     { to: 178, mode: Transport.Taxi },
     { to: 190, mode: Transport.Taxi },
   ],
-  "190": [
+  190: [
     { to: 189, mode: Transport.Taxi },
     { to: 191, mode: Transport.Taxi },
     { to: 192, mode: Transport.Taxi },
@@ -1262,7 +1262,7 @@ const routes: MapRoute = {
     { to: 191, mode: Transport.Bus },
     { to: 180, mode: Transport.Bus },
   ],
-  "191": [
+  191: [
     { to: 178, mode: Transport.Taxi },
     { to: 179, mode: Transport.Taxi },
     { to: 190, mode: Transport.Taxi },
@@ -1271,51 +1271,51 @@ const routes: MapRoute = {
     { to: 165, mode: Transport.Bus },
     { to: 190, mode: Transport.Bus },
   ],
-  "192": [
+  192: [
     { to: 191, mode: Transport.Taxi },
     { to: 190, mode: Transport.Taxi },
     { to: 194, mode: Transport.Taxi },
   ],
-  "193": [
+  193: [
     { to: 180, mode: Transport.Taxi },
     { to: 181, mode: Transport.Taxi },
     { to: 194, mode: Transport.Taxi },
   ],
-  "194": [
+  194: [
     { to: 192, mode: Transport.Taxi },
     { to: 193, mode: Transport.Taxi },
     { to: 195, mode: Transport.Taxi },
     { to: 157, mode: Transport.Ferry },
   ],
-  "195": [
+  195: [
     { to: 182, mode: Transport.Taxi },
     { to: 194, mode: Transport.Taxi },
     { to: 197, mode: Transport.Taxi },
   ],
-  "196": [
+  196: [
     { to: 183, mode: Transport.Taxi },
     { to: 184, mode: Transport.Taxi },
     { to: 197, mode: Transport.Taxi },
   ],
-  "197": [
+  197: [
     { to: 184, mode: Transport.Taxi },
     { to: 195, mode: Transport.Taxi },
     { to: 196, mode: Transport.Taxi },
   ],
-  "198": [
+  198: [
     { to: 171, mode: Transport.Taxi },
     { to: 186, mode: Transport.Taxi },
     { to: 187, mode: Transport.Taxi },
     { to: 199, mode: Transport.Taxi },
   ],
-  "199": [
+  199: [
     { to: 188, mode: Transport.Taxi },
     { to: 198, mode: Transport.Taxi },
     { to: 200, mode: Transport.Taxi },
     { to: 159, mode: Transport.Bus },
     { to: 161, mode: Transport.Bus },
   ],
-  "200": [
+  200: [
     { to: 173, mode: Transport.Taxi },
     { to: 175, mode: Transport.Taxi },
     { to: 199, mode: Transport.Taxi },
@@ -1324,23 +1324,7 @@ const routes: MapRoute = {
 
 export const basicMap: GameMap = {
   startingPositions: [
-    13,
-    26,
-    34,
-    45,
-    52,
-    53,
-    75,
-    78,
-    91,
-    94,
-    103,
-    112,
-    117,
-    132,
-    138,
-    141,
-    155,
+    13, 26, 34, 45, 52, 53, 75, 78, 91, 94, 103, 112, 117, 132, 138, 141, 155,
     157,
   ],
 
