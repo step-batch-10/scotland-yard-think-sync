@@ -113,37 +113,48 @@ const getDimensions = (element) => {
 
 const removeContainer = (e) => e.target.parentNode.remove();
 
-const ticketSelection = (to, elements) => (e) => {
-  const type = e.target.id;
-  fetch(`/game/move/${to}/ticket/${type}`);
-
-  elements.forEach(({ to, clonedCard }) => {
+const removeListners = (pairs) => {
+  pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
+    console.log(to);
     station.onclick = () => {};
-    clonedCard.parentNode.parentNode.remove();
   });
 };
 
-const renderTickets = (options) => (e) => {
+const ticketSelection = (to, elements, pairs) => (e) => {
+  const type = e.target.id;
+  fetch(`/game/move/${to}/ticket/${type}`);
+
+  elements.forEach(({ clonedCard }) => {
+    clonedCard.parentNode.parentNode.remove();
+  });
+  removeListners(pairs);
+};
+
+const createCard = ({ to, mode }) => {
+  const card = document.createElement("div");
+  card.id = mode;
+  card.textContent = mode;
+
+  return { clonedCard: card, to };
+};
+
+const addListners = (elements, card, pairs) => {
+  elements.forEach(({ clonedCard, to }) => {
+    clonedCard.addEventListener("click", ticketSelection(to, elements, pairs));
+    card.appendChild(clonedCard);
+  });
+};
+
+const renderTickets = (options, pairs) => (e) => {
   const cardsContainer = cloneTemplate("#ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
+  const elements = options.map(createCard);
 
   closeBtn.addEventListener("click", removeContainer);
-
   alignCard(cardsContainer, getDimensions(e.currentTarget));
-
-  const elements = options.map(({ to, mode }) => {
-    const card = document.createElement("div");
-    card.id = mode;
-    card.textContent = mode;
-    return { clonedCard: card, to };
-  });
-
-  elements.forEach(({ clonedCard, to }) => {
-    clonedCard.addEventListener("click", ticketSelection(to, elements));
-    card.appendChild(clonedCard);
-  });
+  addListners(elements, card, pairs);
 
   document.body.appendChild(cardsContainer);
 };
@@ -156,11 +167,10 @@ const pairTicketToStaiton = (map) => {
 const showTickets = async () => {
   const possibleStation = await fetchPossiblStations();
   const pairs = pairTicketToStaiton(possibleStation);
-  console.log("Possible", possibleStation);
 
   pairs.forEach(([to, options]) => {
     const station = document.getElementById(`station-${to}`);
-    station.onclick = renderTickets(options);
+    station.onclick = renderTickets(options, pairs);
   });
 };
 
@@ -228,12 +238,15 @@ const showTurn = (currentRole, isYourTurn) => {
   highlightPawn(currentRole);
 };
 
-const startPolling = () => {
-  let turn = false;
+const renderGameOver = ({ winner }) => alert(winner);
 
+const startPolling = () => {
   setInterval(async () => {
-    const { tickets, positions, roles, currentRole, isYourTurn } =
-      await fetchState();
+    const data = await fetchState();
+
+    if (data.isGameOver) return renderGameOver(data);
+
+    const { tickets, positions, roles, currentRole, isYourTurn } = data;
 
     const stats = combineObjects(roles, tickets, positions);
 
@@ -241,14 +254,9 @@ const startPolling = () => {
     renderPawns(stats);
     showTurn(currentRole, isYourTurn);
 
-    if (isYourTurn && !turn) {
-      showTickets();
-    }
-
-    turn = isYourTurn;
+    if (isYourTurn) showTickets();
   }, 3000);
 };
-
 const playAudio = () => {
   const bgAudio = new Audio("/assets/audio/theme-song.mp3");
 
