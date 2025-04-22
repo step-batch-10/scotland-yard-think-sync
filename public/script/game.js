@@ -3,7 +3,7 @@ import { combineObjects } from "./game_utils.js";
 const fetchJson = (route) => fetch(route).then((res) => res.json());
 
 const fetchState = () => fetchJson("/game/state");
-const fetchPossiblStations = () => fetchJson("/game/possible-stations");
+const fetchPossibleStations = () => fetchJson("/game/possible-stations");
 
 const cloneTemplate = (targetId) => {
   const template = document.querySelector(targetId);
@@ -71,10 +71,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -85,7 +85,7 @@ const getDimensions = (element) => {
 
 const removeContainer = (e) => e.target.parentNode.remove();
 
-const removeListners = (pairs) => {
+const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
     station.onclick = () => {};
@@ -93,8 +93,8 @@ const removeListners = (pairs) => {
 };
 
 const removeAllContainers = () => {
-  const continers = document.querySelectorAll(".cards-container");
-  continers.forEach((continer) => continer.remove());
+  const containers = document.querySelectorAll(".cards-container");
+  containers.forEach((container) => container.remove());
 };
 
 const ticketSelection = (to, elements, pairs) => (e) => {
@@ -105,7 +105,7 @@ const ticketSelection = (to, elements, pairs) => (e) => {
     clonedCard.parentNode.parentNode.remove();
   });
   removeAllContainers();
-  removeListners(pairs);
+  removeListeners(pairs);
 };
 
 const createCard = ({ to, mode }) => {
@@ -116,7 +116,7 @@ const createCard = ({ to, mode }) => {
   return { clonedCard: card, to };
 };
 
-const addListners = (elements, card, pairs) => {
+const addListeners = (elements, card, pairs) => {
   elements.forEach(({ clonedCard, to }) => {
     clonedCard.addEventListener("click", ticketSelection(to, elements, pairs));
     card.appendChild(clonedCard);
@@ -130,21 +130,22 @@ const renderTickets = (options, pairs) => (e) => {
   const card = cardsContainer.querySelector(".card");
   const elements = options.map(createCard);
 
-  closeBtn.onclick = removeContainer;
+  closeBtn.addEventListener("click", removeContainer);
   alignCard(cardsContainer, getDimensions(e.currentTarget));
-  addListners(elements, card, pairs);
+  addListeners(elements, card, pairs);
 
   document.body.appendChild(cardsContainer);
 };
 
-const pairTicketToStaiton = (map) => {
+const pairTicketToStation = (map) => {
   const pair = Object.groupBy(map, ({ to }) => to);
   return Object.entries(pair);
 };
 
 const showTickets = async () => {
-  const possibleStation = await fetchPossiblStations();
-  const pairs = pairTicketToStaiton(possibleStation);
+  const possibleStation = await fetchPossibleStations();
+
+  const pairs = pairTicketToStation(possibleStation);
 
   pairs.forEach(([to, options]) => {
     const station = document.getElementById(`station-${to}`);
@@ -239,10 +240,10 @@ const playGame = ({ tickets, positions, roles, currentRole, isYourTurn }) => {
 };
 
 const startPolling = () => {
-  const intervelId = setInterval(async () => {
+  const intervalId = setInterval(async () => {
     const data = await fetchState();
 
-    if (data.isGameOver) return renderGameOver(data, intervelId);
+    if (data.isGameOver) return renderGameOver(data, intervalId);
 
     return playGame(data);
   }, 3000);
@@ -260,7 +261,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };

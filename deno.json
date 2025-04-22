@@ -27,7 +27,8 @@
   "fmt": {
     "indentWidth": 2,
     "lineWidth": 80,
-    "semiColons": true
+    "semiColons": true,
+    "exclude": ["**/*.html", "**/*.svg"]
   },
   "tasks": {
     "format": {

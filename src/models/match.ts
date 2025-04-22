@@ -1,4 +1,5 @@
 import { ScotlandYard } from "./scotland.ts";
+import { GameMap } from "./types.ts";
 
 interface MatchStatus {
   game: ScotlandYard;
@@ -11,8 +12,8 @@ export class Match {
     this.matches = new Map();
   }
 
-  private defaultMatchFormat(players: string[]) {
-    const game = new ScotlandYard(players);
+  private defaultMatchFormat(players: string[], map?: GameMap) {
+    const game = new ScotlandYard(players, map);
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();
@@ -24,8 +25,8 @@ export class Match {
     };
   }
 
-  setMatch(roomId: string, players: Set<string>) {
-    this.matches.set(roomId, this.defaultMatchFormat([...players]));
+  setMatch(roomId: string, players: Set<string>, map?: GameMap) {
+    this.matches.set(roomId, this.defaultMatchFormat([...players], map));
   }
 
   getMatch(roomId: string) {

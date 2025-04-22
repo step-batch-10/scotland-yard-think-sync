@@ -1,5 +1,5 @@
 import { mapToObject } from "../game_play.ts";
-import { basicMap } from "../maps/game_map.ts";
+import { basicMap } from "../maps/half_map.ts";
 import { ticketsOf } from "./tickets.ts";
 import {
   GameMap,
@@ -91,7 +91,7 @@ export class ScotlandYard {
   getDetectivePositions() {
     const playerIterator = this.currentStations.entries();
     const detectiveEntries = [...playerIterator].filter(
-      ([role]) => role !== "MrX",
+      ([role]) => role !== "MrX"
     );
 
     return detectiveEntries.map(([, position]) => position);
@@ -102,6 +102,7 @@ export class ScotlandYard {
     if (!availableRoutes) return [];
 
     const detectivesPos = this.getDetectivePositions();
+
     return availableRoutes.filter(({ to }) => !detectivesPos.includes(to));
   };
 
@@ -177,7 +178,7 @@ export class ScotlandYard {
   useTicket(
     mode: Ticket,
     destination: number,
-    totalTurns: number = 25,
+    totalTurns: number = 25
   ): boolean {
     if (!this.isPossibleStation(mode, destination)) return false;
 

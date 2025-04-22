@@ -2,6 +2,7 @@ import { describe, it } from "testing";
 import { assert, assertEquals, assertFalse } from "assert";
 import { ScotlandYard } from "../src/models/scotland.ts";
 import { mapToObject } from "../src/game_play.ts";
+import { basicMap } from "../src/maps/game_map.ts";
 import {
   GameMap,
   RandomIndex,
@@ -11,7 +12,6 @@ import {
   Tickets,
   Transport,
 } from "../src/models/types.ts";
-import { basicMap } from "../src/maps/game_map.ts";
 
 const setUpDefaultGame = (): [ScotlandYard, Set<string>] => {
   const players = new Set(["a", "b", "c", "d", "e", "f"]);
@@ -102,7 +102,7 @@ describe("assignStartingPositions", () => {
       "test6",
     ]);
 
-    const game = new ScotlandYard([...players]);
+    const game = new ScotlandYard([...players], basicMap);
 
     game.assignRole();
     game.assignStartingPositions(random);
@@ -133,7 +133,7 @@ describe("assignStartingPositions", () => {
       "test6",
     ]);
 
-    const game = new ScotlandYard([...players]);
+    const game = new ScotlandYard([...players], basicMap);
 
     game.assignRole();
     game.assignStartingPositions(random);
@@ -379,14 +379,10 @@ describe("getValidRoutes", () => {
 
 describe("isMrXTurn", () => {
   it("should provide true if its MrX turn", () => {
-    const game = new ScotlandYard([
-      "test1",
-      "test2",
-      "test3",
-      "test4",
-      "test5",
-      "test6",
-    ]);
+    const game = new ScotlandYard(
+      ["test1", "test2", "test3", "test4", "test5", "test6"],
+      basicMap,
+    );
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();
@@ -394,14 +390,10 @@ describe("isMrXTurn", () => {
   });
 
   it("should provide false if its not MrX turn", () => {
-    const game = new ScotlandYard([
-      "test1",
-      "test2",
-      "test3",
-      "test4",
-      "test5",
-      "test6",
-    ]);
+    const game = new ScotlandYard(
+      ["test1", "test2", "test3", "test4", "test5", "test6"],
+      basicMap,
+    );
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();
