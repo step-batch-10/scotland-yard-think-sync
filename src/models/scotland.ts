@@ -149,6 +149,15 @@ export class ScotlandYard {
     return possibleStations.some(ScotlandYard.canTravel(mode, destination));
   }
 
+  private fuelMrX(tickets: Tickets, mode: Ticket) {
+    const mrXTickets = this.tickets.get(Role.MrX);
+    tickets[mode] -= 1;
+
+    if (this.currentRole === Role.MrX || !mrXTickets) return;
+
+    mrXTickets[mode] += 1;
+  }
+
   useTicket(mode: Ticket, destination: number): boolean {
     if (!this.isPossibleStation(mode, destination)) return false;
 
@@ -156,7 +165,7 @@ export class ScotlandYard {
     if (!tickets || !tickets[mode]) return false;
 
     this.movePlayer(destination);
-    tickets[mode] -= 1;
+    this.fuelMrX(tickets, mode);
     this.changeTurn();
 
     return true;

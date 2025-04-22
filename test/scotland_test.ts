@@ -636,3 +636,43 @@ describe("checkWinner", () => {
     assertEquals(game.getWinner(), null);
   });
 });
+
+describe("Increment mrX tickets", () => {
+  it("should reduce the ticket use by mrX", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 1, mode: Transport.Taxi }],
+        4: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    game.useTicket(Ticket.Yellow, 2);
+    const updatedTickets = game.getTickets().get(Role.MrX);
+
+    const expected = { Bus: 3, Taxi: 3, Metro: 3, Wild: 5, "2x": 2 };
+    assertEquals(updatedTickets, expected);
+  });
+  
+  it("should reduce the ticket use by player and increment in mrX", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 1, mode: Transport.Taxi }],
+        4: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    game.useTicket(Ticket.Yellow, 2);
+    game.useTicket(Ticket.Yellow, 1);
+    game.useTicket(Ticket.Yellow, 2);
+    const updatedTickets = game.getTickets().get(Role.MrX);
+
+    const expected = { Bus: 3, Taxi: 5, Metro: 3, Wild: 5, "2x": 2 };
+    assertEquals(updatedTickets, expected);
+  });
+});
