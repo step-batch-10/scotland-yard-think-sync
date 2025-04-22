@@ -229,25 +229,25 @@ const showTurn = (currentRole, isYourTurn) => {
   if (isYourTurn) highlightPawn(currentRole);
 };
 
-const startPolling = async () => {
+const startPolling = () => {
   let turn = false;
 
-  // setInterval(async () => {
-  const { tickets, positions, roles, currentRole, isYourTurn } =
-    await fetchState();
+  setInterval(async () => {
+    const { tickets, positions, roles, currentRole, isYourTurn } =
+      await fetchState();
 
-  const stats = combineObjects(roles, tickets, positions);
+    const stats = combineObjects(roles, tickets, positions);
 
-  renderPlayerTickets(stats);
-  renderPawns(stats);
-  showTurn(currentRole, isYourTurn);
+    renderPlayerTickets(stats);
+    renderPawns(stats);
+    showTurn(currentRole, isYourTurn);
 
-  if (isYourTurn && !turn) {
-    showTickets();
-  }
+    if (isYourTurn && !turn) {
+      showTickets();
+    }
 
-  turn = isYourTurn;
-  // }, 3000);
+    turn = isYourTurn;
+  }, 3000);
 };
 
 const playAudio = () => {
