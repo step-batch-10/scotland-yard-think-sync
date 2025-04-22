@@ -134,3 +134,7 @@ th {
   color: red;
   font-weight: 600;
 }
+
+g tspan {
+  white-space: normal;
+}

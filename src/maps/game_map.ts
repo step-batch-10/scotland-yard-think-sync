@@ -8,7 +8,7 @@ const routes: MapRoute = {
     { to: 181, mode: Transport.Bus },
     { to: 183, mode: Transport.Taxi },
     { to: 183, mode: Transport.Metro },
-    { to: 192, mode: Transport.Taxi },
+    { to: 195, mode: Transport.Taxi },
   ],
 
   183: [

@@ -6,7 +6,7 @@
   },
   "test": {
     "include": ["**/*.ts", "public/script/game_utils.js"],
-    "exclude": ["main.ts", "src/"]
+    "exclude": ["main.ts"]
   },
   "lint": {
     "rules": {

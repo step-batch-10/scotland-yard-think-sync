@@ -87,22 +87,28 @@ const renderPlayer = (rolesObject) => {
   }, 3000);
 };
 
-const alignePiece = (piece, { x, y }) => {
-  piece.style.left = `${x + 65}px`;
-  piece.style.top = `${y - 65}px`;
+const addCoordinate = (pawn, station) => {
+  const [x, y] = getDimensions(station);
+  pawn.style.left = `${x - 8}px`;
+  pawn.style.top = `${y - 60}px`;
 };
 
-const alignCard = (cardsContainer, { x, y }) => {
+const alignCard = (cardsContainer, [x, y]) => {
   cardsContainer.style.position = "absolute";
-  cardsContainer.style.left = `${x + 40}px`;
-  cardsContainer.style.top = `${y - 80}px`;
+
+  cardsContainer.style.left = `${x}px`;
+  cardsContainer.style.top = `${y - 54}px`;
 };
 
-const getDimensions = (e) => {
-  const stationId = e.target.id;
-  const station = document.getElementById(stationId);
+const getDimensions = (element) => {
+  const scrollLeft = globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop = globalThis.pageYOffset || document.documentElement.scrollTop;
+  const dimensions = element.getBoundingClientRect();
 
-  return station.getBoundingClientRect();
+  const absoluteX = dimensions.left + scrollLeft;
+  const absoluteY = dimensions.top + scrollTop;
+
+  return [absoluteX, absoluteY];
 };
 
 const renderTickets = (options) => (e) => {
@@ -110,7 +116,7 @@ const renderTickets = (options) => (e) => {
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
   closeBtn.addEventListener("click", (e) => e.target.parentNode.remove());
-  alignCard(cardsContainer, getDimensions(e));
+  alignCard(cardsContainer, getDimensions(e.currentTarget));
 
   options.forEach(({ mode }) => {
     const clonedCard = cloneTemplate(`#${mode}`);
@@ -140,9 +146,8 @@ const generateStationId = (station) => `#station-${station}`;
 
 const movePawnToStation = (pawn, stationId) => {
   const tspan = document.querySelector(stationId);
-  const dimensions = tspan.getBoundingClientRect();
 
-  alignePiece(pawn, dimensions);
+  addCoordinate(pawn, tspan);
 
   return pawn;
 };
@@ -165,7 +170,6 @@ const createPawn = (player) => {
   const stationId = generateStationId(position);
   const color = findColor(player[0]);
   const pawn = makePawn(color);
-
   return movePawnToStation(pawn, stationId, color);
 };
 
