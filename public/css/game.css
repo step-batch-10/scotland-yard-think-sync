@@ -175,7 +175,6 @@ th {
   }
 }
 
-
 .card {
   display: flex;
   gap: 4px;
@@ -232,6 +231,8 @@ g {
   top: 0;
   backdrop-filter: blur(10px);
   display: flex;
+  flex-direction: column;
+
   justify-content: center;
   align-items: center;
 }
@@ -240,5 +241,34 @@ g {
   text-align: center;
   font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
     "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
-  font-size: 6rem;
+}
+
+.box {
+  width: 10vw;
+  border: 1px solid black;
+}
+
+.row {
+  display: flex;
+  gap: 5px;
+}
+
+.message-container {
+  width: 400px;
+  min-width: 100px;
+
+  text-align: center;
+  height: 30vh;
+  min-height: 200px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.replay {
+  gap: 10px;
+  display: flex;
+  flex-direction: column;
 }

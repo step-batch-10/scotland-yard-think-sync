@@ -2,7 +2,8 @@ import { combineObjects } from "./game_utils.js";
 
 const fetchJson = (route) => fetch(route).then((res) => res.json());
 
-const fetchState = () => fetchJson("/game/state");
+const fetchState = () =>
+  ({ isGameOver: true, winner: "MrX" } || fetchJson("/game/state"));
 const fetchPossiblStations = () => fetchJson("/game/possible-stations");
 
 const cloneTemplate = (targetId) => {
@@ -217,7 +218,7 @@ const renderGameOver = ({ winner }, id) => {
   clearInterval(id);
 
   const banner = cloneTemplate("#winner-banner");
-  banner.querySelector("p").textContent = winningMessage(winner);
+  banner.querySelector("h4").textContent = winningMessage(winner);
 
   document.body.appendChild(banner);
 };
