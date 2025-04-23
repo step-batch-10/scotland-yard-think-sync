@@ -26,8 +26,13 @@ export class ScotlandYard {
   private gameMap: GameMap;
   private winner: Winner;
   private turnCount: number;
+  private totalTurns: number;
 
-  constructor(players: string[], map: GameMap = basicMap) {
+  constructor(
+    players: string[],
+    map: GameMap = basicMap,
+    totalTurns: number = 25
+  ) {
     this.players = [...players];
     this.assignedRoles = new Map();
     this.tickets = new Map();
@@ -36,6 +41,7 @@ export class ScotlandYard {
     this.gameMap = map;
     this.winner = null;
     this.turnCount = 0;
+    this.totalTurns = totalTurns;
 
     this.roles = [
       Role.MrX,
@@ -119,17 +125,17 @@ export class ScotlandYard {
     return detectivesPos.includes(MrXPosition);
   }
 
-  isTurnCount(turns: number): boolean {
+  isTurnCount(): boolean {
     if (this.isMrXTurn()) {
       this.turnCount += 1;
     }
 
-    return this.turnCount === turns;
+    return this.turnCount >= this.totalTurns;
   }
 
-  declareWinner(turns: number) {
+  declareWinner() {
     const hasDetectivesWon = this.isMrXCaught();
-    const hasMrXWon = this.isTurnCount(turns);
+    const hasMrXWon = this.isTurnCount();
 
     if (hasDetectivesWon) this.winner = "Detective";
     if (hasMrXWon) this.winner = "MrX";
@@ -175,11 +181,7 @@ export class ScotlandYard {
     mrXTickets[mode] += 1;
   }
 
-  useTicket(
-    mode: Ticket,
-    destination: number,
-    totalTurns: number = 25
-  ): boolean {
+  useTicket(mode: Ticket, destination: number): boolean {
     if (!this.isPossibleStation(mode, destination)) return false;
 
     const tickets = this.tickets.get(this.currentRole);
@@ -187,11 +189,12 @@ export class ScotlandYard {
 
     this.movePlayer(destination);
     this.fuelMrX(tickets, mode);
-    this.declareWinner(totalTurns);
     this.changeTurn();
+    this.declareWinner();
 
     return true;
   }
+
   getGameState() {
     return {
       tickets: mapToObject<Tickets>(this.tickets),

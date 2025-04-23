@@ -13,7 +13,7 @@ export class Match {
   }
 
   private defaultMatchFormat(players: string[], map?: GameMap) {
-    const game = new ScotlandYard(players, map);
+    const game = new ScotlandYard(players, map, 1);
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();

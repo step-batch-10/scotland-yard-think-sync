@@ -483,8 +483,8 @@ describe("canTravel", () => {
   });
 });
 
-const makeGame = (map: GameMap = basicMap) => {
-  const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"], map);
+const makeGame = (map: GameMap = basicMap, round = 25) => {
+  const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"], map, round);
 
   game.assignRole();
   game.assignStartingPositions();
@@ -694,9 +694,9 @@ describe("declareWinner", () => {
       },
     };
 
-    const game = makeGame(fakeMap);
+    const game = makeGame(fakeMap, 1);
     game.useTicket(Ticket.Yellow, 2);
-    assertEquals(game.declareWinner(1), "MrX");
+    assertEquals(game.declareWinner(), "MrX");
   });
 
   it("should declear Detective as winner when MrX is captured", () => {
@@ -708,11 +708,11 @@ describe("declareWinner", () => {
       },
     };
 
-    const game = makeGame(fakeMap);
+    const game = makeGame(fakeMap, 3);
     const destination = 2;
     game.useTicket(Ticket.Yellow, destination); // MrX
     game.useTicket(Ticket.Yellow, destination); // Detective 1
-    assertEquals(game.declareWinner(3), "Detective");
+    assertEquals(game.declareWinner(), "Detective");
   });
 
   it("should declear Mr.X as winner when he escapes for all the turns", () => {
@@ -728,7 +728,7 @@ describe("declareWinner", () => {
       },
     };
 
-    const game = makeGame(fakeMap);
+    const game = makeGame(fakeMap, 2);
 
     game.useTicket(Ticket.Yellow, 2); // MrX
     game.useTicket(Ticket.Yellow, 1); // Detective 1
@@ -737,6 +737,6 @@ describe("declareWinner", () => {
     game.useTicket(Ticket.Yellow, 5); // Detective 4
     game.useTicket(Ticket.Yellow, 6); // Detective 5
 
-    assertEquals(game.declareWinner(2), "MrX");
+    assertEquals(game.declareWinner(), "MrX");
   });
 });
