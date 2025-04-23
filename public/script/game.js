@@ -88,6 +88,7 @@ const removeContainer = (e) => e.target.parentNode.remove();
 const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
+    station.classList.remove("highlight-station");
     station.onclick = () => {};
   });
 };
@@ -142,9 +143,17 @@ const pairTicketToStation = (map) => {
   return Object.entries(pair);
 };
 
+const highLightDestinations = (stations) => {
+  stations.forEach(({ to }) => {
+    const station = document.getElementById(`station-${to}`);
+
+    station.classList.add("highlight-station");
+  });
+};
+
 const showTickets = async () => {
   const possibleStation = await fetchPossibleStations();
-
+  highLightDestinations(possibleStation);
   const pairs = pairTicketToStation(possibleStation);
 
   pairs.forEach(([to, options]) => {
@@ -196,9 +205,9 @@ const alertUser = (msg, id) => {
   turnIndicator.textContent = msg;
 };
 
-const createHighlighter = () => {
+const createHighlighter = (className) => {
   const element = document.createElement("div");
-  element.classList.add("highlight");
+  element.classList.add(className);
 
   return element;
 };
@@ -206,7 +215,7 @@ const createHighlighter = () => {
 const highlightPawn = (role) => {
   const pawn = document.querySelector(`#${role}`);
 
-  const highlighter = createHighlighter();
+  const highlighter = createHighlighter("highlight");
   pawn.appendChild(highlighter);
 };
 
