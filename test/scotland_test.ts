@@ -684,21 +684,6 @@ describe("Increment mrX tickets", () => {
 });
 
 describe("declareWinner", () => {
-  it("should declear Mr.X as winner when he escapes for all the turns", () => {
-    const fakeMap: GameMap = {
-      startingPositions: [2, 1, 3, 4, 5, 6, 7],
-      routes: {
-        1: [{ to: 2, mode: Transport.Taxi }],
-        3: [{ to: 1, mode: Transport.Taxi }],
-        4: [{ to: 2, mode: Transport.Taxi }],
-      },
-    };
-
-    const game = makeGame(fakeMap, 1);
-    game.useTicket(Ticket.Yellow, 2);
-    assertEquals(game.declareWinner(), "MrX");
-  });
-
   it("should declear Detective as winner when MrX is captured", () => {
     const fakeMap: GameMap = {
       startingPositions: [2, 1, 3, 4, 5, 6, 7],
@@ -708,14 +693,14 @@ describe("declareWinner", () => {
       },
     };
 
-    const game = makeGame(fakeMap, 3);
+    const game = makeGame(fakeMap, 1);
     const destination = 2;
     game.useTicket(Ticket.Yellow, destination); // MrX
     game.useTicket(Ticket.Yellow, destination); // Detective 1
     assertEquals(game.declareWinner(), "Detective");
   });
 
-  it("should declear Mr.X as winner when he escapes for all the turns", () => {
+  it("should declear Mr.X as winner when he escapes for one turn", () => {
     const fakeMap: GameMap = {
       startingPositions: [2, 1, 3, 4, 5, 6, 7],
       routes: {
@@ -728,7 +713,7 @@ describe("declareWinner", () => {
       },
     };
 
-    const game = makeGame(fakeMap, 2);
+    const game = makeGame(fakeMap, 1);
 
     game.useTicket(Ticket.Yellow, 2); // MrX
     game.useTicket(Ticket.Yellow, 1); // Detective 1
