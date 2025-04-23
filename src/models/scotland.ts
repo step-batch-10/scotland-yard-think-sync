@@ -31,7 +31,7 @@ export class ScotlandYard {
   constructor(
     players: string[],
     map: GameMap = basicMap,
-    totalTurns: number = 25
+    totalTurns: number = 25,
   ) {
     this.players = [...players];
     this.assignedRoles = new Map();
@@ -97,7 +97,7 @@ export class ScotlandYard {
   getDetectivePositions() {
     const playerIterator = this.currentStations.entries();
     const detectiveEntries = [...playerIterator].filter(
-      ([role]) => role !== "MrX"
+      ([role]) => role !== "MrX",
     );
 
     return detectiveEntries.map(([, position]) => position);
