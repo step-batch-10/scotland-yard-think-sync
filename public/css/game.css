@@ -26,9 +26,11 @@ body {
 #turn-indicator {
   position: fixed;
   left: 0%;
-  border: 0.5px solid black;
+  color: white;
   padding: 10px 20px;
-  background-color: greenyellow;
+  background-color: rgba(0, 0, 0, 0.8);
+  font-weight: 600;
+  font-size: 20px;
 }
 
 td,
@@ -239,19 +241,12 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
   width: 10vw;
-  border: 1px solid black;
 }
 
 .row {
