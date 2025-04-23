@@ -222,6 +222,6 @@ const routes: MapRoute = {
 };
 
 export const basicMap: GameMap = {
-  startingPositions: [118, 174, 187, 133, 128, 185, 198, 200],
+  startingPositions: [118, 173, 187, 133, 128, 185, 198, 200],
   routes,
 };
