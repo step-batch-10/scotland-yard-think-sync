@@ -11,11 +11,16 @@ import {
   Tickets,
   Transport,
 } from "../src/models/types.ts";
+import { basicMap } from "../src/maps/game_map.ts";
+
+const setUpDefaultGame = (): [ScotlandYard, Set<string>] => {
+  const players = new Set(["a", "b", "c", "d", "e", "f"]);
+  return [new ScotlandYard([...players]), players];
+};
 
 describe("test playerNames", () => {
   it("should provide playerNames", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "d"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy, players] = setUpDefaultGame();
 
     assertEquals(sy.getPlayers(), [...players]);
   });
@@ -23,8 +28,7 @@ describe("test playerNames", () => {
 
 describe("test assignRole", () => {
   it("should assign role", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy, players] = setUpDefaultGame();
     const roles = {
       Red: "b",
       MrX: "a",
@@ -43,8 +47,7 @@ describe("test assignRole", () => {
   });
 
   it("should assign multiple role to a player", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy] = setUpDefaultGame();
     const roles: Roles = { MrX: "b", Blue: "a" };
 
     sy.assignRole(roles);
@@ -65,8 +68,7 @@ describe("test assignRole", () => {
 
 describe("ticket distribution", () => {
   it("should provide detective with proper tickets", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy] = setUpDefaultGame();
     const roles: Roles = { [Role.Red]: "a" };
 
     sy.assignRole(roles);
@@ -153,8 +155,7 @@ describe("assignStartingPositions", () => {
 
 describe("game state", () => {
   it("should provide tickets in the game state", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy] = setUpDefaultGame();
     const roles = {
       Red: "b",
       MrX: "a",
@@ -191,7 +192,7 @@ describe("game state", () => {
 
     const game = new ScotlandYard(
       ["test1", "test2", "test3", "test4", "test5", "test6"],
-      fakeMap
+      fakeMap,
     );
 
     game.assignRole();
@@ -212,8 +213,7 @@ describe("game state", () => {
   });
 
   it("should provide empty starting positions if starting position is not assigned", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy] = setUpDefaultGame();
     sy.assignRole();
     sy.distributeTickets();
 
@@ -223,8 +223,7 @@ describe("game state", () => {
   });
 
   it("should have current role", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy] = setUpDefaultGame();
     sy.assignRole();
     sy.distributeTickets();
 
@@ -236,8 +235,7 @@ describe("game state", () => {
 
 describe("change turn", () => {
   it("should be next player", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy] = setUpDefaultGame();
     sy.assignRole();
     sy.distributeTickets();
     sy.assignStartingPositions();
@@ -247,8 +245,7 @@ describe("change turn", () => {
   });
 
   it("should rotate the turn to the next player in circular order", () => {
-    const players = new Set(["a", "b", "c", "d", "e", "f"]);
-    const sy = new ScotlandYard([...players]);
+    const [sy] = setUpDefaultGame();
     sy.assignRole();
     sy.distributeTickets();
     sy.assignStartingPositions();
@@ -275,7 +272,7 @@ describe("possible stations", () => {
 
     const game = new ScotlandYard(
       ["test1", "test2", "test3", "test4", "test5", "test6"],
-      fakeMap
+      fakeMap,
     );
 
     game.assignRole();
@@ -299,7 +296,7 @@ describe("possible stations", () => {
 
     const game = new ScotlandYard(
       ["test1", "test2", "test3", "test4", "test5", "test6"],
-      fakeMap
+      fakeMap,
     );
 
     const actual = game.possibleStations();
@@ -319,7 +316,7 @@ describe("positionOfDetectives", () => {
 
     const game = new ScotlandYard(
       ["test1", "test2", "test3", "test4", "test5", "test6"],
-      fakeMap
+      fakeMap,
     );
 
     game.assignRole();
@@ -338,7 +335,7 @@ describe("positionOfDetectives", () => {
     };
     const game = new ScotlandYard(
       ["test1", "test2", "test3", "test4", "test5", "test6"],
-      fakeMap
+      fakeMap,
     );
 
     assertEquals(game.getDetectivePositions(), []);
@@ -453,28 +450,28 @@ describe("canTravel", () => {
     assert(
       ScotlandYard.canTravel(
         Ticket.Red,
-        123
-      )({ to: 123, mode: Transport.Metro })
+        123,
+      )({ to: 123, mode: Transport.Metro }),
     );
     assert(
       ScotlandYard.canTravel(
         Ticket.Yellow,
-        123
-      )({ to: 123, mode: Transport.Taxi })
+        123,
+      )({ to: 123, mode: Transport.Taxi }),
     );
     assert(
       ScotlandYard.canTravel(
         Ticket.Green,
-        123
-      )({ to: 123, mode: Transport.Bus })
+        123,
+      )({ to: 123, mode: Transport.Bus }),
     );
   });
   it("should provide false if destination is deferent", () => {
     assertFalse(
       ScotlandYard.canTravel(
         Ticket.Red,
-        125
-      )({ to: 123, mode: Transport.Metro })
+        125,
+      )({ to: 123, mode: Transport.Metro }),
     );
   });
 
@@ -482,19 +479,19 @@ describe("canTravel", () => {
     assertFalse(
       ScotlandYard.canTravel(
         Ticket.Yellow,
-        123
-      )({ to: 123, mode: Transport.Metro })
+        123,
+      )({ to: 123, mode: Transport.Metro }),
     );
     assertFalse(
       ScotlandYard.canTravel(
         Ticket.Green,
-        123
-      )({ to: 123, mode: Transport.Ferry })
+        123,
+      )({ to: 123, mode: Transport.Ferry }),
     );
   });
 });
 
-const makeGame = (map?: GameMap) => {
+const makeGame = (map: GameMap = basicMap) => {
   const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"], map);
 
   game.assignRole();
@@ -505,7 +502,7 @@ const makeGame = (map?: GameMap) => {
 };
 describe("useTicket", () => {
   it("using a valid ticket and destination should change the turn", () => {
-    const game = makeGame();
+    const game = makeGame(basicMap);
 
     assert(game.useTicket(Ticket.Yellow, 181));
     const expected = {
@@ -526,7 +523,7 @@ describe("useTicket", () => {
   });
 
   it("should reject move when ticket type does not match route", () => {
-    const game = makeGame();
+    const game = makeGame(basicMap);
     assertFalse(game.useTicket(Ticket.Red, 182));
   });
 
@@ -545,7 +542,7 @@ describe("useTicket", () => {
   });
 
   it("should not allow moving to a non-adjacent location", () => {
-    const game = makeGame();
+    const game = makeGame(basicMap);
 
     assertFalse(game.useTicket(Ticket.Yellow, 999));
   });
@@ -599,6 +596,21 @@ describe("isMrXCaught", () => {
     game.useTicket(Ticket.Yellow, 2); // MrX
     assertFalse(game.isMrXCaught());
   });
+
+  it("should provide false if position is not assigned", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"], fakeMap);
+    game.assignRole();
+
+    assertFalse(game.isMrXCaught());
+  });
 });
 
 describe("checkWinner", () => {
@@ -615,6 +627,7 @@ describe("checkWinner", () => {
     const destination = 2;
     game.useTicket(Ticket.Yellow, destination); // MrX
     game.useTicket(Ticket.Yellow, destination); // Detective 1
+
     assert(game.isGameOver());
     assertEquals(game.getWinner(), "Detective");
   });
@@ -632,6 +645,7 @@ describe("checkWinner", () => {
     const destination = 2;
     game.useTicket(Ticket.Yellow, destination); // MrX
     game.useTicket(Ticket.Yellow, 6); // Detective 1
+
     assertFalse(game.isGameOver());
     assertEquals(game.getWinner(), null);
   });
@@ -655,7 +669,7 @@ describe("Increment mrX tickets", () => {
     const expected = { Bus: 3, Taxi: 3, Metro: 3, Wild: 5, "2x": 2 };
     assertEquals(updatedTickets, expected);
   });
-  
+
   it("should reduce the ticket use by player and increment in mrX", () => {
     const fakeMap: GameMap = {
       startingPositions: [2, 1, 3, 4, 5, 6, 7],
@@ -674,5 +688,63 @@ describe("Increment mrX tickets", () => {
 
     const expected = { Bus: 3, Taxi: 5, Metro: 3, Wild: 5, "2x": 2 };
     assertEquals(updatedTickets, expected);
+  });
+});
+
+describe("declareWinner", () => {
+  it("should declear Mr.X as winner when he escapes for all the turns", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 1, mode: Transport.Taxi }],
+        4: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    game.useTicket(Ticket.Yellow, 2);
+    assertEquals(game.declareWinner(1), "MrX");
+  });
+
+  it("should declear Detective as winner when MrX is captured", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+    const destination = 2;
+    game.useTicket(Ticket.Yellow, destination); // MrX
+    game.useTicket(Ticket.Yellow, destination); // Detective 1
+    assertEquals(game.declareWinner(3), "Detective");
+  });
+
+  it("should declear Mr.X as winner when he escapes for all the turns", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 1, mode: Transport.Taxi }],
+        4: [{ to: 3, mode: Transport.Taxi }],
+        5: [{ to: 4, mode: Transport.Taxi }],
+        6: [{ to: 5, mode: Transport.Taxi }],
+        7: [{ to: 6, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap);
+
+    game.useTicket(Ticket.Yellow, 2); // MrX
+    game.useTicket(Ticket.Yellow, 1); // Detective 1
+    game.useTicket(Ticket.Yellow, 3); // Detective 2
+    game.useTicket(Ticket.Yellow, 4); // Detective 3
+    game.useTicket(Ticket.Yellow, 5); // Detective 4
+    game.useTicket(Ticket.Yellow, 6); // Detective 5
+
+    assertEquals(game.declareWinner(2), "MrX");
   });
 });

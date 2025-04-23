@@ -25,6 +25,7 @@ export class ScotlandYard {
   private currentRole: Role;
   private gameMap: GameMap;
   private winner: Winner;
+  private turnCount: number;
 
   constructor(players: string[], map: GameMap = basicMap) {
     this.players = [...players];
@@ -34,6 +35,7 @@ export class ScotlandYard {
     this.startingStations = map.startingPositions;
     this.gameMap = map;
     this.winner = null;
+    this.turnCount = 0;
 
     this.roles = [
       Role.MrX,
@@ -89,7 +91,7 @@ export class ScotlandYard {
   getDetectivePositions() {
     const playerIterator = this.currentStations.entries();
     const detectiveEntries = [...playerIterator].filter(
-      ([role]) => role !== "MrX"
+      ([role]) => role !== "MrX",
     );
 
     return detectiveEntries.map(([, position]) => position);
@@ -116,12 +118,26 @@ export class ScotlandYard {
     return detectivesPos.includes(MrXPosition);
   }
 
-  isGameOver() {
-    const hasDetectivesWon = this.isMrXCaught();
-    if (hasDetectivesWon) this.winner = "Detective";
-    const hasMrXWon = false;
+  isTurnCount(turns: number): boolean {
+    if (this.isMrXTurn()) {
+      this.turnCount += 1;
+    }
 
-    return hasMrXWon || hasDetectivesWon;
+    return this.turnCount === turns;
+  }
+
+  declareWinner(turns: number) {
+    const hasDetectivesWon = this.isMrXCaught();
+    const hasMrXWon = this.isTurnCount(turns);
+
+    if (hasDetectivesWon) this.winner = "Detective";
+    if (hasMrXWon) this.winner = "MrX";
+
+    return this.winner;
+  }
+
+  isGameOver() {
+    return Boolean(this.winner);
   }
 
   isMrXTurn(): boolean {
@@ -158,7 +174,11 @@ export class ScotlandYard {
     mrXTickets[mode] += 1;
   }
 
-  useTicket(mode: Ticket, destination: number): boolean {
+  useTicket(
+    mode: Ticket,
+    destination: number,
+    totalTurns: number = 25,
+  ): boolean {
     if (!this.isPossibleStation(mode, destination)) return false;
 
     const tickets = this.tickets.get(this.currentRole);
@@ -166,11 +186,11 @@ export class ScotlandYard {
 
     this.movePlayer(destination);
     this.fuelMrX(tickets, mode);
+    this.declareWinner(totalTurns);
     this.changeTurn();
 
     return true;
   }
-
   getGameState() {
     return {
       tickets: mapToObject<Tickets>(this.tickets),

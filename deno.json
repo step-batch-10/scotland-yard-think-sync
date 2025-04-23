@@ -30,6 +30,10 @@
     "semiColons": true
   },
   "tasks": {
+    "format": {
+      "description": "Formats files",
+      "command": "deno fmt ."
+    },
     "deploy-qa": {
       "description": "Deploy in the QA environment for testing",
       "command": "deployctl deploy --prod -p=scotland-yard-qa main.ts"
@@ -40,12 +44,13 @@
     },
     "test": {
       "description": "Runs test with coverage",
-      "command": "deno test -A --coverage --clean"
+      "command": "deno test -A --coverage --clean",
+      "dependencies": ["format"]
     },
     "coverage": {
       "description": "coverage checker",
       "command": "deno run -A jsr:@ashishkujoy/deno-coverage-checker",
-      "dependencies": ["test"]
+      "dependencies": ["test", "format"]
     },
     "start": {
       "command": "deno run -A --watch main.ts",
