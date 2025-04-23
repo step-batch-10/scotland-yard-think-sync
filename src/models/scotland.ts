@@ -3,6 +3,7 @@ import { basicMap } from "../maps/half_map.ts";
 import { ticketsOf } from "./tickets.ts";
 import {
   GameMap,
+  Positions,
   RandomIndex,
   Role,
   Roles,
@@ -195,15 +196,35 @@ export class ScotlandYard {
     return true;
   }
 
-  getGameState() {
+  private view(positions: Positions) {
     return {
       tickets: mapToObject<Tickets>(this.tickets),
       roles: mapToObject<string>(this.assignedRoles),
-      positions: mapToObject(this.currentStations),
+      positions: positions,
       currentRole: this.currentRole,
       isGameOver: this.isGameOver(),
       winner: this.getWinner(),
     };
+  }
+
+  private detectivesView() {
+    const positions = mapToObject(this.currentStations);
+    delete positions["MrX"];
+
+    return this.view(positions);
+  }
+
+  private mrXView() {
+    const positions = mapToObject(this.currentStations);
+    return this.view(positions);
+  }
+
+  getGameState(role: Role) {
+    if (role === Role.MrX) {
+      return this.mrXView();
+    }
+
+    return this.detectivesView();
   }
 
   getCurrentPosition() {

@@ -1,7 +1,14 @@
 import { Hono } from "hono";
-import { Bindings, GameContext, GameHandler, Ticket } from "./models/types.ts";
+import {
+  Bindings,
+  GameContext,
+  GameHandler,
+  Role,
+  Ticket,
+} from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
+import { getCookie } from "hono/cookie";
 
 export function mapToObject<T>(map?: Map<string, T>) {
   if (!map) return {};
@@ -28,7 +35,8 @@ const serveMatchInfo: GameHandler = (context: GameContext) => {
 };
 
 const fetchGameState = (game: ScotlandYard, playerId: string) => {
-  const state = game.getGameState();
+  const role = playerId as Role;
+  const state = game.getGameState(role);
   const { roles, currentRole } = state;
   const isYourTurn = roles[currentRole] === playerId;
 
