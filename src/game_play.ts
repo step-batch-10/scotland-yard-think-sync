@@ -8,7 +8,6 @@ import {
 } from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
-import { getCookie } from "hono/cookie";
 
 export function mapToObject<T>(map?: Map<string, T>) {
   if (!map) return {};
@@ -35,8 +34,8 @@ const serveMatchInfo: GameHandler = (context: GameContext) => {
 };
 
 const fetchGameState = (game: ScotlandYard, playerId: string) => {
-  const role = playerId as Role;
-  const state = game.getGameState(role);
+  const state = game.getGameState(playerId);
+
   const { roles, currentRole } = state;
   const isYourTurn = roles[currentRole] === playerId;
 

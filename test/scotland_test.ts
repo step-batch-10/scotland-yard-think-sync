@@ -237,7 +237,7 @@ describe("game state", () => {
     sy.distributeTickets();
     sy.assignStartingPositions();
 
-    const { positions } = sy.getGameState(Role.Blue);
+    const { positions } = sy.getGameState("b");
     const expected = {
       Blue: 133,
       Green: 128,
@@ -255,7 +255,7 @@ describe("game state", () => {
     sy.distributeTickets();
     sy.assignStartingPositions();
 
-    const { positions } = sy.getGameState(Role.MrX);
+    const { positions } = sy.getGameState("a");
     const expected = {
       MrX: 173,
       Blue: 133,
@@ -759,5 +759,18 @@ describe("declareWinner", () => {
     game.useTicket(Ticket.Yellow, 6); // Detective 5
 
     assertEquals(game.declareWinner(), "MrX");
+  });
+});
+
+describe("findRole", () => {
+  it("should give role based on player", () => {
+    const game = makeGame();
+    assertEquals(game.findRole("1"), Role.MrX);
+    assertEquals(game.findRole("2"), Role.Red);
+  });
+
+  it("should give role null if it is not a registared player", () => {
+    const game = makeGame();
+    assertFalse(game.findRole("akshay "));
   });
 });

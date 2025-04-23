@@ -16,6 +16,11 @@ import {
 
 const randomNumber: RandomIndex = () => 1;
 
+const reverseObject = (obj: { [key: string]: any }) => {
+  const reversedArray = Object.entries(obj).map(([k, v]) => [v, k]);
+  return Object.fromEntries(reversedArray);
+};
+
 export class ScotlandYard {
   private readonly players: string[];
   private readonly roles: Role[];
@@ -219,7 +224,17 @@ export class ScotlandYard {
     return this.view(positions);
   }
 
-  getGameState(role: Role) {
+  findRole(player: string): Role | null {
+    const playerRoles = mapToObject<string>(this.assignedRoles);
+    const reversed = reverseObject(playerRoles);
+
+    if (!reversed[player]) return null;
+
+    return reversed[player] as Role;
+  }
+
+  getGameState(player: string) {
+    const role = this.findRole(player) as Role;
     if (role === Role.MrX) {
       return this.mrXView();
     }

@@ -104,6 +104,63 @@ describe("gameState", () => {
     assertEquals(actual.message, expected.message);
     assertEquals(response.status, 404);
   });
+
+  it("should positions of all player positions for MrX", async () => {
+    const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+
+    const header = {
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+    };
+
+    bindings.match.setMatch(roomId, new Set(allPlayers));
+
+    const response = await app.request("/game/state", header);
+
+    const actual = await response.json();
+    const expected = {
+      Red: 187,
+      Blue: 133,
+      Green: 128,
+      Yellow: 185,
+      Purple: 198,
+      MrX: 173,
+    };
+
+    assertEquals(actual.positions, expected);
+  });
+
+  it("should give positions as per detective", async () => {
+    const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+
+    const header = {
+      headers: {
+        cookie: `playerId=${players[1]}`,
+      },
+    };
+
+    bindings.match.setMatch(roomId, new Set(allPlayers));
+
+    const response = await app.request("/game/state", header);
+
+    const actual = await response.json();
+    const expected = {
+      Red: 187,
+      Blue: 133,
+      Green: 128,
+      Yellow: 185,
+      Purple: 198,
+    };
+
+    assertEquals(actual.positions, expected);
+  });
 });
 
 describe("mapToObject", () => {

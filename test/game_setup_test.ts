@@ -40,6 +40,7 @@ export const createAppWithHostedRoom: TestApp = (host, ...players) => {
   bindings.playerRegistry.assignRoom(roomId, host);
 
   for (const player of players) {
+    bindings.playerRegistry.createPlayer(player);
     bindings.rooms.addPlayer(roomId, player);
     bindings.playerRegistry.assignRoom(roomId, player);
   }
