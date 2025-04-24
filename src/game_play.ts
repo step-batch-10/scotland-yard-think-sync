@@ -1,5 +1,11 @@
 import { Hono } from "hono";
-import { Bindings, GameContext, GameHandler, Ticket } from "./models/types.ts";
+import {
+  Bindings,
+  GameContext,
+  GameHandler,
+  GameMiddleWare,
+  Ticket,
+} from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
 import _ from "lodash";
@@ -10,18 +16,28 @@ export function mapToObject<T>(map?: Map<string, T>) {
   return Object.fromEntries([...map.entries()]);
 }
 
+export const ensureActiveGame: GameMiddleWare = async (context, next) => {
+  const playerId = extractPlayerId(context);
+  const playerStat = context.env.playerRegistry.getPlayerStats(playerId);
+  const roomId = playerStat?.roomId!;
+
+  if (!context.env.controller.hasMatch(roomId)) {
+    return context.redirect("/lobby");
+  }
+
+  return await next();
+};
+
 const extractMatchAndPlayerId = (context: GameContext) => {
   const playerId = extractPlayerId(context);
   const { roomId = "" } = context.env.playerRegistry.getPlayerStats(playerId);
   const match = context.env.controller.getMatch(roomId);
 
-  return { match, playerId, roomId };
+  return { match: match!, playerId, roomId };
 };
 
 const serveMatchInfo: GameHandler = (context: GameContext) => {
   const { match } = extractMatchAndPlayerId(context);
-
-  if (!match) return context.json({ message: "Game not found" }, 404);
 
   const rolesMap = match.game.getRoles();
   const roles = mapToObject<string>(rolesMap);
@@ -41,8 +57,6 @@ const fetchGameState = (game: ScotlandYard, playerId: string) => {
 const serveMatchState: GameHandler = (context: GameContext) => {
   const { match, playerId } = extractMatchAndPlayerId(context);
 
-  if (!match) return context.json({ message: "Game not found" }, 404);
-
   const gameState = fetchGameState(match.game, playerId);
 
   return context.json(gameState);
@@ -58,8 +72,6 @@ const servePossibleStations: GameHandler = (context: GameContext) => {
 const handleMovement: GameHandler = (context: GameContext) => {
   const { match } = extractMatchAndPlayerId(context);
   const { to, mode } = context.req.param() as { to: string; mode: Ticket };
-
-  if (!mode || !to || !match) return context.json({ success: false });
 
   const success = match.game.useTicket(mode, Number(to));
 

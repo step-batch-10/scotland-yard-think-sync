@@ -20,11 +20,10 @@ describe("ensure Authentication", () => {
     assertEquals(res.headers.get("location"), "/login");
   });
 
-  it("should land the user on lobby page", async () => {
+  it("should land the user on lobby page if logged in", async () => {
     const playerRegistry = new PlayerRegistry();
 
-    const playerName = "Shalini";
-    playerRegistry.createPlayer(playerName);
+    playerRegistry.createPlayer("Shalini");
 
     const bindings: Bindings = {
       playerRegistry,
@@ -35,7 +34,7 @@ describe("ensure Authentication", () => {
     const app = createApp(bindings);
     const req = new Request("http://localhost/", {
       headers: {
-        cookie: `playerId=${playerName}`,
+        cookie: `playerId=Shalini`,
       },
     });
 

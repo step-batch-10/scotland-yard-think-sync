@@ -37,7 +37,7 @@ describe("serveMatchInfo", () => {
     assertEquals(actual.roles, expected);
   });
 
-  it("should give game not found if roomId is invalid", async () => {
+  it("should redirect if game is not found", async () => {
     const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
     const [host, ...players] = allPlayers;
 
@@ -51,11 +51,8 @@ describe("serveMatchInfo", () => {
 
     const response = await app.request("/game/info", header);
 
-    const actual = await response.json();
-    const expected = { message: "Game not found" };
-
-    assertEquals(actual.message, expected.message);
-    assertEquals(response.status, 404);
+    assertEquals(response.status, 302);
+    assertEquals(response.headers.get("location"), "/lobby");
   });
 });
 
@@ -98,11 +95,8 @@ describe("gameState", () => {
 
     const response = await app.request("/game/state", header);
 
-    const actual = await response.json();
-    const expected = { message: "Game not found" };
-
-    assertEquals(actual.message, expected.message);
-    assertEquals(response.status, 404);
+    assertEquals(response.status, 302);
+    assertEquals(response.headers.get("location"), "/lobby");
   });
 
   it("should positions of all player positions for MrX", async () => {
@@ -227,22 +221,6 @@ describe("handleMovement", () => {
     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
 
     const response = await app.request("/game/move/ /ticket/Metro", {
-      headers: { cookie: `playerId=${host}` },
-    });
-
-    const actual = await response.json();
-    const expected = { success: false };
-
-    assertEquals(actual, expected);
-  });
-
-  it("should not be able to move match is not there", async () => {
-    const allPlayers = ["a", "b", "c", "d", "e"];
-    const [host, ...players] = allPlayers;
-
-    const { app } = createAppWithHostedRoom(host, ...players);
-
-    const response = await app.request("/game/move/123/ticket/Metro", {
       headers: { cookie: `playerId=${host}` },
     });
 
