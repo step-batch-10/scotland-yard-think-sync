@@ -12,11 +12,11 @@ const cloneTemplate = (targetId) => {
 
 const colorMap = (color) => {
   const colors = {
-    Red: "red",
-    Yellow: "magenta",
-    Blue: "blue",
-    Green: "green",
-    Purple: "purple",
+    Red: "Red",
+    Yellow: "Magenta",
+    Blue: "Blue",
+    Green: "Green",
+    Purple: "Purple",
   };
 
   return colors[color];
@@ -120,7 +120,7 @@ const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
     deleteNodeBySelector(".highlight-station");
-    station.onclick = () => {};
+    station.onclick = () => { };
   });
 };
 
@@ -259,8 +259,8 @@ const createHighlighter = (className) => {
 
 const highlightPawn = (role) => {
   const pawn = document.querySelector(`#${role}`);
+  console.log("pawn", pawn);
   if (!pawn) return;
-
   pawn.classList.add("highlight-pawn");
 };
 
@@ -274,12 +274,25 @@ const showTurn = (currentRole, isYourTurn) => {
 const winningMessage = (winner) =>
   winner === "MrX" ? "Mr. X is the winner" : "Detectives are the winner";
 
-const renderGameOver = ({ winner }, id) => {
+const renderTravelLog = (travelLog, banner) => {
+  const container = banner.querySelector(".reveal-log");
+
+  const logs = travelLog.map(({ to, mode }) => {
+    const div = document.createElement("div");
+    div.classList.add("transport-log");
+    div.textContent = `${to}-${mode}`;
+    return div;
+  });
+
+  container.append(...logs);
+};
+
+const renderGameOver = ({ winner, travelLog }, id) => {
   clearInterval(id);
 
   const banner = cloneTemplate("#winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
-
+  renderTravelLog([{ to: 132, mode: "Taxi" }], banner);
   document.body.appendChild(banner);
 };
 
