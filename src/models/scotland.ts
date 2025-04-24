@@ -138,9 +138,13 @@ export class ScotlandYard {
     return [station, { to: station.to, mode: Transport.Ferry }];
   }
 
+  hasTwoXCard(): boolean {
+    const twoXCardsCount = this.tickets.get(this.currentRole)?.["2x"] || 0;
+    return twoXCardsCount > 0;
+  }
+
   hasBlackTickets(): boolean {
     const { Wild } = this.tickets.get(this.currentRole) || { Wild: 0 };
-
     return Wild > 0;
   }
 

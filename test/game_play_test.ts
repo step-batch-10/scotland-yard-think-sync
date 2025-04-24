@@ -4,8 +4,8 @@ import {
   createAppWithPlayers,
 } from "./game_setup_test.ts";
 import { assertEquals } from "assert/equals";
-import { mapToObject } from "../src/game_play.ts";
-import { Transport } from "../src/models/types.ts";
+import { addTwoXCard, mapToObject } from "../src/game_play.ts";
+import { Route, Transport } from "../src/models/types.ts";
 import { basicMap } from "../src/maps/game_map.ts";
 
 describe("serveMatchInfo", () => {
@@ -173,7 +173,7 @@ describe("mapToObject", () => {
 });
 
 describe("servePossibleStations", () => {
-  it("should return all the possible station based on the given station", async () => {
+  it("should return all the possible station with 2x card for mr.x", async () => {
     const allPlayers = ["a", "b", "c", "d", "e", "f"];
     const [host, ...players] = allPlayers;
 
@@ -185,10 +185,36 @@ describe("servePossibleStations", () => {
 
     const expected = [
       { to: 181, mode: Transport.Taxi },
+      { to: 181, mode: "2x" },
       { to: 181, mode: Transport.Ferry },
       { to: 181, mode: Transport.Bus },
       { to: 195, mode: Transport.Taxi },
+      { to: 195, mode: "2x" },
       { to: 195, mode: Transport.Ferry },
+    ];
+    const actual = await response.json();
+    assertEquals(actual, expected);
+  });
+
+  it("should return all the possible station without 2x remaining", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller);
+    await app.request("/game/move/160/ticket/Taxi", {
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+    });
+
+    const response = await app.request("/game/possible-stations", {
+      headers: { cookie: `playerId=b` },
+    });
+    const expected = [
+      { to: 172, mode: Transport.Taxi },
+      { to: 188, mode: Transport.Taxi },
+      { to: 159, mode: Transport.Bus },
     ];
     const actual = await response.json();
     assertEquals(actual, expected);
@@ -245,6 +271,16 @@ describe("broadCastMessage", () => {
 
     const actual = await response.json();
     const expected = { message: `MrX is skipped and nextPlayer is Red` };
+
+    assertEquals(actual, expected);
+  });
+});
+
+describe("add 2x card", () => {
+  it("should add the 2x card", () => {
+    const station: Route = { to: 1, mode: Transport.Bus };
+    const actual = addTwoXCard(station);
+    const expected = [station, { to: station.to, mode: "2x" }];
 
     assertEquals(actual, expected);
   });
