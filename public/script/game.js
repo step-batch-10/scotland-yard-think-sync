@@ -120,7 +120,7 @@ const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
     deleteNodeBySelector(".highlight-station");
-    station.onclick = () => {};
+    station.onclick = () => { };
   });
 };
 
@@ -287,7 +287,7 @@ const renderTravelLog = (travelLog, banner) => {
   container.append(...logs);
 };
 
-const renderGameOver = ({ winner, travelLog }, id) => {
+const renderGameOver = ({ winner }, id) => {
   clearInterval(id);
 
   const banner = cloneTemplate("#winner-banner");
