@@ -16,7 +16,7 @@ import {
 
 const randomNumber: RandomIndex = () => 1;
 
-const reverseObject = (obj: { [key: string]: any }) => {
+const reverseObject = <Type>(obj: { [key: string]: Type }) => {
   const reversedArray = Object.entries(obj).map(([k, v]) => [v, k]);
   return Object.fromEntries(reversedArray);
 };
@@ -37,7 +37,7 @@ export class ScotlandYard {
   constructor(
     players: string[],
     map: GameMap = basicMap,
-    totalTurns: number = 25,
+    totalTurns: number = 25
   ) {
     this.players = [...players];
     this.assignedRoles = new Map();
@@ -103,7 +103,7 @@ export class ScotlandYard {
   getDetectivePositions() {
     const playerIterator = this.currentStations.entries();
     const detectiveEntries = [...playerIterator].filter(
-      ([role]) => role !== "MrX",
+      ([role]) => role !== "MrX"
     );
 
     return detectiveEntries.map(([, position]) => position);

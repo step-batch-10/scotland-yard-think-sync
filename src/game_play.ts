@@ -1,11 +1,5 @@
 import { Hono } from "hono";
-import {
-  Bindings,
-  GameContext,
-  GameHandler,
-  Role,
-  Ticket,
-} from "./models/types.ts";
+import { Bindings, GameContext, GameHandler, Ticket } from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
 
