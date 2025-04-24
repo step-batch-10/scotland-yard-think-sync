@@ -10,10 +10,22 @@ const cloneTemplate = (targetId) => {
   return template.content.firstElementChild.cloneNode(true);
 };
 
+const colorMap = (color) => {
+  const colors = {
+    Red: "red",
+    Yellow: "magenta",
+    Blue: "blue",
+    Green: "green",
+    Purple: "purple",
+  };
+
+  return colors[color];
+};
+
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
 
-  cells[0].style.backgroundColor = role;
+  cells[0].style.backgroundColor = colorMap(role);
   cells[1].textContent = playerName;
   cells[2].textContent = tickets.Taxi;
   cells[3].textContent = tickets.Bus;
@@ -40,8 +52,18 @@ const mrXStats = (trElement, [role, playerName, tickets, station]) => {
 
 const renderMrXTransportLog = (transports) => {
   const log = document.querySelectorAll(".transport-modes-log .log");
+
   transports.forEach((transport, index) => {
-    log[index].textContent = transport;
+    const span = document.createElement("span");
+    span.textContent = `${index}`;
+
+    const icon = cloneTemplate(`#${transport}-icon`);
+    icon.style.height = getComputedStyle(log[index]).height;
+    icon.style.width = "5vw";
+    icon.style.marginLeft = "10px";
+
+    log[index].style.textAlign = "start";
+    log[index].replaceChildren(...[span, icon]);
   });
 };
 
@@ -98,7 +120,7 @@ const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
     deleteNodeBySelector(".highlight-station");
-    station.onclick = () => { };
+    station.onclick = () => {};
   });
 };
 
@@ -210,7 +232,7 @@ const makePawn = (color) => {
 const createPawn = (player) => {
   const position = player.at(-1);
   const stationId = generateStationId(position);
-  const color = player[0];
+  const color = colorMap(player[0]);
   const pawn = makePawn(color);
 
   return movePawnToStation(pawn, stationId, color);
@@ -262,7 +284,15 @@ const renderGameOver = ({ winner }, id) => {
 };
 
 const playGame = (data) => {
-  const { tickets, positions, roles, currentRole, isYourTurn, lastSeen, transport } = data;
+  const {
+    tickets,
+    positions,
+    roles,
+    currentRole,
+    isYourTurn,
+    lastSeen,
+    transport,
+  } = data;
 
   const stats = combineObjects(roles, tickets, positions);
   const detectivesStat = stats.filter((stat) => stat[3]);

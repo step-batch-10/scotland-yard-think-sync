@@ -105,8 +105,7 @@ th {
 
 .mrX-stats {
   position: fixed;
-
-  left: 64vw;
+  left: 66vw;
   top: 15vh;
 }
 
@@ -167,7 +166,6 @@ th {
 .cards-container {
   font-size: 18px;
 
-  background-color: rgba(0, 0, 0, 0.8);
   color: white;
   min-width: 85px;
 
@@ -204,12 +202,16 @@ th {
 }
 
 #close-btn {
-  height: 20px;
+  height: 22px;
+  box-sizing: border-box;
+  padding-left: 8px;
   color: red;
-  font-size: larger;
-  font-weight: 700;
 
-  background-color: transparent;
+  font-weight: 400;
+  border: 1px solid black;
+
+  text-align: left;
+  background-color: black;
 }
 
 g tspan {
@@ -249,8 +251,14 @@ g {
 
 .banner p {
   text-align: center;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family:
+    "Lucida Sans",
+    "Lucida Sans Regular",
+    "Lucida Grande",
+    "Lucida Sans Unicode",
+    Geneva,
+    Verdana,
+    sans-serif;
 }
 
 .box {
