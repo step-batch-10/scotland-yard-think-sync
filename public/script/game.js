@@ -51,7 +51,7 @@ const renderPlayerTickets = (stats, lastSeen) => {
   const tbody = playerStatTable.querySelector("tbody");
   const rows = tbody.children;
   const mrXStat = stats[0];
-  mrXStat[3] ||= lastSeen;
+  mrXStat[3] = lastSeen;
 
   renderMrxTickets(mrXStat);
 
