@@ -221,15 +221,16 @@ g {
 }
 
 .highlight-pawn {
-  animation: jump 0.8s ease infinite;
+  animation: jump 1.5s ease infinite;
 }
 
 @keyframes jump {
-  from {
-    transform: translateY(0px);
+  50% {
+    transform: translateY(-10px);
   }
-  to {
-    transform: translateY(-20px);
+
+  100% {
+    transform: translateY(0px);
   }
 }
 
@@ -248,8 +249,14 @@ g {
 
 .banner p {
   text-align: center;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family:
+    "Lucida Sans",
+    "Lucida Sans Regular",
+    "Lucida Grande",
+    "Lucida Sans Unicode",
+    Geneva,
+    Verdana,
+    sans-serif;
 }
 
 .box {
@@ -288,11 +295,15 @@ g {
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  animation: shrink 2s ease-in infinite alternate;
+  animation: shrink 1.5s ease-in infinite alternate;
 }
 
 @keyframes shrink {
-  to {
-    transform: scale(1.5);
+  50% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
   }
 }

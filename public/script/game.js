@@ -89,7 +89,7 @@ const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
     deleteNodeBySelector(".highlight-station");
-    station.onclick = () => { };
+    station.onclick = () => {};
   });
 };
 
