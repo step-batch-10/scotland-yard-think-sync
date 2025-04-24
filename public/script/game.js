@@ -46,12 +46,14 @@ const renderMrxTickets = (stats) => {
   mrXStats(row[0], stats);
 };
 
-const renderPlayerTickets = (stats) => {
+const renderPlayerTickets = (stats, lastSeen) => {
   const playerStatTable = document.querySelector(".player-stats");
   const tbody = playerStatTable.querySelector("tbody");
   const rows = tbody.children;
+  const mrXStat = stats[0];
+  mrXStat[3] ||= lastSeen;
 
-  renderMrxTickets(stats[0]);
+  renderMrxTickets(mrXStat);
 
   for (let index = 1; index < stats.length; index++) {
     playerStats(rows[index - 1], stats[index]);
@@ -252,14 +254,14 @@ const renderGameOver = ({ winner }, id) => {
   document.body.appendChild(banner);
 };
 
-const playGame = (
-  { tickets, positions, roles, currentRole, isYourTurn },
-) => {
+const playGame = (data) => {
+  const { tickets, positions, roles, currentRole, isYourTurn, lastSeen } = data;
+
   const stats = combineObjects(roles, tickets, positions);
   const detectivesStat = stats.filter((stat) => stat[3]);
 
-  renderPlayerTickets(stats);
   renderPawns(detectivesStat);
+  renderPlayerTickets(stats, lastSeen);
   showTurn(currentRole, isYourTurn);
 
   if (isYourTurn) displayTravelOptions();
