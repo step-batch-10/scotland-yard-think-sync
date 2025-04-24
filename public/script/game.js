@@ -71,10 +71,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -214,6 +214,7 @@ const createHighlighter = (className) => {
 
 const highlightPawn = (role) => {
   const pawn = document.querySelector(`#${role}`);
+  if (!pawn) return;
 
   const highlighter = createHighlighter("highlight");
   pawn.appendChild(highlighter);
@@ -240,9 +241,10 @@ const renderGameOver = ({ winner }, id) => {
 
 const playGame = ({ tickets, positions, roles, currentRole, isYourTurn }) => {
   const stats = combineObjects(roles, tickets, positions);
+  const detectivesStat = stats.filter((stat) => stat[3]);
 
   renderPlayerTickets(stats);
-  renderPawns(stats);
+  renderPawns(detectivesStat);
   showTurn(currentRole, isYourTurn);
 
   if (isYourTurn) showTickets();
@@ -257,6 +259,7 @@ const startPolling = () => {
     return playGame(data);
   }, 3000);
 };
+
 const playAudio = () => {
   const bgAudio = new Audio("/assets/audio/theme-song.mp3");
 
@@ -270,7 +273,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };

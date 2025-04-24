@@ -29,6 +29,12 @@ describe("combines objects", () => {
   });
 
   it("should return empty array if no param passed", () => {
-    assertEquals(combineObjects(), []);
+    const param1 = { b: 7, a: 12 };
+    const param2 = { a: 5, b: 8 };
+
+    assertEquals(combineObjects(param1, param2), [
+      ["b", 7, 8],
+      ["a", 12, 5],
+    ]);
   });
 });
