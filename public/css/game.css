@@ -248,14 +248,8 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
@@ -288,20 +282,17 @@ g {
 }
 
 .highlight-station {
-  border: 2px dashed black;
+  border: 2px solid black;
   width: 40px;
   height: 40px;
   position: absolute;
   border-radius: 50%;
   pointer-events: none;
-  animation: rotate 2s linear infinite;
+  animation: shrink 2s ease-in infinite alternate;
 }
 
-@keyframes rotate {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
+@keyframes shrink {
+  to {
+    transform: scale(1.5);
   }
 }
