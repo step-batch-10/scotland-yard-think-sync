@@ -250,7 +250,9 @@ const renderGameOver = ({ winner }, id) => {
   document.body.appendChild(banner);
 };
 
-const playGame = ({ tickets, positions, roles, currentRole, isYourTurn }) => {
+const playGame = (
+  { tickets, positions, roles, currentRole, isYourTurn },
+) => {
   const stats = combineObjects(roles, tickets, positions);
   const detectivesStat = stats.filter((stat) => stat[3]);
 

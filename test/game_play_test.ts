@@ -157,6 +157,7 @@ describe("gameState", () => {
       Green: 128,
       Yellow: 185,
       Purple: 198,
+      MrX: null,
     };
 
     assertEquals(actual.positions, expected);

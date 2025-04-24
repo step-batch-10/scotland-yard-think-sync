@@ -33,7 +33,7 @@ export type Roles = {
 };
 
 export type Positions = {
-  [key in Role]?: number;
+  [key in Role]?: number | null;
 };
 
 export type AssignedRoles = Map<Role, string>;

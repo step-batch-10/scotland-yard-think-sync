@@ -205,6 +205,7 @@ describe("game state", () => {
       Green: 5,
       Yellow: 6,
       Purple: 1,
+      MrX: null,
     };
     const { positions } = game.getGameState(Role.Purple);
 
@@ -244,6 +245,7 @@ describe("game state", () => {
       Purple: 198,
       Red: 187,
       Yellow: 185,
+      MrX: null,
     };
 
     assertEquals(positions, expected);
@@ -266,6 +268,38 @@ describe("game state", () => {
     };
 
     assertEquals(positions, expected);
+  });
+
+  it("should reveal mrX's location in a reveal second turn", () => {
+    const players = ["a", "b", "c", "d", "e", "f"];
+    const game = new ScotlandYard(players, basicMap, 2, [2, 3]);
+
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    game.useTicket(Ticket.Yellow, 181);
+    game.useTicket(Ticket.Yellow, 182);
+    game.useTicket(Ticket.Yellow, 183);
+    game.useTicket(Ticket.Yellow, 184);
+    game.useTicket(Ticket.Red, 185);
+    game.useTicket(Ticket.Yellow, 186);
+
+    game.useTicket(Ticket.Yellow, 100);
+
+    const { positions, lastSeen } = game.getGameState("b");
+
+    const expected = {
+      MrX: 100,
+      Red: 182,
+      Blue: 183,
+      Green: 184,
+      Yellow: 185,
+      Purple: 186,
+    };
+
+    assertEquals(positions, expected);
+    assertEquals(lastSeen, 100);
   });
 });
 
@@ -528,27 +562,28 @@ const makeGame = (map: GameMap = basicMap, round = 25) => {
 
   return game;
 };
+
 describe("useTicket", () => {
-  // it("using a valid ticket and destination should change the turn", () => {
-  //   const game = makeGame(basicMap);
+  it("using a valid ticket and destination should change the turn", () => {
+    const game = makeGame(basicMap);
 
-  //   assert(game.useTicket(Ticket.Yellow, 181));
-  //   const expected = {
-  //     MrX: 181,
-  //     Red: 183,
-  //     Blue: 184,
-  //     Green: 185,
-  //     Yellow: 186,
-  //     Purple: 187,
-  //   };
+    assert(game.useTicket(Ticket.Yellow, 181));
+    const expected = {
+      MrX: 181,
+      Red: 183,
+      Blue: 184,
+      Green: 185,
+      Yellow: 186,
+      Purple: 187,
+    };
 
-  //   const positions = game.getCurrentPosition();
-  //   const gameState = game.getGameState();
+    const positions = game.getCurrentPosition();
+    const gameState = game.getGameState("1");
 
-  //   assertEquals(mapToObject(positions), expected);
-  //   assertEquals(gameState.currentRole, "Red");
-  //   assertEquals(gameState.tickets.MrX.Taxi, 3);
-  // });
+    assertEquals(mapToObject(positions), expected);
+    assertEquals(gameState.currentRole, "Red");
+    assertEquals(gameState.tickets.MrX.Taxi, 3);
+  });
 
   it("should reject move when ticket type does not match route", () => {
     const game = makeGame(basicMap);

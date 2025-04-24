@@ -6,6 +6,7 @@ interface MatchStatus {
   winner: null | string;
   isGameFinished: boolean;
 }
+
 export class Match {
   private matches: Map<string, MatchStatus>;
   constructor() {
@@ -13,7 +14,7 @@ export class Match {
   }
 
   private defaultMatchFormat(players: string[], map?: GameMap) {
-    const game = new ScotlandYard(players, map, 1);
+    const game = new ScotlandYard(players, map, 5);
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();

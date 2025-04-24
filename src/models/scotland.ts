@@ -21,6 +21,8 @@ const reverseObject = <Type>(obj: { [key: string]: Type }) => {
   return Object.fromEntries(reversedArray);
 };
 
+const turns = [2, 8, 13, 18, 24];
+
 export class ScotlandYard {
   private readonly players: string[];
   private readonly roles: Role[];
@@ -33,11 +35,15 @@ export class ScotlandYard {
   private winner: Winner;
   private turnCount: number;
   private totalTurns: number;
+  private revealingTurns: Set<number>;
+  private lastSeen: number | null;
+  private turn: number;
 
   constructor(
     players: string[],
     map: GameMap = basicMap,
     totalTurns: number = 25,
+    revealingTurns = turns,
   ) {
     this.players = [...players];
     this.assignedRoles = new Map();
@@ -48,6 +54,9 @@ export class ScotlandYard {
     this.winner = null;
     this.turnCount = 0;
     this.totalTurns = totalTurns;
+    this.revealingTurns = new Set(revealingTurns);
+    this.lastSeen = null;
+    this.turn = 0;
 
     this.roles = [
       Role.MrX,
@@ -187,6 +196,11 @@ export class ScotlandYard {
     mrXTickets[mode] += 1;
   }
 
+  private updateTurn() {
+    if (this.currentRole !== Role.MrX) return;
+    this.turn += 1;
+  }
+
   useTicket(mode: Ticket, destination: number): boolean {
     if (!this.isPossibleStation(mode, destination)) return false;
 
@@ -195,8 +209,13 @@ export class ScotlandYard {
 
     this.movePlayer(destination);
     this.fuelMrX(tickets, mode);
+    this.updateTurn();
     this.changeTurn();
     this.declareWinner();
+
+    if (this.shouldReveal()) {
+      this.updateLastSeen();
+    }
 
     return true;
   }
@@ -209,12 +228,16 @@ export class ScotlandYard {
       currentRole: this.currentRole,
       isGameOver: this.isGameOver(),
       winner: this.getWinner(),
+      lastSeen: this.lastSeen,
     };
   }
 
   private detectivesView() {
-    const positions = mapToObject(this.currentStations);
-    delete positions["MrX"];
+    const positions = mapToObject(this.currentStations) as Positions;
+
+    if (positions[Role.MrX]) {
+      positions[Role.MrX] = null;
+    }
 
     return this.view(positions);
   }
@@ -233,9 +256,18 @@ export class ScotlandYard {
     return reversed[player] as Role;
   }
 
+  private shouldReveal() {
+    return this.revealingTurns.has(this.turn);
+  }
+
+  private updateLastSeen() {
+    this.lastSeen = this.currentStations.get(Role.MrX) as number;
+  }
+
   getGameState(player: string) {
     const role = this.findRole(player) as Role;
-    if (role === Role.MrX) {
+
+    if (role === Role.MrX || this.shouldReveal()) {
       return this.mrXView();
     }
 
