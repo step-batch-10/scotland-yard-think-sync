@@ -38,6 +38,13 @@ const mrXStats = (trElement, [role, playerName, tickets, station]) => {
   return trElement;
 };
 
+const renderMrXTransportLog = (transports) => {
+  const log = document.querySelectorAll(".transport-modes-log .log");
+  transports.forEach((transport, index) => {
+    log[index].textContent = transport;
+  });
+};
+
 const renderMrxTickets = (stats) => {
   const mrXStatTable = document.querySelector(".mrX-stats table");
   const tbody = mrXStatTable.querySelector("tbody");
@@ -91,7 +98,7 @@ const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
     deleteNodeBySelector(".highlight-station");
-    station.onclick = () => {};
+    station.onclick = () => { };
   });
 };
 
@@ -255,7 +262,7 @@ const renderGameOver = ({ winner }, id) => {
 };
 
 const playGame = (data) => {
-  const { tickets, positions, roles, currentRole, isYourTurn, lastSeen } = data;
+  const { tickets, positions, roles, currentRole, isYourTurn, lastSeen, transport } = data;
 
   const stats = combineObjects(roles, tickets, positions);
   const detectivesStat = stats.filter((stat) => stat[3]);
@@ -263,6 +270,7 @@ const playGame = (data) => {
   renderPawns(detectivesStat);
   renderPlayerTickets(stats, lastSeen);
   showTurn(currentRole, isYourTurn);
+  renderMrXTransportLog(transport);
 
   if (isYourTurn) displayTravelOptions();
 };
