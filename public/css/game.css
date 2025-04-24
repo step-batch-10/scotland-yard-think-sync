@@ -224,10 +224,20 @@ g {
   width: 60px;
   aspect-ratio: 1;
   position: absolute;
-  transform: translate(-30%, -80%);
   border-radius: 50%;
   border: 5px solid black;
   opacity: 0.7;
+
+  animation: shrink 1s 0s infinite;
+}
+
+@keyframes shrink {
+  0% {
+    transform: scale(1) translate(-30%, -90%);
+  }
+  100% {
+    transform: scale(1.2) translate(-20%, -70%);
+  }
 }
 
 .banner {
@@ -245,14 +255,8 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
