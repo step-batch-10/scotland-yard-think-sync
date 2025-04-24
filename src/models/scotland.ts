@@ -23,6 +23,11 @@ const reverseObject = <Type>(obj: { [key: string]: Type }) => {
 
 const turns = [2, 8, 13, 18, 24];
 
+export interface Log {
+  to: number;
+  mode: Ticket;
+}
+
 export class ScotlandYard {
   private readonly players: string[];
   private readonly roles: Role[];
@@ -38,6 +43,7 @@ export class ScotlandYard {
   private revealingTurns: Set<number>;
   private lastSeen: number | null;
   private turn: number;
+  private mrXHistory: Log[];
 
   constructor(
     players: string[],
@@ -57,6 +63,7 @@ export class ScotlandYard {
     this.revealingTurns = new Set(revealingTurns);
     this.lastSeen = null;
     this.turn = 0;
+    this.mrXHistory = [];
 
     this.roles = [
       Role.MrX,
@@ -102,7 +109,7 @@ export class ScotlandYard {
     }
   }
 
-  changeTurn() {
+  changePlayer() {
     const nextPlayerIndex = (this.roles.indexOf(this.currentRole) + 1) % 6;
     this.currentRole = this.roles[nextPlayerIndex];
 
@@ -216,26 +223,33 @@ export class ScotlandYard {
     this.turn += 1;
   }
 
+  updateLog(to: number, mode: Ticket) {
+    if (!this.isMrXTurn()) return;
+
+    this.mrXHistory.push({ to, mode });
+  }
+
   useTicket(mode: Ticket, destination: number): boolean {
     if (!this.isPossibleStation(mode, destination)) return false;
 
     const tickets = this.tickets.get(this.currentRole);
     if (!tickets || !tickets[mode]) return false;
 
+    this.updateLog(destination, mode);
     this.movePlayer(destination);
     this.fuelMrX(tickets, mode);
-    this.updateTurn();
-    this.changeTurn();
-    this.declareWinner();
 
-    if (this.shouldReveal()) {
-      this.updateLastSeen();
-    }
+    this.updateTurn();
+    this.changePlayer();
+    this.declareWinner();
+    this.updateLastSeen();
 
     return true;
   }
 
   private view(positions: Positions) {
+    const transport = this.mrXHistory.map((log) => log.mode);
+
     return {
       tickets: mapToObject<Tickets>(this.tickets),
       roles: mapToObject<string>(this.assignedRoles),
@@ -244,6 +258,7 @@ export class ScotlandYard {
       isGameOver: this.isGameOver(),
       winner: this.getWinner(),
       lastSeen: this.lastSeen,
+      transport,
     };
   }
 
@@ -276,6 +291,7 @@ export class ScotlandYard {
   }
 
   private updateLastSeen() {
+    if (!this.shouldReveal()) return;
     this.lastSeen = this.currentStations.get(Role.MrX) as number;
   }
 

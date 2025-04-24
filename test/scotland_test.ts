@@ -310,7 +310,7 @@ describe("change turn", () => {
     sy.assignRole();
     sy.distributeTickets();
     sy.assignStartingPositions();
-    const nextPlayer = sy.changeTurn();
+    const nextPlayer = sy.changePlayer();
 
     assertEquals(nextPlayer, "Red");
   });
@@ -320,13 +320,13 @@ describe("change turn", () => {
     sy.assignRole();
     sy.distributeTickets();
     sy.assignStartingPositions();
-    sy.changeTurn();
-    sy.changeTurn();
-    sy.changeTurn();
-    sy.changeTurn();
-    sy.changeTurn();
+    sy.changePlayer();
+    sy.changePlayer();
+    sy.changePlayer();
+    sy.changePlayer();
+    sy.changePlayer();
 
-    const nextPlayer = sy.changeTurn();
+    const nextPlayer = sy.changePlayer();
 
     assertEquals(nextPlayer, "MrX");
   });
@@ -494,7 +494,7 @@ describe("isMrXTurn", () => {
     game.distributeTickets();
     game.assignStartingPositions();
     assert(game.isMrXTurn());
-    game.changeTurn();
+    game.changePlayer();
 
     assertFalse(game.isMrXTurn());
   });
@@ -625,7 +625,7 @@ describe("useTicket", () => {
     };
 
     const game = makeGame(fakeMap);
-    game.changeTurn();
+    game.changePlayer();
 
     assertFalse(game.useTicket(Ticket.Black, 2));
   });
@@ -871,7 +871,33 @@ describe("has black Tickets", () => {
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();
-    game.changeTurn();
+    game.changePlayer();
     assertFalse(game.hasBlackTickets());
+  });
+});
+
+describe("should save travel history", () => {
+  it("should update Mrx's travel log if i am Mr.X", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+    game.useTicket(Ticket.Yellow, 181);
+
+    const { transport } = game.getGameState("1");
+
+    assertEquals(transport, [Ticket.Yellow]);
+  });
+
+  it("should update Mrx's travel log even if i am detective", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+    game.useTicket(Ticket.Green, 181);
+
+    const { transport } = game.getGameState("1");
+
+    assertEquals(transport, [Ticket.Green]);
   });
 });
