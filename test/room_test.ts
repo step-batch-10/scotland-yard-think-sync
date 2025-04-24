@@ -1,7 +1,7 @@
 import { assert, assertEquals, assertFalse } from "assert";
 import { beforeEach, describe, it } from "testing";
 import { Rooms } from "../src/models/rooms.ts";
-import { Match } from "../src/models/match.ts";
+import { GameController } from "../src/models/game_controller.ts";
 
 describe("Rooms", () => {
   let rooms: Rooms;
@@ -88,14 +88,14 @@ describe("Rooms", () => {
       rooms.addPlayer(roomId, "e");
       rooms.addPlayer(roomId, "f");
 
-      const match = new Match();
+      const match = new GameController();
 
       assert(rooms.assignGame(roomId, match));
       assert(match.hasMatch(roomId));
     });
 
     it("should not assign game if there roomId is invalid", () => {
-      const match = new Match();
+      const match = new GameController();
 
       assertFalse(rooms.assignGame("123456", match));
       assertFalse(match.hasMatch("123456"));
@@ -108,7 +108,7 @@ describe("Rooms", () => {
       rooms.addPlayer(roomId, "e");
       rooms.addPlayer(roomId, "f");
 
-      const match = new Match();
+      const match = new GameController();
 
       assert(rooms.assignGame(roomId, match));
       assert(match.hasMatch(roomId));

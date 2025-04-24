@@ -1,10 +1,10 @@
 import { assert, assertEquals, assertFalse } from "assert";
 import { describe, it } from "testing";
-import { Match } from "../src/models/match.ts";
+import { GameController } from "../src/models/game_controller.ts";
 
 describe("getMatch", () => {
   it("should return the match status if match is present", () => {
-    const match = new Match();
+    const match = new GameController();
     const roomId = "123456";
     const players = new Set([
       "ramulal",
@@ -24,7 +24,7 @@ describe("getMatch", () => {
   });
 
   it("should return the null if match is not present", () => {
-    const match = new Match();
+    const match = new GameController();
     const roomId = "123456";
 
     const addedMatch = match.getMatch(roomId);
@@ -35,7 +35,7 @@ describe("getMatch", () => {
 
 describe("hasMatch", () => {
   it("should return true if match is present", () => {
-    const match = new Match();
+    const match = new GameController();
     const roomId = "123456";
     const players = new Set([
       "ramulal",
@@ -51,7 +51,7 @@ describe("hasMatch", () => {
   });
 
   it("should return false if match is not present", () => {
-    const match = new Match();
+    const match = new GameController();
     const roomId = "123456";
 
     assertFalse(match.hasMatch(roomId));
@@ -60,7 +60,7 @@ describe("hasMatch", () => {
 
 describe("removeMatch", () => {
   it("should return true if match is deleted", () => {
-    const match = new Match();
+    const match = new GameController();
     const roomId = "123456";
     const players = new Set([
       "ramulal",
@@ -76,7 +76,7 @@ describe("removeMatch", () => {
   });
 
   it("should return false if match is not present or can't be deleted", () => {
-    const match = new Match();
+    const match = new GameController();
     const roomId = "123456";
 
     assertFalse(match.removeMatch(roomId));

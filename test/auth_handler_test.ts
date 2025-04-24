@@ -4,7 +4,7 @@ import { assert, assertEquals } from "jsr:@std/assert";
 import { Bindings } from "../src/models/types.ts";
 import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
-import { Match } from "../src/models/match.ts";
+import { GameController } from "../src/models/game_controller.ts";
 import { createAppWithPlayers } from "./game_setup_test.ts";
 
 describe("login handler", () => {
@@ -12,7 +12,7 @@ describe("login handler", () => {
     const bindings: Bindings = {
       playerRegistry: new PlayerRegistry(),
       rooms: new Rooms(),
-      match: new Match(),
+      controller: new GameController(),
     };
 
     const formData = new FormData();

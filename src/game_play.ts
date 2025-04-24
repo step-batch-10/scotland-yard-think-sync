@@ -13,7 +13,8 @@ export function mapToObject<T>(map?: Map<string, T>) {
 const extractMatchAndPlayerId = (context: GameContext) => {
   const playerId = extractPlayerId(context);
   const { roomId = "" } = context.env.playerRegistry.getPlayerStats(playerId);
-  const match = context.env.match.getMatch(roomId);
+  const match = context.env.controller.getMatch(roomId);
+
   return { match, playerId, roomId };
 };
 

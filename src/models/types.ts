@@ -2,7 +2,7 @@ import { Context, Hono } from "hono";
 import { PlayerRegistry } from "./players.ts";
 import { Handler, MiddlewareHandler } from "hono/types";
 import { Rooms } from "./rooms.ts";
-import { Match } from "./match.ts";
+import { GameController } from "./game_controller.ts";
 
 export enum Role {
   Red = "Red",
@@ -50,7 +50,7 @@ export interface PlayerStats {
 export type Bindings = {
   playerRegistry: PlayerRegistry;
   rooms: Rooms;
-  match: Match;
+  controller: GameController;
 };
 
 export type GameContext = Context<{ Bindings: Bindings }>;

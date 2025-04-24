@@ -7,7 +7,7 @@ interface MatchStatus {
   isGameFinished: boolean;
 }
 
-export class Match {
+export class GameController {
   private matches: Map<string, MatchStatus>;
   constructor() {
     this.matches = new Map();

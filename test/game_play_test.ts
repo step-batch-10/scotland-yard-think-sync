@@ -21,7 +21,7 @@ describe("serveMatchInfo", () => {
       },
     };
 
-    bindings.rooms.assignGame(roomId, bindings.match, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
     const response = await app.request("/game/info", header);
 
     const actual = await response.json();
@@ -68,7 +68,7 @@ describe("gameState", () => {
 
     const header = { headers: { cookie: `playerId=${host}` } };
 
-    bindings.rooms.assignGame(roomId, bindings.match, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
     const response = await app.request("/game/state", header);
 
     const actual = await response.json();
@@ -117,7 +117,7 @@ describe("gameState", () => {
       },
     };
 
-    bindings.match.setMatch(roomId, new Set(allPlayers));
+    bindings.controller.setMatch(roomId, new Set(allPlayers));
 
     const response = await app.request("/game/state", header);
 
@@ -146,7 +146,7 @@ describe("gameState", () => {
       },
     };
 
-    bindings.match.setMatch(roomId, new Set(allPlayers));
+    bindings.controller.setMatch(roomId, new Set(allPlayers));
 
     const response = await app.request("/game/state", header);
 
@@ -184,7 +184,7 @@ describe("servePossibleStations", () => {
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.match, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
     const response = await app.request("/game/possible-stations", {
       headers: { cookie: `playerId=${host}` },
     });
@@ -207,7 +207,7 @@ describe("handleMovement", () => {
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.match, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
 
     const response = await app.request("/game/move/181/ticket/Taxi", {
       headers: { cookie: `playerId=${host}` },
@@ -224,7 +224,7 @@ describe("handleMovement", () => {
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.match, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
 
     const response = await app.request("/game/move/ /ticket/Metro", {
       headers: { cookie: `playerId=${host}` },

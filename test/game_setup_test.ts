@@ -4,7 +4,7 @@ import { assert, assertEquals, assertFalse } from "jsr:@std/assert";
 import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
 import { App, Bindings } from "../src/models/types.ts";
-import { Match } from "../src/models/match.ts";
+import { GameController } from "../src/models/game_controller.ts";
 
 interface TestApp {
   (host: string, ...players: string[]): {
@@ -18,7 +18,7 @@ export const createAppWithPlayers = (...players: string[]): App => {
   const bindings: Bindings = {
     playerRegistry: new PlayerRegistry(),
     rooms: new Rooms(),
-    match: new Match(),
+    controller: new GameController(),
   };
 
   for (const player of players) {
@@ -32,7 +32,7 @@ export const createAppWithHostedRoom: TestApp = (host, ...players) => {
   const bindings: Bindings = {
     playerRegistry: new PlayerRegistry(),
     rooms: new Rooms(),
-    match: new Match(),
+    controller: new GameController(),
   };
 
   bindings.playerRegistry.createPlayer(host);
@@ -230,7 +230,7 @@ describe("servePlayerList", () => {
       headers: { cookie: `playerId=${playerName}` },
     });
 
-    assert(bindings.match.hasMatch(roomId));
+    assert(bindings.controller.hasMatch(roomId));
   });
 
   it("should not assign game if room is not full", async () => {
@@ -245,7 +245,7 @@ describe("servePlayerList", () => {
       headers: { cookie: `playerId=${playerName}` },
     });
 
-    assertFalse(bindings.match.hasMatch(roomId));
+    assertFalse(bindings.controller.hasMatch(roomId));
   });
 
   it("should not assign a game if the room already has one.", async () => {
@@ -260,8 +260,8 @@ describe("servePlayerList", () => {
       headers: { cookie: `playerId=${playerName}` },
     });
 
-    assert(bindings.match.hasMatch(roomId));
-    assertFalse(bindings.rooms.assignGame(roomId, bindings.match));
+    assert(bindings.controller.hasMatch(roomId));
+    assertFalse(bindings.rooms.assignGame(roomId, bindings.controller));
   });
 });
 
