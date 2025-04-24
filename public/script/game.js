@@ -58,10 +58,10 @@ const renderPlayerTickets = (stats) => {
   }
 };
 
-const addCoordinate = (pawn, station) => {
+const addCoordinate = (element, station, offSetX = 0, offSetY = 0) => {
   const [x, y] = getDimensions(station);
-  pawn.style.left = `${x}px`;
-  pawn.style.top = `${y - 45}px`;
+  element.style.left = `${x + offSetX}px`;
+  element.style.top = `${y + offSetY}px`;
 };
 
 const alignCard = (cardsContainer, [x, y]) => {
@@ -88,8 +88,8 @@ const removeContainer = (e) => e.target.parentNode.remove();
 const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
-    station.classList.remove("highlight-station");
-    station.onclick = () => {};
+    deleteNodeBySelector(".highlight-station");
+    station.onclick = () => { };
   });
 };
 
@@ -143,15 +143,27 @@ const pairTicketToStation = (map) => {
   return Object.entries(pair);
 };
 
+const deleteNodeBySelector = (selector) => {
+  const nodes = document.querySelectorAll(selector);
+  if (nodes) {
+    nodes.forEach((node) => {
+      document.body.removeChild(node);
+    });
+  }
+};
+
 const highLightDestinations = (stations) => {
+  deleteNodeBySelector(".highlight-station");
+
   stations.forEach(({ to }) => {
     const station = document.getElementById(`station-${to}`);
-
-    station.classList.add("highlight-station");
+    const highlighter = createHighlighter("highlight-station");
+    addCoordinate(highlighter, station, -8, -6);
+    document.body.appendChild(highlighter);
   });
 };
 
-const showTickets = async () => {
+const displayTravelOptions = async () => {
   const possibleStation = await fetchPossibleStations();
   highLightDestinations(possibleStation);
   const pairs = pairTicketToStation(possibleStation);
@@ -167,7 +179,7 @@ const generateStationId = (station) => `#station-${station}`;
 const movePawnToStation = (pawn, stationId) => {
   const tspan = document.querySelector(stationId);
 
-  addCoordinate(pawn, tspan);
+  addCoordinate(pawn, tspan, 0, -45);
 
   return pawn;
 };
@@ -216,8 +228,7 @@ const highlightPawn = (role) => {
   const pawn = document.querySelector(`#${role}`);
   if (!pawn) return;
 
-  const highlighter = createHighlighter("highlight");
-  pawn.appendChild(highlighter);
+  pawn.classList.add("highlight-pawn");
 };
 
 const showTurn = (currentRole, isYourTurn) => {
@@ -247,7 +258,7 @@ const playGame = ({ tickets, positions, roles, currentRole, isYourTurn }) => {
   renderPawns(detectivesStat);
   showTurn(currentRole, isYourTurn);
 
-  if (isYourTurn) showTickets();
+  if (isYourTurn) displayTravelOptions();
 };
 
 const startPolling = () => {
