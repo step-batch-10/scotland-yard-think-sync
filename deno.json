@@ -1,6 +1,7 @@
 {
   "imports": {
     "assert": "jsr:@std/assert@^1.0.12",
+    "lodash": "npm:lodash@^4.17.21",
     "testing": "jsr:@std/testing/bdd",
     "hono": "npm:hono@^4.7.5"
   },

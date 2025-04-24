@@ -127,10 +127,25 @@ export class ScotlandYard {
     return availableRoutes.filter(({ to }) => !detectivesPos.includes(to));
   };
 
+  private static addExtraTickets(station: Route): Route[] {
+    return [station, { to: station.to, mode: Transport.Ferry }];
+  }
+
+  hasBlackTickets(): boolean {
+    const { Wild } = this.tickets.get(this.currentRole) || { Wild: 0 };
+
+    return Wild > 0;
+  }
+
   possibleStations(): Route[] {
     const station = this.currentStations.get(this.currentRole) || 0;
+    const feasibleRoutes = this.validRoutes(station);
 
-    return this.validRoutes(station);
+    if (this.hasBlackTickets()) {
+      return feasibleRoutes.flatMap(ScotlandYard.addExtraTickets);
+    }
+
+    return feasibleRoutes;
   }
 
   isMrXCaught() {

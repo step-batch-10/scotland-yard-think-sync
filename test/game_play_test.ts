@@ -191,11 +191,12 @@ describe("servePossibleStations", () => {
 
     const expected = [
       { to: 181, mode: Transport.Taxi },
+      { to: 181, mode: Transport.Ferry },
       { to: 181, mode: Transport.Bus },
       { to: 195, mode: Transport.Taxi },
+      { to: 195, mode: Transport.Ferry },
     ];
     const actual = await response.json();
-
     assertEquals(actual, expected);
   });
 });

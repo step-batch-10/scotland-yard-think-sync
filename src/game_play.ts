@@ -2,6 +2,7 @@ import { Hono } from "hono";
 import { Bindings, GameContext, GameHandler, Ticket } from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
+import _ from "lodash";
 
 export function mapToObject<T>(map?: Map<string, T>) {
   if (!map) return {};
@@ -50,7 +51,7 @@ const servePossibleStations: GameHandler = (context: GameContext) => {
   const { match } = extractMatchAndPlayerId(context);
   const nearbyStations = match?.game.possibleStations();
 
-  return context.json(nearbyStations);
+  return context.json(_.uniqWith(nearbyStations, _.isEqual));
 };
 
 const handleMovement: GameHandler = (context: GameContext) => {

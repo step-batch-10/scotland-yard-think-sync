@@ -111,8 +111,9 @@ const ticketSelection = (to, elements, pairs) => (e) => {
 
 const createCard = ({ to, mode }) => {
   const card = document.createElement("div");
-  card.id = mode;
-  card.textContent = mode;
+  const ticketType = mode === "Ferry" ? "Wild" : mode;
+  card.id = ticketType;
+  card.textContent = ticketType;
 
   return { clonedCard: card, to };
 };
@@ -138,9 +139,10 @@ const renderTickets = (options, pairs) => (e) => {
   document.body.appendChild(cardsContainer);
 };
 
-const pairTicketToStation = (map) => {
-  const pair = Object.groupBy(map, ({ to }) => to);
-  return Object.entries(pair);
+const pairTicketToStation = (availableRoutes) => {
+  const groupedRoutes = Object.groupBy(availableRoutes, ({ to }) => to);
+
+  return Object.entries(groupedRoutes);
 };
 
 const deleteNodeBySelector = (selector) => {
