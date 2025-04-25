@@ -55,7 +55,7 @@ export class ScotlandYard {
     players: string[],
     map: GameMap = basicMap,
     totalTurns: number = 25,
-    revealingTurns = turns,
+    revealingTurns = turns
   ) {
     this.players = [...players];
     this.assignedRoles = new Map();
@@ -127,7 +127,7 @@ export class ScotlandYard {
   getDetectivePositions() {
     const playerIterator = this.currentStations.entries();
     const detectiveEntries = [...playerIterator].filter(
-      ([role]) => role !== "MrX",
+      ([role]) => role !== "MrX"
     );
 
     return detectiveEntries.map(([, position]) => position);
@@ -341,11 +341,10 @@ export class ScotlandYard {
   }
 
   enable2X(): boolean {
-    this.isUsing2X = this.hasTwoXCard() && !this.isUsing2X;
+    if (this.isUsing2X || !this.hasTwoXCard()) return false;
 
-    if (this.isUsing2X) this.reduceTickets(Role.MrX, Ticket["2x"]);
-
-    return this.isUsing2X;
+    this.reduceTickets(Role.MrX, Ticket["2x"]);
+    return (this.isUsing2X = true);
   }
 
   getGameState(player: string) {

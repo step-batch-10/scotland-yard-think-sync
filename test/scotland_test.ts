@@ -976,6 +976,18 @@ describe("use 2X ticket", () => {
 
     assertEquals(actual, expected);
   });
+
+  it("should not enable 2x mode even if tried twice", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    game.enable2X();
+    game.enable2X();
+
+    assertFalse(game.enable2X());
+  });
 });
 
 describe("can accept 2x", () => {
