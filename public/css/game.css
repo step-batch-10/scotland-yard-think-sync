@@ -166,7 +166,8 @@ th {
 .cards-container {
   color: white;
   min-width: 85px;
-  background-color: rgba(0, 0, 0, 0.2);
+  background-color: white;
+  z-index: 999;
 
   *:hover {
     cursor: pointer;
@@ -183,8 +184,7 @@ th {
 
 .card div {
   &:hover {
-    background-color: rgba(0, 0, 0, 0.4);
-    color: black;
+    transform: scale(1.5);
   }
 }
 
