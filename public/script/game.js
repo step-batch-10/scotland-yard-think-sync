@@ -298,11 +298,11 @@ const renderGameOver = ({ winner }, id) => {
   document.body.appendChild(banner);
 };
 
-const render2XTicket = ({ MrX }) => {
-  const twoX = MrX["2x"];
-  if (!twoX) return;
+const render2XTicket = ({ MrX }, currentRole, isYourTurn) => {
+  const enableButton = document.querySelector("#two-x");
+  const shouldEnable = currentRole === "MrX" && isYourTurn && MrX["2x"];
 
-  document.querySelector("#two-x").style.display = "block";
+  enableButton.style.display = shouldEnable ? "block" : "none";
 };
 
 const playGame = (data) => {
@@ -324,7 +324,7 @@ const playGame = (data) => {
   showTurn(currentRole, isYourTurn);
   renderMrXTransportLog(transport);
 
-  if (currentRole === "MrX" && isYourTurn) render2XTicket(tickets);
+  render2XTicket(tickets, currentRole, isYourTurn);
 
   if (isYourTurn) displayTravelOptions();
 };
@@ -367,6 +367,7 @@ const enable2X = async () => {
 const main = () => {
   playAudio();
   startPolling();
+
   document.querySelector("#two-x").onclick = enable2X;
 };
 
