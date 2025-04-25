@@ -10,22 +10,23 @@ const cloneTemplate = (targetId) => {
   return template.content.firstElementChild.cloneNode(true);
 };
 
-const colorMap = (color) => {
-  const colors = {
-    Red: "red",
-    Yellow: "magenta",
-    Blue: "blue",
-    Green: "green",
-    Purple: "purple",
+const mapRoleToColor = (role) => {
+  const tokenColors = {
+    Red: "Red",
+    Yellow: "Magenta",
+    Blue: "Blue",
+    Green: "Green",
+    Purple: "Purple",
+    MrX: "Black",
   };
 
-  return colors[color];
+  return tokenColors[role];
 };
 
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
 
-  cells[0].style.backgroundColor = colorMap(role);
+  cells[0].style.backgroundColor = mapRoleToColor(role);
   cells[1].textContent = playerName;
   cells[2].textContent = tickets.Taxi;
   cells[3].textContent = tickets.Bus;
@@ -97,7 +98,7 @@ const addCoordinate = (element, station, offSetX = 0, offSetY = 0) => {
 
 const alignCard = (cardsContainer, [x, y]) => {
   cardsContainer.style.position = "absolute";
-  cardsContainer.style.left = `${x}px`;
+  cardsContainer.style.left = `${x - 24}px`;
   cardsContainer.style.top = `${y - 54}px`;
 };
 
@@ -114,7 +115,7 @@ const getDimensions = (element) => {
   return [absoluteX, absoluteY];
 };
 
-const removeContainer = (e) => e.target.parentNode.remove();
+const removeContainer = (e) => e.target.parentNode.parentNode.remove();
 
 const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
@@ -130,7 +131,8 @@ const removeAllContainers = () => {
 };
 
 const ticketSelection = (to, elements, pairs) => (e) => {
-  const type = e.target.id;
+  const element = e.target.closest("svg");
+  const type = element.id;
   fetch(`/game/move/${to}/ticket/${type}`);
 
   elements.forEach(({ clonedCard }) => {
@@ -140,11 +142,16 @@ const ticketSelection = (to, elements, pairs) => (e) => {
   removeListeners(pairs);
 };
 
-const createCard = ({ to, mode }) => {
+const createCard = ({ to, mode }, container) => {
   const card = document.createElement("div");
   const ticketType = mode === "Ferry" ? "Wild" : mode;
   card.id = ticketType;
-  card.textContent = ticketType;
+
+  const icon = cloneTemplate(`#${ticketType}-icon`);
+  icon.style.height = getComputedStyle(container).height;
+  icon.style.width = "1.5vw";
+
+  card.append(icon);
 
   return { clonedCard: card, to };
 };
@@ -161,8 +168,7 @@ const renderTickets = (options, pairs) => (e) => {
   const cardsContainer = cloneTemplate("#ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
-  const elements = options.map(createCard);
-
+  const elements = options.map((option) => createCard(option, card));
   closeBtn.addEventListener("click", removeContainer);
   alignCard(cardsContainer, getDimensions(e.currentTarget));
   addListeners(elements, card, pairs);
@@ -240,7 +246,7 @@ const makePawn = (color) => {
 const createPawn = (player) => {
   const position = player.at(-1);
   const stationId = generateStationId(position);
-  const color = colorMap(player[0]);
+  const color = mapRoleToColor(player[0]);
   const pawn = makePawn(color);
 
   return movePawnToStation(pawn, stationId, color);
@@ -266,7 +272,9 @@ const createHighlighter = (className) => {
 };
 
 const highlightPawn = (role) => {
-  const pawn = document.querySelector(`#${role}`);
+  const color = mapRoleToColor(role);
+  const pawn = document.querySelector(`#${color}`);
+
   if (!pawn) return;
   pawn.classList.add("highlight-pawn");
 };
@@ -281,12 +289,25 @@ const showTurn = (currentRole, isYourTurn) => {
 const winningMessage = (winner) =>
   winner === "MrX" ? "Mr. X is the winner" : "Detectives are the winner";
 
+const renderTravelLog = (travelLog, banner) => {
+  const container = banner.querySelector(".reveal-log");
+
+  const logs = travelLog.map(({ to, mode }) => {
+    const div = document.createElement("div");
+    div.classList.add("transport-log");
+    div.textContent = `${to}-${mode}`;
+    return div;
+  });
+
+  container.append(...logs);
+};
+
 const renderGameOver = ({ winner }, id) => {
   clearInterval(id);
 
   const banner = cloneTemplate("#winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
-
+  renderTravelLog([{ to: 132, mode: "Taxi" }], banner);
   document.body.appendChild(banner);
 };
 

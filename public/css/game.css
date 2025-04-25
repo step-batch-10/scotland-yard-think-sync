@@ -166,8 +166,7 @@ th {
 .cards-container {
   color: white;
   min-width: 85px;
-  background-color: white;
-  z-index: 999;
+  background-color: whitesmoke;
 
   *:hover {
     cursor: pointer;
@@ -249,14 +248,8 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
