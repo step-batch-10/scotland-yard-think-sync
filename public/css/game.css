@@ -6,26 +6,13 @@ body {
   background-color: aliceblue;
 }
 
-#pop-up {
-  position: absolute;
-  left: 60%;
-  top: 30%;
-  transform: translateX(-100%);
-  background-color: rgba(43, 0, 255, 0.6);
-  backdrop-filter: blur(25px);
-
-  padding: 10px 40px;
-}
-
-#show-ticket {
+.ticket-panel {
   background-color: transparent;
   border: none;
   padding: 0px;
 }
 
 #turn-indicator {
-  position: fixed;
-  left: 0%;
   color: white;
   padding: 10px 20px;
   background-color: rgba(0, 0, 0, 0.8);
@@ -38,15 +25,9 @@ th {
   padding: 8px;
 }
 
-.player-panel {
-  position: fixed;
-  right: 1vw;
-  top: 4vh;
-  border: 1px solid black;
-}
-
 .icon {
   width: 70px;
+  height: 70px;
 }
 
 .player-stats {
@@ -128,14 +109,6 @@ th {
   font-size: 20px;
 }
 
-.mrx-panel {
-  position: fixed;
-  right: 1vw;
-  top: 12vh;
-  border: 1px solid black;
-  background-color: aliceblue;
-}
-
 .mrX-stats table {
   margin-bottom: 4px;
   border: 1px solid black;
@@ -183,6 +156,8 @@ th {
 }
 
 .card div {
+  transition: 1.2s;
+
   &:hover {
     transform: scale(1.5);
   }
@@ -249,14 +224,8 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
@@ -328,13 +297,28 @@ g {
   display: none;
   background-color: black;
   color: white;
-  position: fixed;
-  top: 20vh;
-  right: 1vw;
+  background-image: url("/assets/images/2x-icon.svg");
+  background-repeat: no-repeat;
+  background-size: contain;
+  background-position: center;
+
+  height: 25px;
 }
 
 .log-text {
   color: black;
   padding: 4px;
   font-weight: 700;
+}
+.side-bar button:hover {
+  background-color: transparent;
+}
+
+.side-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: fixed;
+  right: 2vw;
 }

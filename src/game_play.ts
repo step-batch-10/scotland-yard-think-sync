@@ -95,11 +95,13 @@ const handleEnableTwoX: GameHandler = (context) => {
 
 export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
+
   gameApp.get("/info", serveMatchInfo);
   gameApp.get("/state", serveMatchState);
   gameApp.get("/possible-stations", servePossibleStations);
   gameApp.get("/skip-move", handleSkipPlayer);
   gameApp.get("/move/:to/ticket/:type", handleMovement);
   gameApp.get("/enable-2x", handleEnableTwoX);
+
   return gameApp;
 };
