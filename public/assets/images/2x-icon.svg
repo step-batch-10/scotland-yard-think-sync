@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg
+   width="48"
+   height="48"
+   viewBox="0 0 48 48"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="2x-icon.svg"
+   inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#000000"
+     borderopacity="0.25"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="6.5223767"
+     inkscape:cx="16.558381"
+     inkscape:cy="25.9108"
+     inkscape:window-width="1792"
+     inkscape:window-height="1067"
+     inkscape:window-x="0"
+     inkscape:window-y="25"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <rect
+     width="48"
+     height="48"
+     rx="8"
+     fill="#ffffff"
+     id="rect1"
+     style="fill:#1a1a1a" />
+  <text
+     x="26.625998"
+     y="25.105425"
+     dominant-baseline="middle"
+     text-anchor="middle"
+     font-family="Arial, sans-serif"
+     font-size="48.4397px"
+     fill="#000000"
+     id="text1"
+     style="fill:#fef3f3;stroke:#1c1c1c;stroke-width:0.50199999;stroke-dasharray:none;stroke-opacity:1;fill-opacity:1"
+     transform="scale(0.85228492,1.1733166)">2x</text>
+</svg>
