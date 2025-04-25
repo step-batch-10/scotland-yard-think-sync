@@ -133,13 +133,25 @@ export class ScotlandYard {
     return detectiveEntries.map(([, position]) => position);
   }
 
+  getValidTickets() {
+    const tickets = this.tickets.get(this.currentRole)!;
+    const pairs = Object.entries(tickets).filter(([_, count]) => count !== 0);
+
+    return pairs.flatMap(([ticket]) => ticket);
+  }
+
   validRoutes = (station: number) => {
     const availableRoutes = this.gameMap.routes[station];
     if (!availableRoutes) return [];
 
-    const detectivesPos = this.getDetectivePositions();
+    const validTickets = this.getValidTickets();
 
-    return availableRoutes.filter(({ to }) => !detectivesPos.includes(to));
+    const detectivesPos = this.getDetectivePositions();
+    const possibleRoutes = availableRoutes.filter(({ mode }) => {
+      return validTickets.includes(mode.toString());
+    });
+
+    return possibleRoutes.filter(({ to }) => !detectivesPos.includes(to));
   };
 
   private static addBlackTicket(station: Route): Route[] {

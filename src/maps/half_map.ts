@@ -194,6 +194,7 @@ const routes: MapRoute = {
     { to: 198, mode: Transport.Taxi },
     { to: 159, mode: Transport.Bus },
     { to: 185, mode: Transport.Bus },
+    { to: 172, mode: Transport.Ferry },
   ],
   188: [
     { to: 159, mode: Transport.Taxi },
