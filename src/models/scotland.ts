@@ -333,4 +333,8 @@ export class ScotlandYard {
   getWinner() {
     return this.winner;
   }
+
+  getCurrentRole() {
+    return this.currentRole;
+  }
 }

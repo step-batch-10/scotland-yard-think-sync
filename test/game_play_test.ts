@@ -230,3 +230,22 @@ describe("handleMovement", () => {
     assertEquals(actual, expected);
   });
 });
+
+describe("broadCastMessage", () => {
+  it("should give the skip player message when the type is skip", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+
+    const response = await app.request("/game/broadcast/skip", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const actual = await response.json();
+    const expected = { message: `MrX is skipped and nextPlayer is Red` };
+
+    assertEquals(actual, expected);
+  });
+});

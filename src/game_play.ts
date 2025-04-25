@@ -78,12 +78,28 @@ const handleMovement: GameHandler = (context: GameContext) => {
   return context.json({ success });
 };
 
+const broadCastSkipped = (game: ScotlandYard) => {
+  const currentRole = game.getCurrentRole();
+  const newRole = game.changePlayer();
+
+  return `${currentRole} is skipped and nextPlayer is ${newRole}`;
+};
+
+const broadCastMessage: GameHandler = (context: GameContext) => {
+  // const broadCastType = context.req.param("type");
+  const { match } = extractMatchAndPlayerId(context);
+  const message = broadCastSkipped(match.game);
+
+  return context.json({ message });
+};
+
 export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
   gameApp.get("/info", serveMatchInfo);
   gameApp.get("/state", serveMatchState);
   gameApp.get("/possible-stations", servePossibleStations);
   gameApp.get("/move/:to/ticket/:mode", handleMovement);
+  gameApp.get("/broadcast/:type", broadCastMessage);
 
   return gameApp;
 };
