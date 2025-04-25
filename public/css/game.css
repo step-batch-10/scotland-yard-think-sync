@@ -316,6 +316,7 @@ g {
   background-position: center;
 
   height: 25px;
+<<<<<<< HEAD
 }
 
 .log-text {
@@ -441,4 +442,17 @@ g {
 
 #controls button:hover {
   background: #555;
+}
+
+.side-bar button:hover {
+  background-color: transparent;
+}
+
+.side-bar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  position: fixed;
+  right: 2vw;
 }
