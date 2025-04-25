@@ -10,13 +10,14 @@
   </head>
 
   <body>
-    <div id="turn-indicator"></div>
     <div id="pawns-display"></div>
+
     <div class="side-bar">
+      <div id="turn-indicator">Turn Indicator</div>
       <button
-        id="show-ticket"
+        id="show-ticket-player"
         popovertarget="player-panel"
-        class="player-panel"
+        class="ticket-panel"
       >
         <img
           class="icon"
@@ -25,14 +26,18 @@
           popovertarget="player-panel"
         />
       </button>
-      <button id="show-ticket" popovertarget="mrX-Panel" class="mrx-panel">
+      <button
+        id="show-ticket-mrx"
+        popovertarget="mrX-Panel"
+        class="ticket-panel"
+      >
         <img
           class="icon"
           src="/assets/images/mrX-icon.png"
           popovertarget="mrx-panel"
         />
       </button>
-      <button id="two-x">Enable 2X</button>
+      <button id="two-x" class="ticket-panel icon"></button>
     </div>
 
     <svg
@@ -33221,16 +33226,6 @@
 
     <template id="roles-table">
       <div class="pop-up-1">
-        <table>
-          <thead>
-            <tr>
-              <th>Role</th>
-              <th>Player</th>
-            </tr>
-          </thead>
-          <tbody></tbody>
-        </table>
-
         <p>Mode of transports used</p>
         <div class="transport-modes-log">
           <div class="log"></div>

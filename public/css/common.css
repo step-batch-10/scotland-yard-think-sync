@@ -39,6 +39,7 @@ a {
   font-weight: 500;
   min-width: 100px;
   border-radius: 4px;
+
   &:hover {
     cursor: pointer;
     background-color: #50390ff0;
@@ -89,6 +90,7 @@ form {
 input:focus {
   outline: none;
 }
+
 a {
   min-width: 50px;
 }
