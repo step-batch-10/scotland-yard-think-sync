@@ -10,22 +10,23 @@ const cloneTemplate = (targetId) => {
   return template.content.firstElementChild.cloneNode(true);
 };
 
-const colorMap = (color) => {
-  const colors = {
+const mapRoleToColor = (role) => {
+  const tokenColors = {
     Red: "Red",
     Yellow: "Magenta",
     Blue: "Blue",
     Green: "Green",
     Purple: "Purple",
+    MrX: "Black",
   };
 
-  return colors[color];
+  return tokenColors[role];
 };
 
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
 
-  cells[0].style.backgroundColor = colorMap(role);
+  cells[0].style.backgroundColor = mapRoleToColor(role);
   cells[1].textContent = playerName;
   cells[2].textContent = tickets.Taxi;
   cells[3].textContent = tickets.Bus;
@@ -120,7 +121,7 @@ const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
     const station = document.getElementById(`station-${to}`);
     deleteNodeBySelector(".highlight-station");
-    station.onclick = () => { };
+    station.onclick = () => {};
   });
 };
 
@@ -232,7 +233,7 @@ const makePawn = (color) => {
 const createPawn = (player) => {
   const position = player.at(-1);
   const stationId = generateStationId(position);
-  const color = colorMap(player[0]);
+  const color = mapRoleToColor(player[0]);
   const pawn = makePawn(color);
 
   return movePawnToStation(pawn, stationId, color);
@@ -258,8 +259,9 @@ const createHighlighter = (className) => {
 };
 
 const highlightPawn = (role) => {
-  const pawn = document.querySelector(`#${role}`);
-  console.log("pawn", pawn);
+  const color = mapRoleToColor(role);
+  const pawn = document.querySelector(`#${color}`);
+
   if (!pawn) return;
   pawn.classList.add("highlight-pawn");
 };
