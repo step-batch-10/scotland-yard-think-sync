@@ -102,10 +102,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft =
-    globalThis.pageXOffset || document.documentElement.scrollLeft;
-  const scrollTop =
-    globalThis.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = globalThis.pageXOffset ||
+    document.documentElement.scrollLeft;
+  const scrollTop = globalThis.pageYOffset ||
+    document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -338,21 +338,22 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true }
+      { once: true },
     );
   });
+};
+
+const enable2X = async () => {
+  const response = await fetch("/game/enable-2x");
+  const json = await response.json();
+  console.log(json);
+
+  if (json.accepted) alert("you are in 2x mode");
 };
 
 const main = () => {
   playAudio();
   startPolling();
-  document.querySelector("#two-x").onclick = async () => {
-    const response = await fetch("/game/enable-2x");
-    const json = await response.json();
-    console.log(json);
-
-    if (json.accepted) alert("you are in 2x mode");
-  };
+  document.querySelector("#two-x").onclick = enable2X;
 };
-
 globalThis.onload = main;

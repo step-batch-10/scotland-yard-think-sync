@@ -353,9 +353,7 @@ describe("possible stations", () => {
 
     const expected = [
       { to: 1, mode: Transport.Bus },
-      { to: 1, mode: Ticket["2x"] },
       { to: 1, mode: Transport.Ferry },
-      { to: 1, mode: Ticket["2x"] },
     ];
 
     assertEquals(actual, expected);
@@ -396,9 +394,7 @@ describe("possible stations", () => {
     const actual = game.possibleStations();
     const expected = [
       { to: 20, mode: Transport.Bus },
-      { to: 20, mode: Ticket["2x"] },
       { to: 20, mode: Transport.Ferry },
-      { to: 20, mode: Ticket["2x"] },
     ];
 
     assertEquals(actual, expected);
@@ -935,6 +931,7 @@ describe("use 2X ticket", () => {
 
     const state = game.getGameState("2");
     assertEquals(state.currentRole, Role.MrX);
+    assertEquals(state.tickets[Role.MrX]["2x"], 1);
   });
 
   it("should change turn after using 2x", () => {
