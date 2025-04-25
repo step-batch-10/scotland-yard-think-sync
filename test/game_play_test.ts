@@ -5,7 +5,7 @@ import {
 } from "./game_setup_test.ts";
 import { assertEquals } from "assert/equals";
 import { mapToObject } from "../src/game_play.ts";
-import { Route, Transport } from "../src/models/types.ts";
+import { Transport } from "../src/models/types.ts";
 import { basicMap } from "../src/maps/game_map.ts";
 import { assert } from "assert/assert";
 
@@ -276,12 +276,6 @@ describe("handleMovement", () => {
 
     const actual = await response1.json();
     const expected = { success: true };
-
-    assertEquals(actual, expected);
-
-    const response2 = await app.request("/game/state", {
-      headers: { cookie: `playerId=${host}` },
-    });
 
     assertEquals(actual, expected);
   });
