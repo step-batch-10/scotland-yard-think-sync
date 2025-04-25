@@ -4,12 +4,8 @@ const fetchJson = (route) => fetch(route).then((res) => res.json());
 
 const fetchState = () => fetchJson("/game/state");
 
-const fetchPossibleStations = (status = false) =>
-  fetch("/game/possible-stations", {
-    headers: {
-      isTwoXCard: status,
-    },
-  }).then((res) => res.json());
+const fetchPossibleStations = () =>
+  fetch("/game/possible-stations").then((res) => res.json());
 
 const cloneTemplate = (targetId) => {
   const template = document.querySelector(targetId);
@@ -108,10 +104,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -156,7 +152,7 @@ const ticketSelection = (to, elements, pairs) => async (e) => {
     startPolling();
   }
 
-  const possibleStations = await fetchPossibleStations(true);
+  const possibleStations = await fetchPossibleStations();
   removeTickets(elements, pairs);
 
   return displayTravelOptions(possibleStations, true);
@@ -369,7 +365,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };

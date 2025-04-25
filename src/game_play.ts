@@ -73,7 +73,8 @@ const handleMovement: GameHandler = (context: GameContext) => {
   const { to, type } = context.req.param() as { to: string; type: Ticket };
 
   if (type === Ticket["2x"]) {
-    return context.json({ accepted2x: true });
+    const accept = match.game.accept2X();
+    return context.json({ accepted2x: accept });
   }
 
   const isTwoX = context.req.header().isusing2x === "true";

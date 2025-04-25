@@ -240,7 +240,7 @@ export class ScotlandYard {
     destination: number,
     wantToUse2X: boolean,
   ) {
-    if (this.isUsing2X && wantToUse2X) return false;
+    if (!this.isUsing2X && wantToUse2X) return false;
 
     const possibleStations = this.possibleStations();
     return possibleStations.some(ScotlandYard.canTravel(mode, destination));
@@ -273,6 +273,8 @@ export class ScotlandYard {
   ): boolean {
     if (!this.isTravelPossible(mode, destination, opt.isTwoX)) return false;
 
+    this.isUsing2X = opt?.isTwoX || false;
+
     const tickets = this.tickets.get(this.currentRole);
     if (!tickets || !tickets[mode]) return false;
 
@@ -286,8 +288,6 @@ export class ScotlandYard {
 
     this.declareWinner();
     this.updateLastSeen();
-
-    this.isUsing2X = opt?.isTwoX || false;
 
     return true;
   }
@@ -340,8 +340,9 @@ export class ScotlandYard {
     this.lastSeen = this.currentStations.get(Role.MrX) as number;
   }
 
-  canAccept2X(): boolean {
-    return this.hasTwoXCard() && !this.isUsing2X;
+  accept2X(): boolean {
+    this.isUsing2X = this.hasTwoXCard() && !this.isUsing2X;
+    return this.isUsing2X;
   }
 
   getGameState(player: string) {
