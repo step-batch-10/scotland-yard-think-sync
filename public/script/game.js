@@ -104,10 +104,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft =
-    globalThis.pageXOffset || document.documentElement.scrollLeft;
-  const scrollTop =
-    globalThis.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = globalThis.pageXOffset ||
+    document.documentElement.scrollLeft;
+  const scrollTop = globalThis.pageYOffset ||
+    document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -139,6 +139,7 @@ const ticketSelection = (to, elements, pairs) => (e) => {
   elements.forEach(({ clonedCard }) => {
     clonedCard.parentNode.parentNode.remove();
   });
+  startPolling();
   removeAllContainers();
   removeListeners(pairs);
 };
@@ -290,9 +291,7 @@ const showTurn = (currentRole, isYourTurn) => {
 const winningMessage = (winner) =>
   winner === "MrX" ? "Mr. X is the winner" : "Detectives are the winner";
 
-const renderGameOver = ({ winner }, id) => {
-  clearInterval(id);
-
+const renderGameOver = ({ winner }) => {
   const banner = cloneTemplate("#winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
   document.body.appendChild(banner);
@@ -332,10 +331,14 @@ const playGame = (data) => {
 const startPolling = () => {
   const intervalId = setInterval(async () => {
     const data = await fetchState();
+    playGame(data);
 
-    if (data.isGameOver) return renderGameOver(data, intervalId);
+    if (data.isGameOver) {
+      renderGameOver(data);
+      clearInterval(intervalId);
+    }
 
-    return playGame(data);
+    if (data.isYourTurn) clearInterval(intervalId);
   }, 3000);
 };
 
@@ -352,7 +355,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true }
+      { once: true },
     );
   });
 };
