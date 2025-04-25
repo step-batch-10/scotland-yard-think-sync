@@ -67,6 +67,7 @@ export interface Route {
 export interface MapRoute {
   [key: number]: Route[];
 }
+
 export interface GameMap {
   startingPositions: number[];
   routes: MapRoute;
