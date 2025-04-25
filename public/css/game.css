@@ -249,14 +249,8 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
@@ -319,4 +313,12 @@ g {
   width: 25%;
   text-align: center;
   border: 1px solid black;
+}
+
+#two-x {
+  background-color: black;
+  color: white;
+  position: fixed;
+  top: 20vh;
+  right: 1vw;
 }
