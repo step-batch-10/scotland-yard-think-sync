@@ -98,7 +98,7 @@ const addCoordinate = (element, station, offSetX = 0, offSetY = 0) => {
 
 const alignCard = (cardsContainer, [x, y]) => {
   cardsContainer.style.position = "absolute";
-  cardsContainer.style.left = `${x}px`;
+  cardsContainer.style.left = `${x - 24}px`;
   cardsContainer.style.top = `${y - 54}px`;
 };
 
@@ -115,7 +115,7 @@ const getDimensions = (element) => {
   return [absoluteX, absoluteY];
 };
 
-const removeContainer = (e) => e.target.parentNode.remove();
+const removeContainer = (e) => e.target.parentNode.parentNode.remove();
 
 const removeListeners = (pairs) => {
   pairs.forEach(([to]) => {
@@ -131,7 +131,8 @@ const removeAllContainers = () => {
 };
 
 const ticketSelection = (to, elements, pairs) => (e) => {
-  const type = e.target.id;
+  const element = e.target.closest("svg");
+  const type = element.id;
   fetch(`/game/move/${to}/ticket/${type}`);
 
   elements.forEach(({ clonedCard }) => {
@@ -141,11 +142,16 @@ const ticketSelection = (to, elements, pairs) => (e) => {
   removeListeners(pairs);
 };
 
-const createCard = ({ to, mode }) => {
+const createCard = ({ to, mode }, container) => {
   const card = document.createElement("div");
   const ticketType = mode === "Ferry" ? "Wild" : mode;
   card.id = ticketType;
-  card.textContent = ticketType;
+
+  const icon = cloneTemplate(`#${ticketType}-icon`);
+  icon.style.height = getComputedStyle(container).height;
+  icon.style.width = "1.5vw";
+
+  card.append(icon);
 
   return { clonedCard: card, to };
 };
@@ -162,8 +168,7 @@ const renderTickets = (options, pairs) => (e) => {
   const cardsContainer = cloneTemplate("#ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
-  const elements = options.map(createCard);
-
+  const elements = options.map((option) => createCard(option, card));
   closeBtn.addEventListener("click", removeContainer);
   alignCard(cardsContainer, getDimensions(e.currentTarget));
   addListeners(elements, card, pairs);

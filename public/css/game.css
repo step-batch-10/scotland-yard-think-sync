@@ -164,10 +164,9 @@ th {
 }
 
 .cards-container {
-  font-size: 18px;
-
   color: white;
   min-width: 85px;
+  background-color: rgba(0, 0, 0, 0.2);
 
   *:hover {
     cursor: pointer;
@@ -179,13 +178,12 @@ th {
   gap: 4px;
   flex-direction: row;
   justify-content: space-evenly;
-  background-color: black;
   color: white;
 }
 
 .card div {
   &:hover {
-    background-color: white;
+    background-color: rgba(0, 0, 0, 0.4);
     color: black;
   }
 }
@@ -202,16 +200,16 @@ th {
 }
 
 #close-btn {
-  height: 22px;
+  width: 1vw;
+  height: 2vh;
   box-sizing: border-box;
-  padding-left: 8px;
   color: red;
-
+  text-align: center;
+  padding-bottom: 4px;
   font-weight: 400;
   border: 1px solid black;
 
-  text-align: left;
-  background-color: black;
+  border-radius: 50%;
 }
 
 g tspan {
