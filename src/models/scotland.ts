@@ -267,7 +267,6 @@ export class ScotlandYard {
   private updateState() {
     if (this.twoXTurnCout < 1 && this.isUsing2X) {
       this.twoXTurnCout += 1;
-
       return;
     }
 
@@ -279,9 +278,6 @@ export class ScotlandYard {
 
   useTicket(mode: Ticket, destination: number): boolean {
     if (!this.isTravelPossible(mode, destination)) return false;
-
-    const tickets = this.tickets.get(this.currentRole);
-    if (!tickets || !tickets[mode]) return false;
 
     this.updateLog(destination, mode);
     this.movePlayer(destination);
