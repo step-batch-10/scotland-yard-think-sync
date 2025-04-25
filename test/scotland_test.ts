@@ -709,6 +709,7 @@ describe("checkWinner", () => {
       routes: {
         1: [{ to: 2, mode: Transport.Taxi }],
         3: [{ to: 2, mode: Transport.Taxi }],
+        4: [{ to: 3, mode: Transport.Taxi }],
       },
     };
 
@@ -787,6 +788,7 @@ describe("declareWinner", () => {
       routes: {
         1: [{ to: 2, mode: Transport.Taxi }],
         3: [{ to: 2, mode: Transport.Taxi }],
+        4: [{ to: 3, mode: Transport.Taxi }],
       },
     };
 
@@ -818,6 +820,21 @@ describe("declareWinner", () => {
     game.useTicket(Ticket.Yellow, 4); // Detective 3
     game.useTicket(Ticket.Yellow, 5); // Detective 4
     game.useTicket(Ticket.Yellow, 6); // Detective 5
+
+    assertEquals(game.declareWinner(), "MrX");
+  });
+
+  it("should declear Mr.X as winner when detectives can't move", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap, 4);
+
+    game.useTicket(Ticket.Yellow, 2);
 
     assertEquals(game.declareWinner(), "MrX");
   });

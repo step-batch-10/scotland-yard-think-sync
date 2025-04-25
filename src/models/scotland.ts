@@ -162,7 +162,7 @@ export class ScotlandYard {
     return detectivesPos.includes(MrXPosition);
   }
 
-  isTurnCount(): boolean {
+  private isTurnCount(): boolean {
     if (this.isMrXTurn()) {
       this.turnCount += 1;
     }
@@ -170,9 +170,18 @@ export class ScotlandYard {
     return this.turnCount >= this.totalTurns;
   }
 
+  private detectivesCannotMove() {
+    const detectivesPositions = this.getDetectivePositions();
+    const allValidRoutes = detectivesPositions.map((position) => {
+      return this.validRoutes(position);
+    });
+
+    return allValidRoutes.every((validRoutes) => validRoutes.length === 0);
+  }
+
   declareWinner() {
     const hasDetectivesWon = this.isMrXCaught();
-    const hasMrXWon = this.isTurnCount();
+    const hasMrXWon = this.isTurnCount() || this.detectivesCannotMove();
 
     if (hasDetectivesWon) this.winner = "Detective";
     if (hasMrXWon) this.winner = "MrX";

@@ -64,7 +64,7 @@ const serveMatchState: GameHandler = (context: GameContext) => {
 
 const servePossibleStations: GameHandler = (context: GameContext) => {
   const { match } = extractMatchAndPlayerId(context);
-  const nearbyStations = match?.game.possibleStations();
+  const nearbyStations = match.game.possibleStations();
 
   return context.json(_.uniqWith(nearbyStations, _.isEqual));
 };
