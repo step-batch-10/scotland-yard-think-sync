@@ -37,9 +37,10 @@ const createAuthenticatedRoutes = () => {
 const createGuestRoutes = () => {
   const guestApp = new Hono<{ Bindings: Bindings }>();
 
-  guestApp.use("/login", skipIfAuthenticated);
-  guestApp.post("/login", loginHandler);
-  guestApp.get("/login", serveStatic({ path: "./public/html/login.html" }));
+  guestApp
+    .use("/login", skipIfAuthenticated)
+    .post(loginHandler)
+    .get("/login", serveStatic({ path: "./public/html/login.html" }));
 
   guestApp.get("/favicon.icon", serveAssets);
   guestApp.get("/assets/*", serveAssets);
