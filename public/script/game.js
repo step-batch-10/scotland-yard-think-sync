@@ -361,9 +361,17 @@ const playAudio = () => {
   });
 };
 
+const enable2X = async () => {
+  const response = await fetch("/game/enable-2x");
+  const json = await response.json();
+
+  if (json.accepted) alert("you are in 2x mode");
+};
+
 const main = () => {
   playAudio();
   startPolling();
+  document.querySelector("#two-x").onclick = enable2X;
 };
 
 globalThis.onload = main;
