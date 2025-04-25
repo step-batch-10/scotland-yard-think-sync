@@ -77,17 +77,16 @@ const handleMovement: GameHandler = (context: GameContext) => {
   return context.json({ success });
 };
 
-const broadCastSkipped = (game: ScotlandYard) => {
+const createSkipMessage = (game: ScotlandYard) => {
   const currentRole = game.getCurrentRole();
   const newRole = game.changePlayer();
 
   return `${currentRole} is skipped and nextPlayer is ${newRole}`;
 };
 
-const broadCastMessage: GameHandler = (context: GameContext) => {
-  // const broadCastType = context.req.param("type");
+const handleSkipPlayer: GameHandler = (context: GameContext) => {
   const { match } = extractMatchAndPlayerId(context);
-  const message = broadCastSkipped(match.game);
+  const message = createSkipMessage(match.game);
 
   return context.json({ message });
 };
@@ -104,7 +103,7 @@ export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   gameApp.get("/info", serveMatchInfo);
   gameApp.get("/state", serveMatchState);
   gameApp.get("/possible-stations", servePossibleStations);
-  gameApp.get("/broadcast/:type", broadCastMessage);
+  gameApp.get("/skip-move", handleSkipPlayer);
   gameApp.get("/move/:to/ticket/:type", handleMovement);
   gameApp.get("/enable-2x", handleEnableTwoX);
   return gameApp;

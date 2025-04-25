@@ -202,16 +202,17 @@ const highLightDestinations = (stations) => {
   });
 };
 
-const brodcastMessage = async (type) => {
-  const { message } = await fetchJson(`/game/broadcast/${type}`);
+const showMessage = async () => {
+  const { message } = await fetchJson(`/game/skip-move`);
 
   return alertUser(message, "#turn-indicator");
 };
 
 const displayTravelOptions = async () => {
   const possibleStation = await fetchPossibleStations();
+  console.log("Possible Station", possibleStation);
 
-  if (possibleStation.length === 0) return brodcastMessage("skip");
+  if (possibleStation.length === 0) return showMessage("skip");
   highLightDestinations(possibleStation);
   const pairs = pairTicketToStation(possibleStation);
 

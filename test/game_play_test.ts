@@ -287,7 +287,7 @@ describe("broadCastMessage", () => {
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
 
-    const response = await app.request("/game/broadcast/skip", {
+    const response = await app.request("/game/skip-move", {
       headers: { cookie: `playerId=${host}` },
     });
 
