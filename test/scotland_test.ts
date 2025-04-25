@@ -930,7 +930,8 @@ describe("use 2X ticket", () => {
     game.distributeTickets();
     game.assignStartingPositions();
 
-    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+    game.enable2X();
+    game.useTicket(Ticket.Yellow, 195);
 
     const state = game.getGameState("2");
     assertEquals(state.currentRole, Role.MrX);
@@ -942,7 +943,7 @@ describe("use 2X ticket", () => {
     game.distributeTickets();
     game.assignStartingPositions();
 
-    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+    game.useTicket(Ticket.Yellow, 195);
     game.useTicket(Ticket.Yellow, 181);
 
     const state = game.getGameState("2");
@@ -955,8 +956,8 @@ describe("use 2X ticket", () => {
     game.distributeTickets();
     game.assignStartingPositions();
 
-    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
-    const actual = game.useTicket(Ticket.Yellow, 181, { isTwoX: true });
+    game.useTicket(Ticket.Yellow, 195);
+    const actual = game.useTicket(Ticket.Yellow, 181);
 
     assertFalse(actual);
   });
@@ -967,8 +968,8 @@ describe("use 2X ticket", () => {
     game.distributeTickets();
     game.assignStartingPositions();
 
-    game.accept2X();
-    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+    game.enable2X();
+    game.useTicket(Ticket.Yellow, 195);
     const actual = game.possibleStations();
 
     const expected = [
@@ -987,7 +988,7 @@ describe("can accept 2x", () => {
     game.distributeTickets();
     game.assignStartingPositions();
 
-    assert(game.accept2X());
+    assert(game.enable2X());
   });
 
   it("should not accept 2x card if using", () => {
@@ -995,9 +996,10 @@ describe("can accept 2x", () => {
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();
-    game.accept2X();
-    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+    game.enable2X();
 
-    assertFalse(game.accept2X());
+    game.useTicket(Ticket.Yellow, 195);
+
+    assertFalse(game.enable2X());
   });
 });

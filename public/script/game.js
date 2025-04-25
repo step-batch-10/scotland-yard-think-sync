@@ -104,10 +104,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft =
-    globalThis.pageXOffset || document.documentElement.scrollLeft;
-  const scrollTop =
-    globalThis.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = globalThis.pageXOffset ||
+    document.documentElement.scrollLeft;
+  const scrollTop = globalThis.pageYOffset ||
+    document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -215,7 +215,6 @@ const highLightDestinations = (stations) => {
   });
 };
 
-<<<<<<< HEAD
 const brodcastMessage = async (type) => {
   const { message } = await fetchJson(`/game/broadcast/${type}`);
 
@@ -226,9 +225,7 @@ const displayTravelOptions = async () => {
   const possibleStation = await fetchPossibleStations();
 
   if (possibleStation.length === 0) return brodcastMessage("skip");
-=======
-const displayTravelOptions = (possibleStation, status = false) => {
->>>>>>> 2e6d41c ([#16] | suman/akshay | adds 2x card logic)
+
   highLightDestinations(possibleStation);
   const pairs = pairTicketToStation(possibleStation);
 
@@ -309,10 +306,8 @@ const renderGameOver = ({ winner }, id) => {
 
   const banner = cloneTemplate("#winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
-<<<<<<< HEAD
-=======
+
   renderTravelLog([{ to: 132, mode: "Taxi" }], banner);
->>>>>>> 2e6d41c ([#16] | suman/akshay | adds 2x card logic)
 
   document.body.appendChild(banner);
 };
@@ -365,7 +360,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true }
+      { once: true },
     );
   });
 };

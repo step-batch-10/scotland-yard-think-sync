@@ -72,13 +72,7 @@ const handleMovement: GameHandler = (context: GameContext) => {
   const { match } = extractMatchAndPlayerId(context);
   const { to, type } = context.req.param() as { to: string; type: Ticket };
 
-  if (type === Ticket["2x"]) {
-    const accept = match.game.accept2X();
-    return context.json({ accepted2x: accept });
-  }
-
-  const isTwoX = context.req.header().isusing2x === "true";
-  const success = match.game.useTicket(type, Number(to), { isTwoX });
+  const success = match.game.useTicket(type, Number(to));
 
   return context.json({ success });
 };
@@ -98,6 +92,13 @@ const broadCastMessage: GameHandler = (context: GameContext) => {
   return context.json({ message });
 };
 
+const handleEnableTwoX: GameHandler = (context) => {
+  const { match } = extractMatchAndPlayerId(context);
+  const accepted = match.game.enable2X();
+
+  return context.json({ accepted });
+};
+
 export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
   gameApp.get("/info", serveMatchInfo);
@@ -105,6 +106,6 @@ export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   gameApp.get("/possible-stations", servePossibleStations);
   gameApp.get("/broadcast/:type", broadCastMessage);
   gameApp.get("/move/:to/ticket/:type", handleMovement);
-
+  gameApp.get("/enable-2x", handleEnableTwoX);
   return gameApp;
 };

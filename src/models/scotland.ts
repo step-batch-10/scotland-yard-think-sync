@@ -49,6 +49,7 @@ export class ScotlandYard {
   private turn: number;
   private mrXHistory: Log[];
   private isUsing2X: boolean;
+  private twoXTurnCout: number;
 
   constructor(
     players: string[],
@@ -70,6 +71,7 @@ export class ScotlandYard {
     this.turn = 0;
     this.mrXHistory = [];
     this.isUsing2X = false;
+    this.twoXTurnCout = 0;
 
     this.roles = [
       Role.MrX,
@@ -235,13 +237,7 @@ export class ScotlandYard {
     this.currentStations.set(this.currentRole, destination);
   }
 
-  private isTravelPossible(
-    mode: Ticket,
-    destination: number,
-    wantToUse2X: boolean,
-  ) {
-    if (!this.isUsing2X && wantToUse2X) return false;
-
+  private isTravelPossible(mode: Ticket, destination: number) {
     const possibleStations = this.possibleStations();
     return possibleStations.some(ScotlandYard.canTravel(mode, destination));
   }
@@ -266,14 +262,22 @@ export class ScotlandYard {
     this.mrXHistory.push({ to, mode });
   }
 
-  useTicket(
-    mode: Ticket,
-    destination: number,
-    opt: Options = { isTwoX: false },
-  ): boolean {
-    if (!this.isTravelPossible(mode, destination, opt.isTwoX)) return false;
+  private updateState() {
+    if (this.twoXTurnCout < 1 && this.isUsing2X) {
+      this.twoXTurnCout += 1;
 
-    this.isUsing2X = opt?.isTwoX || false;
+      return;
+    }
+
+    this.twoXTurnCout = 0;
+    this.isUsing2X = false;
+    console.log("in update state", this.currentRole);
+
+    this.changePlayer();
+  }
+
+  useTicket(mode: Ticket, destination: number): boolean {
+    if (!this.isTravelPossible(mode, destination)) return false;
 
     const tickets = this.tickets.get(this.currentRole);
     if (!tickets || !tickets[mode]) return false;
@@ -283,8 +287,7 @@ export class ScotlandYard {
     this.fuelMrX(tickets, mode);
 
     this.updateTurn();
-
-    if (!opt.isTwoX) this.changePlayer();
+    this.updateState();
 
     this.declareWinner();
     this.updateLastSeen();
@@ -340,7 +343,7 @@ export class ScotlandYard {
     this.lastSeen = this.currentStations.get(Role.MrX) as number;
   }
 
-  accept2X(): boolean {
+  enable2X(): boolean {
     this.isUsing2X = this.hasTwoXCard() && !this.isUsing2X;
     return this.isUsing2X;
   }

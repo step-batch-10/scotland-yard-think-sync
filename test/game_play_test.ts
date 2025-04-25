@@ -266,7 +266,7 @@ describe("handleMovement", () => {
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
 
-    app.request("/game/move/181/ticket/2x", {
+    app.request("/game/enable-2x", {
       headers: { cookie: `playerId=${host}` },
     });
 
@@ -313,12 +313,12 @@ describe("add 2x card", () => {
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
 
-    app.request("/game/move/181/ticket/2x", {
+    await app.request("/game/enable-2x", {
       headers: { cookie: `playerId=${host}` },
     });
 
     const response1 = await app.request("/game/move/181/ticket/Taxi", {
-      headers: { cookie: `playerId=${host}`, isusing2x: "true" },
+      headers: { cookie: `playerId=${host}` },
     });
 
     await app.request("/game/move/182/ticket/Taxi", {
@@ -335,6 +335,7 @@ describe("add 2x card", () => {
     });
 
     const state = await response2.json();
+
     assertEquals(state.currentRole, "Red");
   });
 
@@ -345,11 +346,11 @@ describe("add 2x card", () => {
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
 
-    const response = await app.request("/game/move/181/ticket/2x", {
+    const response = await app.request("/game/enable-2x", {
       headers: { cookie: `playerId=${host}` },
     });
 
     const actual = await response.json();
-    assert(actual.accepted2x);
+    assert(actual.accepted);
   });
 });
