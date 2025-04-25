@@ -103,10 +103,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -290,26 +290,19 @@ const showTurn = (currentRole, isYourTurn) => {
 const winningMessage = (winner) =>
   winner === "MrX" ? "Mr. X is the winner" : "Detectives are the winner";
 
-const renderTravelLog = (travelLog, banner) => {
-  const container = banner.querySelector(".reveal-log");
-
-  const logs = travelLog.map(({ to, mode }) => {
-    const div = document.createElement("div");
-    div.classList.add("transport-log");
-    div.textContent = `${to}-${mode}`;
-    return div;
-  });
-
-  container.append(...logs);
-};
-
 const renderGameOver = ({ winner }, id) => {
   clearInterval(id);
 
   const banner = cloneTemplate("#winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
-  renderTravelLog([{ to: 132, mode: "Taxi" }], banner);
   document.body.appendChild(banner);
+};
+
+const render2XTicket = ({ MrX }) => {
+  const twoX = MrX["2x"];
+  if (!twoX) return;
+
+  document.querySelector("#two-x").style.display = "block";
 };
 
 const playGame = (data) => {
@@ -330,6 +323,8 @@ const playGame = (data) => {
   renderPlayerTickets(stats, lastSeen);
   showTurn(currentRole, isYourTurn);
   renderMrXTransportLog(transport);
+
+  if (currentRole === "MrX" && isYourTurn) render2XTicket(tickets);
 
   if (isYourTurn) displayTravelOptions();
 };
@@ -357,7 +352,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };
