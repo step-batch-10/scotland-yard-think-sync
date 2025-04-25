@@ -1,7 +1,10 @@
 import { GameMap, MapRoute, Transport } from "../models/types.ts";
 
 const routes: MapRoute = {
-  181: [{ to: 182, mode: Transport.Taxi }, { to: 100, mode: Transport.Taxi }],
+  181: [
+    { to: 182, mode: Transport.Taxi },
+    { to: 100, mode: Transport.Taxi },
+  ],
 
   182: [
     { to: 181, mode: Transport.Taxi },
@@ -70,6 +73,7 @@ const routes: MapRoute = {
     { to: 185, mode: Transport.Metro },
     { to: 192, mode: Transport.Taxi },
   ],
+  195: [{ to: 181, mode: Transport.Taxi }],
 };
 
 export const basicMap: GameMap = {

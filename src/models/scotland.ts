@@ -28,6 +28,10 @@ export interface Log {
   mode: Ticket;
 }
 
+export interface Options {
+  isTwoX: boolean;
+}
+
 export class ScotlandYard {
   private readonly players: string[];
   private readonly roles: Role[];
@@ -44,6 +48,7 @@ export class ScotlandYard {
   private lastSeen: number | null;
   private turn: number;
   private mrXHistory: Log[];
+  private isUsing2X: boolean;
 
   constructor(
     players: string[],
@@ -64,6 +69,7 @@ export class ScotlandYard {
     this.lastSeen = null;
     this.turn = 0;
     this.mrXHistory = [];
+    this.isUsing2X = false;
 
     this.roles = [
       Role.MrX,
@@ -134,7 +140,7 @@ export class ScotlandYard {
     return availableRoutes.filter(({ to }) => !detectivesPos.includes(to));
   };
 
-  private static addExtraTickets(station: Route): Route[] {
+  private static addBlackTicket(station: Route): Route[] {
     return [station, { to: station.to, mode: Transport.Ferry }];
   }
 
@@ -144,19 +150,31 @@ export class ScotlandYard {
   }
 
   hasBlackTickets(): boolean {
-    const { Wild } = this.tickets.get(this.currentRole) || { Wild: 0 };
+    const { Wild = 0 } = this.tickets.get(this.currentRole)!;
     return Wild > 0;
+  }
+
+  private static add2XTicket(station: Route) {
+    return [station, { to: station.to, mode: Ticket["2x"] }];
+  }
+
+  private mrXPossibleStation(feasibleRoutes: Route[]) {
+    const stations = feasibleRoutes.flatMap(ScotlandYard.addBlackTicket);
+
+    if (!this.hasTwoXCard() || this.isUsing2X) {
+      return stations;
+    }
+
+    return stations.flatMap(ScotlandYard.add2XTicket);
   }
 
   possibleStations(): Route[] {
     const station = this.currentStations.get(this.currentRole) || 0;
     const feasibleRoutes = this.validRoutes(station);
 
-    if (this.hasBlackTickets()) {
-      return feasibleRoutes.flatMap(ScotlandYard.addExtraTickets);
-    }
+    if (!this.isMrXTurn()) return feasibleRoutes;
 
-    return feasibleRoutes;
+    return this.mrXPossibleStation(feasibleRoutes) as Route[];
   }
 
   isMrXCaught() {
@@ -217,7 +235,13 @@ export class ScotlandYard {
     this.currentStations.set(this.currentRole, destination);
   }
 
-  private isPossibleStation(mode: Ticket, destination: number) {
+  private isTravelPossible(
+    mode: Ticket,
+    destination: number,
+    wantToUse2X: boolean,
+  ) {
+    if (this.isUsing2X && wantToUse2X) return false;
+
     const possibleStations = this.possibleStations();
     return possibleStations.some(ScotlandYard.canTravel(mode, destination));
   }
@@ -242,8 +266,12 @@ export class ScotlandYard {
     this.mrXHistory.push({ to, mode });
   }
 
-  useTicket(mode: Ticket, destination: number): boolean {
-    if (!this.isPossibleStation(mode, destination)) return false;
+  useTicket(
+    mode: Ticket,
+    destination: number,
+    opt: Options = { isTwoX: false },
+  ): boolean {
+    if (!this.isTravelPossible(mode, destination, opt.isTwoX)) return false;
 
     const tickets = this.tickets.get(this.currentRole);
     if (!tickets || !tickets[mode]) return false;
@@ -253,9 +281,13 @@ export class ScotlandYard {
     this.fuelMrX(tickets, mode);
 
     this.updateTurn();
-    this.changePlayer();
+
+    if (!opt.isTwoX) this.changePlayer();
+
     this.declareWinner();
     this.updateLastSeen();
+
+    this.isUsing2X = opt?.isTwoX || false;
 
     return true;
   }
@@ -306,6 +338,10 @@ export class ScotlandYard {
   private updateLastSeen() {
     if (!this.shouldReveal()) return;
     this.lastSeen = this.currentStations.get(Role.MrX) as number;
+  }
+
+  canAccept2X(): boolean {
+    return this.hasTwoXCard() && !this.isUsing2X;
   }
 
   getGameState(player: string) {

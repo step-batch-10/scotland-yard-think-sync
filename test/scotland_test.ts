@@ -8,7 +8,6 @@ import {
   RandomIndex,
   Role,
   Roles,
-  Route,
   Ticket,
   Tickets,
   Transport,
@@ -354,7 +353,9 @@ describe("possible stations", () => {
 
     const expected = [
       { to: 1, mode: Transport.Bus },
+      { to: 1, mode: Ticket["2x"] },
       { to: 1, mode: Transport.Ferry },
+      { to: 1, mode: Ticket["2x"] },
     ];
 
     assertEquals(actual, expected);
@@ -392,11 +393,14 @@ describe("possible stations", () => {
     game.assignStartingPositions();
     game.assignRole();
     game.distributeTickets();
-    const actual: Route[] = game.possibleStations();
-    const expected: Route[] = [
+    const actual = game.possibleStations();
+    const expected = [
       { to: 20, mode: Transport.Bus },
+      { to: 20, mode: Ticket["2x"] },
       { to: 20, mode: Transport.Ferry },
+      { to: 20, mode: Ticket["2x"] },
     ];
+
     assertEquals(actual, expected);
   });
 });
@@ -916,5 +920,82 @@ describe("should save travel history", () => {
     const { transport } = game.getGameState("1");
 
     assertEquals(transport, [Ticket.Green]);
+  });
+});
+
+describe("use 2X ticket", () => {
+  it("should not change turn if using 2x", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+
+    const state = game.getGameState("2");
+    assertEquals(state.currentRole, Role.MrX);
+  });
+
+  it("should change turn after using 2x", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+    game.useTicket(Ticket.Yellow, 181);
+
+    const state = game.getGameState("2");
+    assertEquals(state.currentRole, Role.Red);
+  });
+
+  it("should not be able to use 2x consicutively", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+    const actual = game.useTicket(Ticket.Yellow, 181, { isTwoX: true });
+
+    assertFalse(actual);
+  });
+
+  it("should not give 2x option is i am using 2x", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+    const actual = game.possibleStations();
+
+    const expected = [
+      { to: 181, mode: "Taxi" },
+      { to: 181, mode: "Ferry" },
+    ];
+
+    assertEquals(actual, expected);
+  });
+});
+
+describe("can accept 2x", () => {
+  it("should accept 2x card if not using", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    assert(game.canAccept2X());
+  });
+
+  it("should not accept 2x card if not using", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+    game.useTicket(Ticket.Yellow, 195, { isTwoX: true });
+
+    assertFalse(game.canAccept2X());
   });
 });

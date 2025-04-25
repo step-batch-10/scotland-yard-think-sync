@@ -8,7 +8,6 @@ import {
 } from "./models/types.ts";
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
-import { Route } from "./models/types.ts";
 import _ from "lodash";
 
 export function mapToObject<T>(map?: Map<string, T>) {
@@ -62,27 +61,23 @@ const serveMatchState: GameHandler = (context: GameContext) => {
   return context.json(gameState);
 };
 
-export const addTwoXCard = (station: Route) => {
-  return [station, { to: station.to, mode: "2x" }];
-};
-
-const servePossibleStations: GameHandler = (context: GameContext) => {
+const servePossibleStations: GameHandler = (context) => {
   const { match } = extractMatchAndPlayerId(context);
   const nearbyStations = match.game.possibleStations();
 
-  if (!match.game.hasTwoXCard()) {
-    return context.json(_.uniqWith(nearbyStations, _.isEqual));
-  }
-
-  const withTwoXCard = nearbyStations.flatMap(addTwoXCard);
-  return context.json(_.uniqWith(withTwoXCard, _.isEqual));
+  return context.json(_.uniqWith(nearbyStations, _.isEqual));
 };
 
 const handleMovement: GameHandler = (context: GameContext) => {
   const { match } = extractMatchAndPlayerId(context);
   const { to, type } = context.req.param() as { to: string; type: Ticket };
 
-  const success = match.game.useTicket(type, Number(to));
+  if (type === Ticket["2x"]) {
+    return context.json({ accepted2x: true });
+  }
+
+  const isTwoX = context.req.header().isusing2x === "true";
+  const success = match.game.useTicket(type, Number(to), { isTwoX });
 
   return context.json({ success });
 };

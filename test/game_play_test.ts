@@ -4,9 +4,10 @@ import {
   createAppWithPlayers,
 } from "./game_setup_test.ts";
 import { assertEquals } from "assert/equals";
-import { addTwoXCard, mapToObject } from "../src/game_play.ts";
+import { mapToObject } from "../src/game_play.ts";
 import { Route, Transport } from "../src/models/types.ts";
 import { basicMap } from "../src/maps/game_map.ts";
+import { assert } from "assert/assert";
 
 describe("serveMatchInfo", () => {
   it("should serve roles if player are present", async () => {
@@ -257,8 +258,8 @@ describe("handleMovement", () => {
   });
 });
 
-describe("broadCastMessage", () => {
-  it("should give the skip player message when the type is skip", async () => {
+describe("handleMovement", () => {
+  it("should play 2x ticket", async () => {
     const allPlayers = ["a", "b", "c", "d", "e", "f"];
     const [host, ...players] = allPlayers;
 
@@ -276,12 +277,65 @@ describe("broadCastMessage", () => {
   });
 });
 
+describe("broadCastMessage", () => {
+  it("should give the skip player message when the type is skip", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+
+    const response = await app.request("/game/broadcast/skip", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const actual = await response.json();
+    const expected = { message: `MrX is skipped and nextPlayer is Red` };
+    assertEquals(actual, expected);
+  });
+});
+
 describe("add 2x card", () => {
-  it("should add the 2x card", () => {
-    const station: Route = { to: 1, mode: Transport.Bus };
-    const actual = addTwoXCard(station);
-    const expected = [station, { to: station.to, mode: "2x" }];
+  it("should change turn after two turns", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+
+    const response1 = await app.request("/game/move/181/ticket/Taxi", {
+      headers: { cookie: `playerId=${host}`, isusing2x: "true" },
+    });
+
+    await app.request("/game/move/182/ticket/Taxi", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const actual = await response1.json();
+    const expected = { success: true };
 
     assertEquals(actual, expected);
+
+    const response2 = await app.request("/game/state", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const state = await response2.json();
+    assertEquals(state.currentRole, "Red");
+  });
+
+  it("should accept 2x", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+
+    const response = await app.request("/game/move/181/ticket/2x", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const actual = await response.json();
+    assert(actual.accepted2x);
   });
 });

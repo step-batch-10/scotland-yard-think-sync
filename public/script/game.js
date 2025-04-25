@@ -3,7 +3,13 @@ import { combineObjects } from "./game_utils.js";
 const fetchJson = (route) => fetch(route).then((res) => res.json());
 
 const fetchState = () => fetchJson("/game/state");
-const fetchPossibleStations = () => fetchJson("/game/possible-stations");
+
+const fetchPossibleStations = (status = false) =>
+  fetch("/game/possible-stations", {
+    headers: {
+      isTwoXCard: status,
+    },
+  }).then((res) => res.json());
 
 const cloneTemplate = (targetId) => {
   const template = document.querySelector(targetId);
@@ -129,10 +135,7 @@ const removeAllContainers = () => {
   containers.forEach((container) => container.remove());
 };
 
-const ticketSelection = (to, elements, pairs) => (e) => {
-  const type = e.target.id;
-  fetch(`/game/move/${to}/ticket/${type}`);
-
+const removeTickets = (elements, pairs) => {
   elements.forEach(({ clonedCard }) => {
     clonedCard.parentNode.parentNode.remove();
   });
@@ -140,10 +143,30 @@ const ticketSelection = (to, elements, pairs) => (e) => {
   removeListeners(pairs);
 };
 
-const createCard = ({ to, mode }) => {
+const ticketSelection = (to, elements, pairs) => async (e) => {
+  const type = e.target.id;
+  const respose = await fetch(`/game/move/${to}/ticket/${type}`, {
+    headers: { isusing2x: e.target.dataset.isusing2x },
+  });
+
+  const { accepted2x } = await respose.json();
+
+  if (!accepted2x) {
+    removeTickets(elements, pairs);
+    startPolling();
+  }
+
+  const possibleStations = await fetchPossibleStations(true);
+  removeTickets(elements, pairs);
+
+  return displayTravelOptions(possibleStations, true);
+};
+
+const createCard = ({ to, mode }, status) => {
   const card = document.createElement("div");
   const ticketType = mode === "Ferry" ? "Wild" : mode;
   card.id = ticketType;
+  card.dataset.isusing2x = status;
   card.textContent = ticketType;
 
   return { clonedCard: card, to };
@@ -156,12 +179,12 @@ const addListeners = (elements, card, pairs) => {
   });
 };
 
-const renderTickets = (options, pairs) => (e) => {
+const renderTickets = (options, pairs, status) => (e) => {
   removeAllContainers();
   const cardsContainer = cloneTemplate("#ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
-  const elements = options.map(createCard);
+  const elements = options.map((ele) => createCard(ele, status));
 
   closeBtn.addEventListener("click", removeContainer);
   alignCard(cardsContainer, getDimensions(e.currentTarget));
@@ -196,6 +219,7 @@ const highLightDestinations = (stations) => {
   });
 };
 
+<<<<<<< HEAD
 const brodcastMessage = async (type) => {
   const { message } = await fetchJson(`/game/broadcast/${type}`);
 
@@ -206,12 +230,15 @@ const displayTravelOptions = async () => {
   const possibleStation = await fetchPossibleStations();
 
   if (possibleStation.length === 0) return brodcastMessage("skip");
+=======
+const displayTravelOptions = (possibleStation, status = false) => {
+>>>>>>> 2e6d41c ([#16] | suman/akshay | adds 2x card logic)
   highLightDestinations(possibleStation);
   const pairs = pairTicketToStation(possibleStation);
 
   pairs.forEach(([to, options]) => {
     const station = document.getElementById(`station-${to}`);
-    station.onclick = renderTickets(options, pairs);
+    station.onclick = renderTickets(options, pairs, status);
   });
 };
 
@@ -286,11 +313,15 @@ const renderGameOver = ({ winner }, id) => {
 
   const banner = cloneTemplate("#winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
+<<<<<<< HEAD
+=======
+  renderTravelLog([{ to: 132, mode: "Taxi" }], banner);
+>>>>>>> 2e6d41c ([#16] | suman/akshay | adds 2x card logic)
 
   document.body.appendChild(banner);
 };
 
-const playGame = (data) => {
+const playGame = async (data, intervalId) => {
   const {
     tickets,
     positions,
@@ -309,7 +340,10 @@ const playGame = (data) => {
   showTurn(currentRole, isYourTurn);
   renderMrXTransportLog(transport);
 
-  if (isYourTurn) displayTravelOptions();
+  if (isYourTurn) {
+    clearInterval(intervalId);
+    displayTravelOptions(await fetchPossibleStations());
+  }
 };
 
 const startPolling = () => {
@@ -318,7 +352,7 @@ const startPolling = () => {
 
     if (data.isGameOver) return renderGameOver(data, intervalId);
 
-    return playGame(data);
+    return playGame(data, intervalId);
   }, 3000);
 };
 
