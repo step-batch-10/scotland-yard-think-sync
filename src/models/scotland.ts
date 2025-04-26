@@ -42,7 +42,6 @@ export class ScotlandYard {
   private currentRole: Role;
   private gameMap: GameMap;
   private winner: Winner;
-  private turnCount: number;
   private totalTurns: number;
   private revealingTurns: Set<number>;
   private lastSeen: number | null;
@@ -64,7 +63,6 @@ export class ScotlandYard {
     this.startingStations = map.startingPositions;
     this.gameMap = map;
     this.winner = null;
-    this.turnCount = 0;
     this.totalTurns = totalTurns;
     this.revealingTurns = new Set(revealingTurns);
     this.lastSeen = null;
@@ -147,8 +145,9 @@ export class ScotlandYard {
     const validTickets = this.getValidTickets();
 
     const detectivesPos = this.getDetectivePositions();
+
     const possibleRoutes = availableRoutes.filter(({ mode }) => {
-      return validTickets.includes(mode.toString());
+      return validTickets.includes(mode.toString()) || mode === Transport.Ferry;
     });
 
     return possibleRoutes.filter(({ to }) => !detectivesPos.includes(to));
@@ -184,12 +183,10 @@ export class ScotlandYard {
     return detectivesPos.includes(MrXPosition);
   }
 
-  private isTurnCount(): boolean {
-    if (this.isMrXTurn()) {
-      this.turnCount += 1;
-    }
-
-    return this.turnCount >= this.totalTurns;
+  private isTurnReachedLimit(): boolean {
+    return (
+      this.turn >= this.totalTurns && this.currentRole === this.roles.at(-1)
+    );
   }
 
   private detectivesCannotMove() {
@@ -203,7 +200,7 @@ export class ScotlandYard {
 
   declareWinner() {
     const hasDetectivesWon = this.isMrXCaught();
-    const hasMrXWon = this.isTurnCount() || this.detectivesCannotMove();
+    const hasMrXWon = this.isTurnReachedLimit() || this.detectivesCannotMove();
 
     if (hasDetectivesWon) this.winner = "Detective";
     if (hasMrXWon) this.winner = "MrX";
