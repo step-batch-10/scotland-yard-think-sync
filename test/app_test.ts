@@ -1,6 +1,6 @@
 import { createApp } from "../src/app.ts";
 import { describe, it } from "testing";
-import { assertEquals } from "jsr:@std/assert";
+import { assertEquals } from "assert";
 import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
 import { Bindings } from "../src/models/types.ts";

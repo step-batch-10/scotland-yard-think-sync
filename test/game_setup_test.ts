@@ -1,6 +1,6 @@
 import { createApp } from "../src/app.ts";
 import { describe, it } from "testing";
-import { assert, assertEquals, assertFalse } from "jsr:@std/assert";
+import { assert, assertEquals, assertFalse } from "assert";
 import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
 import { App, Bindings } from "../src/models/types.ts";
@@ -223,7 +223,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d", "e"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players,
+      ...players
     );
 
     await app.request("/setup/player-list", {
@@ -238,7 +238,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players,
+      ...players
     );
 
     await app.request("/setup/player-list", {
@@ -253,7 +253,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d", "e"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players,
+      ...players
     );
 
     await app.request("/setup/player-list", {
