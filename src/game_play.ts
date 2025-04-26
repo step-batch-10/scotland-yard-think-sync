@@ -9,12 +9,7 @@ import {
 import { extractPlayerId } from "./game_setup.ts";
 import { ScotlandYard } from "./models/scotland.ts";
 import _ from "lodash";
-
-export function mapToObject<T>(map?: Map<string, T>) {
-  if (!map) return {};
-
-  return Object.fromEntries([...map.entries()]);
-}
+import { mapToObject } from "./game_utils.ts";
 
 export const ensureActiveGame: GameMiddleWare = async (context, next) => {
   const playerId = extractPlayerId(context);

@@ -1,7 +1,6 @@
 import { describe, it } from "testing";
 import { assert, assertEquals, assertFalse } from "assert";
 import { ScotlandYard } from "../src/models/scotland.ts";
-import { mapToObject } from "../src/game_play.ts";
 import { basicMap } from "../src/maps/game_map.ts";
 import {
   GameMap,
@@ -12,6 +11,7 @@ import {
   Tickets,
   Transport,
 } from "../src/models/types.ts";
+import { mapToObject } from "../src/game_utils.ts";
 
 const setUpDefaultGame = (): [ScotlandYard, Set<string>] => {
   const players = new Set(["a", "b", "c", "d", "e", "f"]);

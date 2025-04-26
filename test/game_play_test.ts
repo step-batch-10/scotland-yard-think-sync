@@ -4,7 +4,6 @@ import {
   createAppWithPlayers,
 } from "./game_setup_test.ts";
 import { assertEquals } from "assert/equals";
-import { mapToObject } from "../src/game_play.ts";
 import { Transport } from "../src/models/types.ts";
 import { basicMap } from "../src/maps/game_map.ts";
 import { assert } from "assert/assert";
@@ -156,20 +155,6 @@ describe("gameState", () => {
     };
 
     assertEquals(actual.positions, expected);
-  });
-});
-
-describe("mapToObject", () => {
-  it("should return object if map has values", () => {
-    const map = new Map();
-    map.set("name", "akshay");
-    map.set("age", "none");
-
-    assertEquals(mapToObject<string>(map), { name: "akshay", age: "none" });
-  });
-
-  it("should return empty object if there is no parameter", () => {
-    assertEquals(mapToObject(), {});
   });
 });
 

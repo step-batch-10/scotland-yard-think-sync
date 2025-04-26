@@ -1,8 +1,9 @@
-import { mapToObject } from "../game_play.ts";
+import { mapToObject, randomNumber, reverseObject } from "../game_utils.ts";
 import { basicMap } from "../maps/half_map.ts";
 import { ticketsOf } from "./tickets.ts";
 import {
   GameMap,
+  Log,
   Positions,
   RandomIndex,
   Role,
@@ -14,23 +15,7 @@ import {
   Winner,
 } from "./types.ts";
 
-const randomNumber: RandomIndex = () => 1;
-
-const reverseObject = <Type>(obj: { [key: string]: Type }) => {
-  const reversedArray = Object.entries(obj).map(([k, v]) => [v, k]);
-  return Object.fromEntries(reversedArray);
-};
-
 const turns = [3, 8, 13, 18, 24];
-
-export interface Log {
-  to: number;
-  mode: Ticket;
-}
-
-export interface Options {
-  isTwoX: boolean;
-}
 
 export class ScotlandYard {
   private readonly players: string[];
@@ -45,7 +30,6 @@ export class ScotlandYard {
   private totalTurns: number;
   private revealingTurns: Set<number>;
   private lastSeen: number | null;
-  private turn: number;
   private mrXHistory: Log[];
   private isUsing2X: boolean;
   private twoXTurnCout: number;
@@ -66,7 +50,6 @@ export class ScotlandYard {
     this.totalTurns = totalTurns;
     this.revealingTurns = new Set(revealingTurns);
     this.lastSeen = null;
-    this.turn = 0;
     this.mrXHistory = [];
     this.isUsing2X = false;
     this.twoXTurnCout = 0;
@@ -79,6 +62,7 @@ export class ScotlandYard {
       Role.Yellow,
       Role.Purple,
     ];
+
     this.currentRole = this.roles[0];
   }
 
@@ -145,7 +129,6 @@ export class ScotlandYard {
     if (!availableRoutes) return [];
 
     const validTickets = this.getValidTickets();
-
     const detectivesPos = this.getDetectivePositions();
 
     const possibleRoutes = availableRoutes.filter(({ mode }) => {
@@ -159,14 +142,17 @@ export class ScotlandYard {
     return [station, { to: station.to, mode: Transport.Ferry }];
   }
 
-  hasTwoXCard(): boolean {
-    const twoXCardsCount = this.tickets.get(this.currentRole)!["2x"];
-    return twoXCardsCount > 0;
+  private hasTickets(ticket: Ticket): boolean {
+    const tickets = this.tickets.get(this.currentRole)!;
+    return tickets[ticket] > 0;
+  }
+
+  private hasTwoXCard(): boolean {
+    return this.hasTickets(Ticket["2x"]);
   }
 
   hasBlackTickets(): boolean {
-    const { Wild = 0 } = this.tickets.get(this.currentRole)!;
-    return Wild > 0;
+    return this.hasTickets(Ticket.Black);
   }
 
   possibleStations(): Route[] {
@@ -193,20 +179,23 @@ export class ScotlandYard {
   }
 
   private detectivesCannotMove() {
-    const detectivesPositions = this.getDetectivePositions();
-    const allValidRoutes = detectivesPositions.map((position) => {
-      return this.validRoutes(position);
-    });
+    const detectiveLocations = this.getDetectivePositions();
+    const permissibleRoutes = detectiveLocations.map(this.validRoutes);
 
-    return allValidRoutes.every((validRoutes) => validRoutes.length === 0);
+    return permissibleRoutes.every((validRoutes) => validRoutes.length === 0);
+  }
+
+  private hasDetectivesWon() {
+    return this.isMrXCaught();
+  }
+
+  private hasMrXWon() {
+    return this.detectivesCannotMove() || this.isTurnReachedLimit();
   }
 
   declareWinner() {
-    const hasDetectivesWon = this.isMrXCaught();
-    const hasMrXWon = this.isTurnReachedLimit() || this.detectivesCannotMove();
-
-    if (hasDetectivesWon) this.winner = "Detective";
-    if (hasMrXWon) this.winner = "MrX";
+    if (this.hasDetectivesWon()) this.winner = "Detective";
+    if (this.hasMrXWon()) this.winner = "MrX";
 
     return this.winner;
   }

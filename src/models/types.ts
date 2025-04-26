@@ -74,3 +74,11 @@ export interface GameMap {
 }
 
 export type Winner = null | "Detective" | "MrX";
+export interface Log {
+  to: number;
+  mode: Ticket;
+}
+
+export interface Options {
+  isTwoX: boolean;
+}
