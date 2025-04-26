@@ -272,7 +272,7 @@ describe("game state", () => {
 
   it("should reveal mrX's location in a reveal second turn", () => {
     const players = ["a", "b", "c", "d", "e", "f"];
-    const game = new ScotlandYard(players, basicMap, 2, [2, 3]);
+    const game = new ScotlandYard(players, basicMap, 5, [2, 3]);
 
     game.assignRole();
     game.distributeTickets();
@@ -788,7 +788,7 @@ describe("Increment mrX tickets", () => {
 });
 
 describe("declareWinner", () => {
-  it("should declear Detective as winner when MrX is captured", () => {
+  it("should declare Detective as winner when MrX is captured", () => {
     const fakeMap: GameMap = {
       startingPositions: [2, 1, 3, 4, 5, 6, 7],
       routes: {
@@ -799,6 +799,7 @@ describe("declareWinner", () => {
     };
 
     const game = makeGame(fakeMap, 1);
+
     const destination = 2;
     game.useTicket(Ticket.Yellow, destination);
     game.useTicket(Ticket.Yellow, destination);
@@ -806,7 +807,7 @@ describe("declareWinner", () => {
     assertEquals(game.declareWinner(), "Detective");
   });
 
-  it("should declear Mr.X as winner when he escapes for one turn", () => {
+  it("should declare Mr.X as winner when he escapes for one turn", () => {
     const fakeMap: GameMap = {
       startingPositions: [2, 1, 3, 4, 5, 6, 7],
       routes: {
@@ -831,7 +832,7 @@ describe("declareWinner", () => {
     assertEquals(game.declareWinner(), "MrX");
   });
 
-  it("should declear Mr.X as winner when detectives can't move", () => {
+  it("should declare Mr.X as winner when detectives can't move", () => {
     const fakeMap: GameMap = {
       startingPositions: [2, 1, 3, 4, 5, 6, 7],
       routes: {
@@ -1010,6 +1011,32 @@ describe("use 2X ticket", () => {
 
     game.useTicket(Ticket.Yellow, 181);
     assertEquals(game.getGameState("2").currentRole, Role.Red);
+  });
+
+  it("should be game over if before last round mrX plays 2x", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 1, mode: Transport.Taxi }],
+        4: [
+          { to: 3, mode: Transport.Taxi },
+          { to: 3, mode: Transport.Ferry },
+        ],
+        5: [{ to: 4, mode: Transport.Taxi }],
+        6: [{ to: 5, mode: Transport.Taxi }],
+        7: [{ to: 6, mode: Transport.Taxi }],
+        2: [{ to: 100, mode: Transport.Metro }],
+      },
+    };
+
+    const game = makeGame(fakeMap, 1);
+    assert(game.enable2X());
+
+    assert(game.useTicket(Ticket.Yellow, 2));
+    assert(game.useTicket(Ticket.Black, 100));
+
+    assertEquals(game.declareWinner(), "MrX");
   });
 
   it("should be game over if last round is 2x and all players played", () => {

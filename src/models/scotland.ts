@@ -187,7 +187,8 @@ export class ScotlandYard {
 
   private isTurnReachedLimit(): boolean {
     return (
-      this.turn >= this.totalTurns && this.currentRole === this.roles.at(-1)
+      this.mrXHistory.length >= this.totalTurns &&
+      (this.currentRole === this.roles.at(-1) || this.isUsing2X)
     );
   }
 
@@ -252,11 +253,6 @@ export class ScotlandYard {
     mrXTickets[mode] += 1;
   }
 
-  private updateTurn() {
-    if (this.currentRole !== Role.MrX) return;
-    this.turn += 1;
-  }
-
   updateLog(to: number, mode: Ticket) {
     if (!this.isMrXTurn()) return;
 
@@ -282,7 +278,6 @@ export class ScotlandYard {
     this.movePlayer(destination);
     this.fuelMrX(mode);
 
-    this.updateTurn();
     this.updateState();
 
     this.declareWinner();
@@ -331,7 +326,7 @@ export class ScotlandYard {
   }
 
   private shouldReveal() {
-    return this.revealingTurns.has(this.turn);
+    return this.revealingTurns.has(this.mrXHistory.length);
   }
 
   private updateLastSeen() {
