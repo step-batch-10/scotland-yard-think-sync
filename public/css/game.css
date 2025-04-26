@@ -167,6 +167,7 @@ th {
   color: white;
   min-width: 85px;
   background-color: whitesmoke;
+  z-index: 999;
 
   *:hover {
     cursor: pointer;
@@ -248,18 +249,22 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
   width: 10vw;
+}
+
+.body-parts {
+  stroke: black;
+  stroke-width: 2;
+  filter: drop-shadow(2px 2px 2px rgba(0, 0, 0, 0.5));
+}
+
+.pawn .neck {
+  stroke: none;
 }
 
 .row {
@@ -320,4 +325,10 @@ g {
   position: fixed;
   top: 20vh;
   right: 1vw;
+}
+
+.log-text {
+  color: black;
+  padding: 4px;
+  font-weight: 700;
 }

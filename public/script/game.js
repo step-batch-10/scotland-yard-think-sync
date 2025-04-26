@@ -13,7 +13,7 @@ const cloneTemplate = (targetId) => {
 const mapRoleToColor = (role) => {
   const tokenColors = {
     Red: "Red",
-    Yellow: "Magenta",
+    Yellow: "Goldenrod",
     Blue: "Blue",
     Green: "Green",
     Purple: "Purple",
@@ -56,7 +56,8 @@ const renderMrXTransportLog = (transports) => {
 
   transports.forEach((transport, index) => {
     const span = document.createElement("span");
-    span.textContent = `${index}`;
+    span.textContent = `${index + 1}`;
+    span.classList.add("log-text");
 
     const icon = cloneTemplate(`#${transport}-icon`);
     icon.style.height = getComputedStyle(log[index]).height;
@@ -64,7 +65,7 @@ const renderMrXTransportLog = (transports) => {
     icon.style.marginLeft = "10px";
 
     log[index].style.textAlign = "start";
-    log[index].replaceChildren(...[span, icon]);
+    log[index].replaceChildren(...[icon, span]);
   });
 };
 
@@ -103,10 +104,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -351,7 +352,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };
