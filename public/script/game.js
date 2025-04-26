@@ -29,9 +29,11 @@ const addTextContent = (values, cells) =>
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
   const { Taxi, Bus, Metro } = tickets;
-  const values = [mapRoleToColor(role), playerName, Taxi, Bus, Metro, station];
+  cells[0].style.backgroundColor = mapRoleToColor(role);
 
+  const values = ["", playerName, Taxi, Bus, Metro, station];
   addTextContent(values, cells);
+
   return trElement;
 };
 

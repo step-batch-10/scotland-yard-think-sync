@@ -282,13 +282,6 @@ g {
   }
 }
 
-.reveal-log {
-  display: flex;
-  width: 21vw;
-  border: 1px solid black;
-  align-items: center;
-}
-
 .transport-log {
   width: 25%;
   text-align: center;

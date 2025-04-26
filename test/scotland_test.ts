@@ -579,8 +579,13 @@ describe("canTravel", () => {
   });
 });
 
-const makeGame = (map: GameMap = basicMap, round = 25) => {
-  const game = new ScotlandYard(["1", "2", "3", "4", "5", "6"], map, round);
+const makeGame = (map: GameMap = basicMap, round = 25, reveal = [1, 3]) => {
+  const game = new ScotlandYard(
+    ["1", "2", "3", "4", "5", "6"],
+    map,
+    round,
+    reveal,
+  );
 
   game.assignRole();
   game.assignStartingPositions();
@@ -618,9 +623,10 @@ describe("useTicket", () => {
 
   it("should not allow player to use a ticket they don't own", () => {
     const fakeMap: GameMap = {
-      startingPositions: [1, 1, 1, 1, 1, 1],
+      startingPositions: [1, 1, 2, 1, 1, 1],
       routes: {
         1: [{ to: 2, mode: Transport.Ferry }],
+        2: [{ to: 100, mode: Transport.Ferry }],
       },
     };
 
@@ -794,8 +800,9 @@ describe("declareWinner", () => {
 
     const game = makeGame(fakeMap, 1);
     const destination = 2;
-    game.useTicket(Ticket.Yellow, destination); // MrX
-    game.useTicket(Ticket.Yellow, destination); // Detective 1
+    game.useTicket(Ticket.Yellow, destination);
+    game.useTicket(Ticket.Yellow, destination);
+
     assertEquals(game.declareWinner(), "Detective");
   });
 
@@ -987,6 +994,54 @@ describe("use 2X ticket", () => {
     game.enable2X();
 
     assertFalse(game.enable2X());
+  });
+
+  it("should reveal and play 2x if it is time to reaveal", () => {
+    const game = makeGame();
+    game.assignRole();
+    game.distributeTickets();
+    game.assignStartingPositions();
+
+    game.enable2X();
+    game.useTicket(Ticket.Yellow, 195);
+
+    assertEquals(game.getGameState("2").lastSeen, 195);
+    game.useTicket(Ticket.Yellow, 181);
+
+    game.useTicket(Ticket.Yellow, 181);
+    assertEquals(game.getGameState("2").currentRole, Role.Red);
+  });
+
+  it("should be game over if last round is 2x and all players played", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [{ to: 2, mode: Transport.Taxi }],
+        3: [{ to: 1, mode: Transport.Taxi }],
+        4: [
+          { to: 3, mode: Transport.Taxi },
+          { to: 3, mode: Transport.Ferry },
+        ],
+        5: [{ to: 4, mode: Transport.Taxi }],
+        6: [{ to: 5, mode: Transport.Taxi }],
+        7: [{ to: 6, mode: Transport.Taxi }],
+        2: [{ to: 100, mode: Transport.Metro }],
+      },
+    };
+
+    const game = makeGame(fakeMap, 2);
+    assert(game.enable2X());
+
+    assert(game.useTicket(Ticket.Yellow, 2));
+    assert(game.useTicket(Ticket.Black, 100));
+
+    assert(game.useTicket(Ticket.Yellow, 1));
+    assert(game.useTicket(Ticket.Yellow, 3));
+    assert(game.useTicket(Ticket.Yellow, 4));
+    assert(game.useTicket(Ticket.Yellow, 5));
+    assert(game.useTicket(Ticket.Yellow, 6));
+
+    assertEquals(game.declareWinner(), "MrX");
   });
 });
 

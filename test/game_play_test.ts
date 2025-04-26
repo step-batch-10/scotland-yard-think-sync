@@ -210,11 +210,14 @@ describe("servePossibleStations", () => {
     const response = await app.request("/game/possible-stations", {
       headers: { cookie: `playerId=b` },
     });
+
     const expected = [
       { to: 172, mode: Transport.Taxi },
       { to: 188, mode: Transport.Taxi },
       { to: 159, mode: Transport.Bus },
+      { to: 118, mode: Transport.Ferry },
     ];
+
     const actual = await response.json();
     assertEquals(actual, expected);
   });
