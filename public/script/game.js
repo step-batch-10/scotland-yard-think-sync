@@ -25,7 +25,6 @@ const mapRoleToColor = (role) => {
 
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
-
   const { Taxi, Bus, Metro } = tickets;
   const values = ["", playerName, Taxi, Bus, Metro, station];
   values.forEach((value, i) => (cells[i].textContent = value));
@@ -69,7 +68,7 @@ const renderMrXTransportLog = (transports) => {
     icon.style.marginLeft = "10px";
 
     log[index].style.textAlign = "start";
-    log[index].replaceChildren(icon, span);
+    log[index].replaceChildren(span, icon);
   });
 };
 
@@ -107,13 +106,12 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
 
   const { left, top } = element.getBoundingClientRect();
-
   return [scrollLeft + left, scrollTop + top];
 };
 
@@ -353,7 +351,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };
