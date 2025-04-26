@@ -103,10 +103,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -210,7 +210,6 @@ const showMessage = async () => {
 
 const displayTravelOptions = async () => {
   const possibleStation = await fetchPossibleStations();
-  console.log("Possible Station", possibleStation);
 
   if (possibleStation.length === 0) return showMessage("skip");
   highLightDestinations(possibleStation);
@@ -352,7 +351,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };
