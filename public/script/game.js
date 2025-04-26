@@ -23,31 +23,24 @@ const mapRoleToColor = (role) => {
   return tokenColors[role];
 };
 
+const addTextContent = (values, cells) =>
+  values.forEach((value, i) => (cells[i].textContent = value));
+
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
+  const { Taxi, Bus, Metro } = tickets;
+  const values = [mapRoleToColor(role), playerName, Taxi, Bus, Metro, station];
 
-  cells[0].style.backgroundColor = mapRoleToColor(role);
-  cells[1].textContent = playerName;
-  cells[2].textContent = tickets.Taxi;
-  cells[3].textContent = tickets.Bus;
-  cells[4].textContent = tickets.Metro;
-  cells[5].textContent = station;
-
+  addTextContent(values, cells);
   return trElement;
 };
 
 const mrXStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
+  const { Taxi, Bus, Metro, Wild, ["2x"]: twox } = tickets;
+  const values = [role, playerName, Taxi, Bus, Metro, Wild, twox, station];
 
-  cells[0].textContent = role;
-  cells[1].textContent = playerName;
-  cells[2].textContent = tickets.Taxi;
-  cells[3].textContent = tickets.Bus;
-  cells[4].textContent = tickets.Metro;
-  cells[5].textContent = tickets.Wild;
-  cells[6].textContent = tickets["2x"];
-  cells[7].textContent = station;
-
+  addTextContent(values, cells);
   return trElement;
 };
 
@@ -64,7 +57,7 @@ const renderMrXTransportLog = (transports) => {
     icon.style.marginLeft = "10px";
 
     log[index].style.textAlign = "start";
-    log[index].replaceChildren(...[span, icon]);
+    log[index].replaceChildren(span, icon);
   });
 };
 
@@ -103,16 +96,13 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
-  const dimensions = element.getBoundingClientRect();
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
 
-  const absoluteX = dimensions.left + scrollLeft;
-  const absoluteY = dimensions.top + scrollTop;
-
-  return [absoluteX, absoluteY];
+  const { left, top } = element.getBoundingClientRect();
+  return [scrollLeft + left, scrollTop + top];
 };
 
 const removeContainer = (e) => e.target.parentNode.parentNode.remove();
@@ -351,7 +341,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };
