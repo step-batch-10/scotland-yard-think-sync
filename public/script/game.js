@@ -26,9 +26,9 @@ const mapRoleToColor = (role) => {
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
   const { Taxi, Bus, Metro } = tickets;
+  cells[0].style.backgroundColor = mapRoleToColor(role);
   const values = ["", playerName, Taxi, Bus, Metro, station];
   values.forEach((value, i) => (cells[i].textContent = value));
-  cells[0].style.backgroundColor = mapRoleToColor(role);
 
   return trElement;
 };
