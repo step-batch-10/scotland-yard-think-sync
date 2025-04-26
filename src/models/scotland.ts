@@ -21,7 +21,7 @@ const reverseObject = <Type>(obj: { [key: string]: Type }) => {
   return Object.fromEntries(reversedArray);
 };
 
-const turns = [2, 8, 13, 18, 24];
+const turns = [3, 8, 13, 18, 24];
 
 export interface Log {
   to: number;

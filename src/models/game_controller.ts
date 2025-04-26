@@ -14,7 +14,7 @@ export class GameController {
   }
 
   private defaultMatchFormat(players: string[], map?: GameMap) {
-    const game = new ScotlandYard(players, map, 3);
+    const game = new ScotlandYard(players, map, 5);
     game.assignRole();
     game.distributeTickets();
     game.assignStartingPositions();
