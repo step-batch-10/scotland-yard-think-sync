@@ -223,7 +223,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d", "e"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players
+      ...players,
     );
 
     await app.request("/setup/player-list", {
@@ -238,7 +238,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players
+      ...players,
     );
 
     await app.request("/setup/player-list", {
@@ -253,7 +253,7 @@ describe("servePlayerList", () => {
     const players = ["a", "b", "c", "d", "e"];
     const { app, roomId, bindings } = createAppWithHostedRoom(
       playerName,
-      ...players
+      ...players,
     );
 
     await app.request("/setup/player-list", {
