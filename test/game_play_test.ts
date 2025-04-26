@@ -201,6 +201,7 @@ describe("servePossibleStations", () => {
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
     bindings.rooms.assignGame(roomId, bindings.controller);
+
     await app.request("/game/move/160/ticket/Taxi", {
       headers: {
         cookie: `playerId=${host}`,
@@ -215,7 +216,6 @@ describe("servePossibleStations", () => {
       { to: 172, mode: Transport.Taxi },
       { to: 188, mode: Transport.Taxi },
       { to: 159, mode: Transport.Bus },
-      { to: 118, mode: Transport.Ferry },
     ];
 
     const actual = await response.json();

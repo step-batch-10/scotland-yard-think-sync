@@ -135,7 +135,9 @@ export class ScotlandYard {
     const tickets = this.tickets.get(this.currentRole)!;
     const pairs = Object.entries(tickets).filter(([_, count]) => count !== 0);
 
-    return pairs.flatMap(([ticket]) => ticket);
+    return pairs.flatMap(([ticket]) =>
+      ticket === "Wild" ? Transport.Ferry : ticket
+    );
   }
 
   validRoutes = (station: number) => {
@@ -147,7 +149,7 @@ export class ScotlandYard {
     const detectivesPos = this.getDetectivePositions();
 
     const possibleRoutes = availableRoutes.filter(({ mode }) => {
-      return validTickets.includes(mode.toString()) || mode === Transport.Ferry;
+      return validTickets.includes(mode.toString());
     });
 
     return possibleRoutes.filter(({ to }) => !detectivesPos.includes(to));
