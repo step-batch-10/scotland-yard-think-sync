@@ -848,19 +848,6 @@ describe("declareWinner", () => {
   });
 });
 
-describe("findRole", () => {
-  it("should give role based on player", () => {
-    const game = makeGame();
-    assertEquals(game.findRole("1"), Role.MrX);
-    assertEquals(game.findRole("2"), Role.Red);
-  });
-
-  it("should give role null if it is not a registared player", () => {
-    const game = makeGame();
-    assertFalse(game.findRole("akshay "));
-  });
-});
-
 describe("has black Tickets", () => {
   it("should return true if the player has blak tickets", () => {
     const fakeMap: GameMap = {

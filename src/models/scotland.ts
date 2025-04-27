@@ -1,4 +1,4 @@
-import { mapToObject, randomNumber, reverseObject } from "../game_utils.ts";
+import { mapToObject, randomNumber } from "../game_utils.ts";
 import { basicMap } from "../maps/half_map.ts";
 import { ticketsOf } from "./tickets.ts";
 import {
@@ -305,15 +305,6 @@ export class ScotlandYard {
     return this.view(positions);
   }
 
-  findRole(player: string): Role | null {
-    const playerRoles = mapToObject<string>(this.assignedRoles);
-    const reversed = reverseObject(playerRoles);
-
-    if (!reversed[player]) return null;
-
-    return reversed[player] as Role;
-  }
-
   private shouldReveal() {
     return this.revealingTurns.has(this.mrXHistory.length);
   }
@@ -331,9 +322,9 @@ export class ScotlandYard {
   }
 
   getGameState(player: string) {
-    const role = this.findRole(player) as Role;
+    const isMrx = this.assignedRoles.get(Role.MrX) === player;
 
-    if (role === Role.MrX || this.shouldReveal()) {
+    if (isMrx || this.shouldReveal()) {
       return this.mrXView();
     }
 

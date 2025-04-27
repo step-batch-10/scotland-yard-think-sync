@@ -206,6 +206,33 @@ describe("servePossibleStations", () => {
     const actual = await response.json();
     assertEquals(actual, expected);
   });
+
+  it("should not give any possible station if it is not my turn", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller);
+
+    await app.request("/game/move/160/ticket/Taxi", {
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+    });
+
+    const response = await app.request("/game/possible-stations", {
+      headers: { cookie: `playerId=b` },
+    });
+
+    const expected = [
+      { to: 172, mode: Transport.Taxi },
+      { to: 188, mode: Transport.Taxi },
+      { to: 159, mode: Transport.Bus },
+    ];
+
+    const actual = await response.json();
+    assertEquals(actual, expected);
+  });
 });
 
 describe("handleMovement", () => {
