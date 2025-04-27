@@ -10,20 +10,20 @@ export class Rooms {
     this.roomId = 100000;
   }
 
-  #generateId() {
+  private generateId() {
     this.roomId++;
     return this.roomId.toString();
   }
 
-  #createRoom() {
-    const roomId = this.#generateId();
+  private createRoom() {
+    const roomId = this.generateId();
     this.lobbies.set(roomId, new Set());
 
     return roomId;
   }
 
   addHost(player: string) {
-    const roomId = this.#createRoom();
+    const roomId = this.createRoom();
     const lobby = this.lobbies.get(roomId);
     lobby?.add(player);
 
