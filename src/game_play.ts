@@ -104,6 +104,13 @@ const handleEnableTwoX: GameHandler = (context) => {
   return context.json({ accepted });
 };
 
+const handleMrXLog: GameHandler = (context) => {
+  const { match } = extractMatchAndPlayerId(context);
+  const logs = match.game.getMrXhistoryLog();
+
+  return context.json(logs);
+};
+
 export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
 
@@ -113,6 +120,7 @@ export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   gameApp.get("/skip-move", handleSkipPlayer);
   gameApp.get("/move/:to/ticket/:type", handleMovement);
   gameApp.get("/enable-2x", handleEnableTwoX);
+  gameApp.get("/mrXlog", handleMrXLog);
 
   return gameApp;
 };

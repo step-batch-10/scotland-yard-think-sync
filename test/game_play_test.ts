@@ -7,6 +7,7 @@ import { assertEquals } from "assert/equals";
 import { RandomIndex, Transport } from "../src/models/types.ts";
 import { basicMap } from "../src/maps/game_map.ts";
 import { assert } from "assert/assert";
+import { Ticket } from "../src/models/types.ts";
 
 const random: RandomIndex = () => 0;
 describe("serveMatchInfo", () => {
@@ -349,87 +350,50 @@ describe("add 2x card", () => {
   });
 });
 
-// describe("ensureActiveGame", () => {
-//   it("It should redirect to the game page if the player is in an active game and tries to access a lobby page.", async () => {
-//     const allPlayers = ["a", "b", "c", "d", "e", "f"];
-//     const [host, ...players] = allPlayers;
+describe("mrX Travel log", () => {
+  it("should return mrX logs as empty because mrX is not moved yet", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
 
-//     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-//     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
-//     bindings.playerRegistry.joinMatch(allPlayers);
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
 
-//     const response = await app.request("/lobby", {
-//       headers: { cookie: `playerId=${host}` },
-//     });
+    const response = await app.request("/game/mrXlog", {
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+    });
 
-//     const location = response.headers.get("location");
+    const expected = await response.json();
+    assertEquals([], expected);
+  });
 
-//     assertEquals(location, "/html/game.html");
-//   });
+  it("should return two logs of mrX as he move on played two turn", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
 
-//   it("It should  serve the requested page if the player is not in the active game session.", async () => {
-//     const allPlayers = ["a", "b", "c", "d", "e", "f"];
-//     const [host, ...players] = allPlayers;
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
+    const match = bindings.controller.getMatch(roomId)!;
+    const game = match.game;
 
-//     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-//     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    game.useTicket(Ticket.Yellow, 100);
+    game.useTicket(Ticket.Yellow, 181);
+    game.useTicket(Ticket.Yellow, 182);
+    game.useTicket(Ticket.Yellow, 183);
+    game.useTicket(Ticket.Yellow, 184);
+    game.useTicket(Ticket.Red, 185);
+    game.useTicket(Ticket.Yellow, 101);
 
-//     const response = await app.request("/lobby", {
-//       headers: { cookie: `playerId=${host}` },
-//     });
+    const response = await app.request("/game/mrXlog", {
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+    });
 
-//     await response.text();
+    const actual = [{ to: 100, mode: "Taxi" }, { to: 101, mode: "Taxi" }];
+    const expected = await response.json();
 
-//     assertEquals(response.status, 200);
-//   });
-
-//   it("It should redirect to the game page if the player is in an active game and tries to access a waiting page.", async () => {
-//     const allPlayers = ["a", "b", "c", "d", "e", "f"];
-//     const [host, ...players] = allPlayers;
-
-//     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-//     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
-//     bindings.playerRegistry.joinMatch(allPlayers);
-
-//     const response = await app.request("/html/waiting.html", {
-//       headers: { cookie: `playerId=${host}` },
-//     });
-
-//     const location = response.headers.get("location");
-
-//     assertEquals(location, "/html/game.html");
-//   });
-
-//   it("It should  serve the waiting page if the player is not in the active game session.", async () => {
-//     const allPlayers = ["a", "b", "c", "d", "e", "f"];
-//     const [host, ...players] = allPlayers;
-
-//     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-//     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
-
-//     const response = await app.request("/lobby", {
-//       headers: { cookie: `playerId=${host}` },
-//     });
-
-//     await response.text();
-
-//     assertEquals(response.status, 200);
-//   });
-
-//   it("It should redirect to the game page if the player is in an active game and tries to access a waiting page.", async () => {
-//     const allPlayers = ["a", "b", "c", "d", "e", "f"];
-//     const [host, ...players] = allPlayers;
-
-//     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-//     bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
-//     bindings.playerRegistry.joinMatch(allPlayers);
-
-//     const response = await app.request("/html/join.html", {
-//       headers: { cookie: `playerId=${host}` },
-//     });
-
-//     const location = response.headers.get("location");
-
-//     assertEquals(location, "/html/game.html");
-//   });
-// });
+    assertEquals(actual, expected);
+  });
+});

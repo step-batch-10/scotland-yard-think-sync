@@ -256,4 +256,8 @@ export class ScotlandYard {
   getCurrentRole() {
     return this.stateManager.getCurrentRole();
   }
+
+  getMrXhistoryLog() {
+    return this.mrXHistory;
+  }
 }
