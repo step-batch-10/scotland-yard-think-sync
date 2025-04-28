@@ -8,7 +8,7 @@
   "test": {
     "include": ["**/*.ts", "public/script/game_utils.js"],
 
-    "exclude": ["main.ts", "src/maps/*"]
+    "exclude": ["main.ts", "src/maps/*", "spikes"]
   },
   "lint": {
     "rules": {

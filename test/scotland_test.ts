@@ -1,6 +1,6 @@
 import { describe, it } from "testing";
 import { assert, assertEquals, assertFalse } from "assert";
-import { ScotlandYard } from "../src/models/scotland.ts";
+import { mapToObject } from "../src/game_utils.ts";
 import { basicMap } from "../src/maps/game_map.ts";
 import {
   GameMap,
@@ -11,12 +11,14 @@ import {
   Tickets,
   Transport,
 } from "../src/models/types.ts";
-import { mapToObject } from "../src/game_utils.ts";
+import { ScotlandYard } from "../src/models/scotland.ts";
 
 const setUpDefaultGame = (): [ScotlandYard, Set<string>] => {
   const players = new Set(["a", "b", "c", "d", "e", "f"]);
   return [new ScotlandYard([...players]), players];
 };
+
+const random: RandomIndex = () => 1;
 
 describe("test playerNames", () => {
   it("should provide playerNames", () => {
@@ -189,7 +191,6 @@ describe("game state", () => {
         1: [{ to: 1, mode: Transport.Bus }],
       },
     };
-
     const game = new ScotlandYard(
       ["test1", "test2", "test3", "test4", "test5", "test6"],
       fakeMap,
@@ -197,7 +198,7 @@ describe("game state", () => {
 
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     const expected = {
       Red: 3,
@@ -236,7 +237,7 @@ describe("game state", () => {
     const [sy] = setUpDefaultGame();
     sy.assignRole();
     sy.distributeTickets();
-    sy.assignStartingPositions();
+    sy.assignStartingPositions(random);
 
     const { positions } = sy.getGameState("b");
     const expected = {
@@ -255,7 +256,7 @@ describe("game state", () => {
     const [sy] = setUpDefaultGame();
     sy.assignRole();
     sy.distributeTickets();
-    sy.assignStartingPositions();
+    sy.assignStartingPositions(random);
 
     const { positions } = sy.getGameState("a");
     const expected = {
@@ -272,11 +273,11 @@ describe("game state", () => {
 
   it("should reveal mrX's location in a reveal second turn", () => {
     const players = ["a", "b", "c", "d", "e", "f"];
-    const game = new ScotlandYard(players, basicMap, 5, [2, 3]);
+    const game = new ScotlandYard(players, basicMap, 4, [2, 3]);
 
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     game.useTicket(Ticket.Yellow, 181);
     game.useTicket(Ticket.Yellow, 182);
@@ -308,7 +309,7 @@ describe("change turn", () => {
     const [sy] = setUpDefaultGame();
     sy.assignRole();
     sy.distributeTickets();
-    sy.assignStartingPositions();
+    sy.assignStartingPositions(random);
     const nextPlayer = sy.changePlayer();
 
     assertEquals(nextPlayer, "Red");
@@ -318,7 +319,7 @@ describe("change turn", () => {
     const [sy] = setUpDefaultGame();
     sy.assignRole();
     sy.distributeTickets();
-    sy.assignStartingPositions();
+    sy.assignStartingPositions(random);
     sy.changePlayer();
     sy.changePlayer();
     sy.changePlayer();
@@ -347,7 +348,7 @@ describe("possible stations", () => {
 
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     const actual = game.possibleStations();
 
@@ -363,7 +364,7 @@ describe("possible stations", () => {
     const fakeMap: GameMap = {
       startingPositions: [1, 2, 3, 4, 5, 6],
       routes: {
-        1: [{ to: 1, mode: Transport.Bus }],
+        1: [],
       },
     };
 
@@ -371,13 +372,16 @@ describe("possible stations", () => {
       ["test1", "test2", "test3", "test4", "test5", "test6"],
       fakeMap,
     );
+    game.assignRole();
+    game.assignStartingPositions(random);
+    game.distributeTickets();
 
     const actual = game.possibleStations();
 
     assertEquals(actual, []);
   });
 
-  it("should add the extra tickets for mr.x if he has", () => {
+  it("should add the extra tickets for mr.x if he has black ticket", () => {
     const route = [{ to: 20, mode: Transport.Bus }];
     const fakeMap: GameMap = {
       startingPositions: [1, 2, 3, 4, 5, 6],
@@ -388,9 +392,10 @@ describe("possible stations", () => {
       ["test1", "test2", "test3", "test4", "test5", "test6"],
       fakeMap,
     );
-    game.assignStartingPositions();
+
     game.assignRole();
     game.distributeTickets();
+    game.assignStartingPositions(random);
     const actual = game.possibleStations();
     const expected = [
       { to: 20, mode: Transport.Bus },
@@ -417,7 +422,7 @@ describe("positionOfDetectives", () => {
 
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     assertEquals(game.getDetectivePositions(), [3, 4, 5, 6, 1]);
   });
@@ -481,7 +486,7 @@ describe("isMrXTurn", () => {
     );
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
     assert(game.isMrXTurn());
   });
 
@@ -492,7 +497,7 @@ describe("isMrXTurn", () => {
     );
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
     assert(game.isMrXTurn());
     game.changePlayer();
 
@@ -588,7 +593,8 @@ const makeGame = (map: GameMap = basicMap, round = 25, reveal = [1, 3]) => {
   );
 
   game.assignRole();
-  game.assignStartingPositions();
+  const random: RandomIndex = () => 1;
+  game.assignStartingPositions(random);
   game.distributeTickets();
 
   return game;
@@ -849,7 +855,7 @@ describe("declareWinner", () => {
 });
 
 describe("has black Tickets", () => {
-  it("should return true if the player has blak tickets", () => {
+  it("should return true if the player has black tickets", () => {
     const fakeMap: GameMap = {
       startingPositions: [1, 2, 3, 4, 5, 6, 7],
       routes: {
@@ -864,7 +870,7 @@ describe("has black Tickets", () => {
 
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
     assert(game.hasBlackTickets());
   });
   it("should return false if the player has blak tickets", () => {
@@ -882,7 +888,7 @@ describe("has black Tickets", () => {
 
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
     game.changePlayer();
     assertFalse(game.hasBlackTickets());
   });
@@ -893,7 +899,7 @@ describe("should save travel history", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
     game.useTicket(Ticket.Yellow, 181);
 
     const { transport } = game.getGameState("1");
@@ -905,7 +911,7 @@ describe("should save travel history", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
     game.useTicket(Ticket.Green, 181);
 
     const { transport } = game.getGameState("1");
@@ -919,7 +925,7 @@ describe("use 2X ticket", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     game.enable2X();
     game.useTicket(Ticket.Yellow, 195);
@@ -933,7 +939,7 @@ describe("use 2X ticket", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     game.useTicket(Ticket.Yellow, 195);
     game.useTicket(Ticket.Yellow, 181);
@@ -946,7 +952,7 @@ describe("use 2X ticket", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     game.useTicket(Ticket.Yellow, 195);
     const actual = game.useTicket(Ticket.Yellow, 181);
@@ -958,7 +964,7 @@ describe("use 2X ticket", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     game.enable2X();
     game.useTicket(Ticket.Yellow, 195);
@@ -976,7 +982,7 @@ describe("use 2X ticket", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     game.enable2X();
     game.enable2X();
@@ -988,7 +994,7 @@ describe("use 2X ticket", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     game.enable2X();
     game.useTicket(Ticket.Yellow, 195);
@@ -1064,7 +1070,7 @@ describe("can accept 2x", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     assert(game.enable2X());
   });
@@ -1073,7 +1079,7 @@ describe("can accept 2x", () => {
     const game = makeGame();
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
     game.enable2X();
 
     game.useTicket(Ticket.Yellow, 195);

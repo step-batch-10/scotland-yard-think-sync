@@ -32,7 +32,7 @@ export class ScotlandYard {
   private lastSeen: number | null;
   private mrXHistory: Log[];
   private isUsing2X: boolean;
-  private twoXTurnCout: number;
+  private twoXTurnCount: number;
 
   constructor(
     players: string[],
@@ -52,7 +52,7 @@ export class ScotlandYard {
     this.lastSeen = null;
     this.mrXHistory = [];
     this.isUsing2X = false;
-    this.twoXTurnCout = 0;
+    this.twoXTurnCount = 0;
 
     this.roles = [
       Role.MrX,
@@ -249,12 +249,12 @@ export class ScotlandYard {
   }
 
   private updateState() {
-    if (this.twoXTurnCout < 1 && this.isUsing2X) {
-      this.twoXTurnCout += 1;
+    if (this.twoXTurnCount < 1 && this.isUsing2X) {
+      this.twoXTurnCount += 1;
       return;
     }
 
-    this.twoXTurnCout = 0;
+    this.twoXTurnCount = 0;
     this.isUsing2X = false;
 
     this.changePlayer();
