@@ -11,6 +11,17 @@ import { ScotlandYard } from "./models/scotland.ts";
 import _ from "lodash";
 import { mapToObject } from "./game_utils.ts";
 
+export const alreadyInGame: GameMiddleWare = async (context, next) => {
+  const playerId = extractPlayerId(context);
+  const playerStat = context.env.playerRegistry.getPlayerStats(playerId);
+
+  if (playerStat.isPlaying) {
+    return context.redirect("/html/game.html");
+  }
+
+  return await next();
+};
+
 export const ensureActiveGame: GameMiddleWare = async (context, next) => {
   const playerId = extractPlayerId(context);
   const playerStat = context.env.playerRegistry.getPlayerStats(playerId);
@@ -18,10 +29,6 @@ export const ensureActiveGame: GameMiddleWare = async (context, next) => {
 
   if (!context.env.controller.hasMatch(roomId)) {
     return context.redirect("/lobby");
-  }
-
-  if (playerStat.isPlaying) {
-    return context.redirect("/html/game.html");
   }
 
   return await next();
