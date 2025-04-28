@@ -4,7 +4,7 @@ import {
   createAppWithPlayers,
 } from "./game_setup_test.ts";
 import { assertEquals } from "assert/equals";
-import { RandomIndex, Transport } from "../src/models/types.ts";
+import { RandomIndex } from "../src/models/types.ts";
 import { basicMap } from "../src/maps/game_map.ts";
 import { assert } from "assert/assert";
 import { Ticket } from "../src/models/types.ts";
@@ -170,10 +170,7 @@ describe("servePossibleStations", () => {
       headers: { cookie: `playerId=${host}` },
     });
 
-    const expected = [
-      { to: 100, mode: Transport.Taxi },
-      { to: 100, mode: Transport.Ferry },
-    ];
+    const expected = [{ to: 100, tickets: [Ticket.Yellow, Ticket.Black] }];
     const actual = await response.json();
     assertEquals(actual, expected);
   });
@@ -196,9 +193,8 @@ describe("servePossibleStations", () => {
     });
 
     const expected = [
-      { to: 181, mode: Transport.Taxi },
-      { to: 181, mode: Transport.Bus },
-      { to: 195, mode: Transport.Taxi },
+      { to: 181, tickets: [Ticket.Yellow, Ticket.Green] },
+      { to: 195, tickets: [Ticket.Yellow] },
     ];
 
     const actual = await response.json();
@@ -391,7 +387,10 @@ describe("mrX Travel log", () => {
       },
     });
 
-    const actual = [{ to: 100, mode: "Taxi" }, { to: 101, mode: "Taxi" }];
+    const actual = [
+      { to: 100, mode: "Taxi" },
+      { to: 101, mode: "Taxi" },
+    ];
     const expected = await response.json();
 
     assertEquals(actual, expected);

@@ -350,10 +350,7 @@ describe("possible stations", () => {
 
     const actual = game.possibleStations();
 
-    const expected = [
-      { to: 1, mode: Transport.Bus },
-      { to: 1, mode: Transport.Ferry },
-    ];
+    const expected = [{ to: 1, tickets: [Ticket.Green, Ticket.Black] }];
 
     assertEquals(actual, expected);
   });
@@ -395,10 +392,7 @@ describe("possible stations", () => {
     game.distributeTickets();
     game.assignStartingPositions(random);
     const actual = game.possibleStations();
-    const expected = [
-      { to: 20, mode: Transport.Bus },
-      { to: 20, mode: Transport.Ferry },
-    ];
+    const expected = [{ to: 20, tickets: [Ticket.Green, Ticket.Black] }];
 
     assertEquals(actual, expected);
   });
@@ -905,10 +899,7 @@ describe("use 2X ticket", () => {
     game.useTicket(Ticket.Yellow, 195);
     const actual = game.possibleStations();
 
-    const expected = [
-      { to: 181, mode: "Taxi" },
-      { to: 181, mode: "Ferry" },
-    ];
+    const expected = [{ to: 181, tickets: [Ticket.Yellow, Ticket.Black] }];
 
     assertEquals(actual, expected);
   });

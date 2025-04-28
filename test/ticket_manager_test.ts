@@ -251,3 +251,35 @@ describe("Get Valid Ticket Options", () => {
     );
   });
 });
+
+describe("possibleStationTickets", () => {
+  it("should provide station tickets", () => {
+    const routes = [{ to: 1, mode: Transport.Bus }];
+    const tickets = [Ticket.Green];
+    const expected = [{ to: 1, tickets: [Ticket.Green] }];
+    assertEquals(
+      TicketManager.possibleStationTickets(routes, tickets),
+      expected,
+    );
+  });
+
+  it("should provide station tickets", () => {
+    const routes = [{ to: 1, mode: Transport.Bus }];
+    const tickets = [Ticket.Green, Ticket.Black, Ticket.Yellow];
+    const expected = [{ to: 1, tickets: [Ticket.Green, Ticket.Black] }];
+    assertEquals(
+      TicketManager.possibleStationTickets(routes, tickets),
+      expected,
+    );
+  });
+
+  it("should provide station tickets", () => {
+    const routes = [{ to: 1, mode: Transport.Ferry }];
+    const tickets = [Ticket.Green, Ticket.Black, Ticket.Yellow];
+    const expected = [{ to: 1, tickets: [Ticket.Black] }];
+    assertEquals(
+      TicketManager.possibleStationTickets(routes, tickets),
+      expected,
+    );
+  });
+});

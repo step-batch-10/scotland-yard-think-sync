@@ -26,6 +26,22 @@ export class TicketManager {
     return tickets.filter((ticket) => TicketManager.validTicket(ticket, mode));
   }
 
+  static possibleStationTickets(routes: Route[], tickets: Ticket[]) {
+    const groupedRoutes = Object.entries(
+      Object.groupBy(routes, ({ to }) => to),
+    );
+    interface Fn {
+      ({ mode }: Route): Ticket[];
+    }
+    const fn: Fn = ({ mode }) => TicketManager.validTicketOption(tickets, mode);
+    const pair = groupedRoutes.map(([to, routes]): [number, Ticket[]] => [
+      Number(to),
+      [...new Set(routes!.flatMap(fn))],
+    ]);
+
+    return pair.map(([to, tickets]) => ({ to, tickets }));
+  }
+
   distributeTickets(): void {
     this.roles.forEach((role) => {
       this.tickets.set(role, ticketsOf(role));
@@ -49,15 +65,11 @@ export class TicketManager {
     }
   }
 
-  static addBlackTicket(station: Route): Route[] {
-    return [station, { to: station.to, mode: Transport.Ferry }];
-  }
-
-  getValidTickets(currentRole: Role) {
+  getValidTickets(currentRole: Role): Ticket[] {
     const tickets = this.tickets.get(currentRole) || {};
     const pairs = Object.entries(tickets).filter(([_, count]) => count !== 0);
 
-    return pairs.map(([ticket]) => ticket);
+    return pairs.map(([ticket]) => ticket as Ticket);
   }
 
   getTickets(): Map<Role, Tickets> {

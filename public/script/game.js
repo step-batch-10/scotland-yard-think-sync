@@ -107,10 +107,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
 
   const { left, top } = element.getBoundingClientRect();
 
@@ -120,7 +120,7 @@ const getDimensions = (element) => {
 const removeContainer = (e) => e.target.parentNode.parentNode.remove();
 
 const removeListeners = (pairs) => {
-  pairs.forEach(([to]) => {
+  pairs.forEach((to) => {
     const station = document.getElementById(`station-${to}`);
     deleteNodeBySelector(".highlight-station");
     station.onclick = () => {};
@@ -145,9 +145,12 @@ const ticketSelection = (to, elements, pairs) => (e) => {
   removeListeners(pairs);
 };
 
-const createCard = ({ to, mode }, container) => {
+const createCard = (ticket, to, container) => {
   const card = document.createElement("div");
-  const ticketType = mode === "Ferry" ? "Wild" : mode;
+  console.log("in createCard");
+  console.log(ticket, to);
+
+  const ticketType = ticket;
   card.id = ticketType;
 
   const icon = cloneTemplate(`${ticketType}-icon`);
@@ -156,7 +159,7 @@ const createCard = ({ to, mode }, container) => {
 
   card.append(icon);
 
-  return { clonedCard: card, to };
+  return { clonedCard: card, to: to };
 };
 
 const addListeners = (elements, card, pairs) => {
@@ -166,23 +169,19 @@ const addListeners = (elements, card, pairs) => {
   });
 };
 
-const renderTickets = (options, pairs) => (e) => {
+const renderTickets = (tickets, to, stations) => (e) => {
   removeAllContainers();
   const cardsContainer = cloneTemplate("ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
-  const elements = options.map((option) => createCard(option, card));
+
+  const elements = tickets.map((ticket) => createCard(ticket, to, card));
+
   closeBtn.addEventListener("click", removeContainer);
   alignCard(cardsContainer, getDimensions(e.currentTarget));
-  addListeners(elements, card, pairs);
+  addListeners(elements, card, stations);
 
   document.body.appendChild(cardsContainer);
-};
-
-const pairTicketToStation = (availableRoutes) => {
-  const groupedRoutes = Object.groupBy(availableRoutes, ({ to }) => to);
-
-  return Object.entries(groupedRoutes);
 };
 
 const deleteNodeBySelector = (selector) => {
@@ -216,11 +215,11 @@ const displayTravelOptions = async () => {
 
   if (possibleStation.length === 0) return showMessage("skip");
   highLightDestinations(possibleStation);
-  const pairs = pairTicketToStation(possibleStation);
 
-  pairs.forEach(([to, options]) => {
+  const stations = possibleStation.map(({ to }) => to);
+  possibleStation.forEach(({ to, tickets }) => {
     const station = document.getElementById(`station-${to}`);
-    station.onclick = renderTickets(options, pairs);
+    station.onclick = renderTickets(tickets, to, stations);
   });
 };
 
@@ -357,7 +356,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };

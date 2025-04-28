@@ -10,7 +10,6 @@ import {
   RandomIndex,
   Role,
   Roles,
-  Route,
   Ticket,
   Tickets,
 } from "./types.ts";
@@ -99,14 +98,14 @@ export class ScotlandYard {
     return this.stateManager.getCurrentRole()! === Role.MrX;
   }
 
-  possibleStations(): Route[] {
+  possibleStations(): { to: number; tickets: Ticket[] }[] {
     const currentRole = this.stateManager.getCurrentRole();
     const station = this.mapManager.getCurrentStations().get(currentRole)!;
-    const routes = this.validRoutes(station);
-
-    if (!this.isMrXTurn()) return routes;
-
-    return routes.flatMap(TicketManager.addBlackTicket);
+    const tickets = this.ticketManager.getValidTickets(currentRole);
+    return TicketManager.possibleStationTickets(
+      this.validRoutes(station),
+      tickets,
+    );
   }
 
   getCurrentPosition() {
@@ -165,9 +164,11 @@ export class ScotlandYard {
     this.changePlayer();
   }
 
-  private isTravelPossible(mode: Ticket, destination: number) {
+  private isTravelPossible(ticket: Ticket, destination: number) {
     const possibleStations = this.possibleStations();
-    return possibleStations.some(TicketManager.canTravel(mode, destination));
+    return possibleStations.some(
+      ({ to, tickets }) => to === destination && tickets.includes(ticket),
+    );
   }
 
   getCurrentTurn() {
