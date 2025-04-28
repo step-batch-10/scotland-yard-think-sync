@@ -26,12 +26,10 @@ const mapRoleToColor = (role) => {
 const playerStats = (trElement, [role, playerName, tickets, station]) => {
   const cells = trElement.querySelectorAll("td");
 
+  const { Taxi, Bus, Metro } = tickets;
+  const values = ["", playerName, Taxi, Bus, Metro, station];
+  values.forEach((value, i) => (cells[i].textContent = value));
   cells[0].style.backgroundColor = mapRoleToColor(role);
-  cells[1].textContent = playerName;
-  cells[2].textContent = tickets.Taxi;
-  cells[3].textContent = tickets.Bus;
-  cells[4].textContent = tickets.Metro;
-  cells[5].textContent = station;
 
   return trElement;
 };
@@ -71,7 +69,7 @@ const renderMrXTransportLog = (transports) => {
     icon.style.marginLeft = "10px";
 
     log[index].style.textAlign = "start";
-    log[index].replaceChildren(...[icon, span]);
+    log[index].replaceChildren(icon, span);
   });
 };
 
@@ -109,16 +107,14 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft =
-    globalThis.pageXOffset || document.documentElement.scrollLeft;
-  const scrollTop =
-    globalThis.pageYOffset || document.documentElement.scrollTop;
-  const dimensions = element.getBoundingClientRect();
+  const scrollLeft = globalThis.pageXOffset ||
+    document.documentElement.scrollLeft;
+  const scrollTop = globalThis.pageYOffset ||
+    document.documentElement.scrollTop;
 
-  const absoluteX = dimensions.left + scrollLeft;
-  const absoluteY = dimensions.top + scrollTop;
+  const { left, top } = element.getBoundingClientRect();
 
-  return [absoluteX, absoluteY];
+  return [scrollLeft + left, scrollTop + top];
 };
 
 const removeContainer = (e) => e.target.parentNode.parentNode.remove();
@@ -344,8 +340,6 @@ const startPolling = () => {
       renderGameOver(data);
       clearInterval(intervalId);
     }
-
-    if (data.isYourTurn) clearInterval(intervalId);
   }, 3000);
 };
 
@@ -362,7 +356,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true }
+      { once: true },
     );
   });
 };
@@ -375,16 +369,36 @@ const enable2X = async () => {
 };
 
 const handleZoom = () => {
-  svgPanZoom("#svg1", {
+  const panZoomInstance = svgPanZoom("#svg1", {
     zoomEnabled: true,
-    controlIconsEnabled: true,
+    controlIconsEnabled: false,
     fit: true,
     center: true,
     minZoom: 1,
     maxZoom: 10,
-    contain: true,
+    contain: "inside",
     zoomScaleSensitivity: 0.15,
-    panEnabled: false,
+    panEnabled: true,
+    dblClickZoomEnabled: false,
+  });
+
+  const sizes = panZoomInstance.getSizes();
+  const realZoom = sizes.width / sizes.viewBox.width;
+  panZoomInstance.setMinZoom(realZoom);
+  panZoomInstance.fit();
+  panZoomInstance.center();
+
+  document.getElementById("zoom-in").addEventListener("click", function () {
+    panZoomInstance.zoomIn();
+  });
+
+  document.getElementById("zoom-out").addEventListener("click", function () {
+    panZoomInstance.zoomOut();
+  });
+
+  document.getElementById("reset").addEventListener("click", function () {
+    panZoomInstance.resetZoom();
+    panZoomInstance.center();
   });
 };
 

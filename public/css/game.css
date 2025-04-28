@@ -231,8 +231,14 @@ g {
 
 .banner p {
   text-align: center;
-  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
-    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
+  font-family:
+    "Lucida Sans",
+    "Lucida Sans Regular",
+    "Lucida Grande",
+    "Lucida Sans Unicode",
+    Geneva,
+    Verdana,
+    sans-serif;
 }
 
 .box {
@@ -406,5 +412,29 @@ g {
   align-items: center;
   gap: 10px;
   position: fixed;
-  right: 2vw;
+  right: 0;
+}
+
+#controls {
+  position: fixed;
+  bottom: 0px;
+  right: 1vw;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  z-index: 1000;
+}
+
+#controls button {
+  padding: 4px;
+  font-size: 18px;
+  background: #333;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+#controls button:hover {
+  background: #555;
 }
