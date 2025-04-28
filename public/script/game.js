@@ -140,6 +140,7 @@ const ticketSelection = (to, elements, pairs) => (e) => {
   elements.forEach(({ clonedCard }) => {
     clonedCard.parentNode.parentNode.remove();
   });
+
   startPolling();
   removeAllContainers();
   removeListeners(pairs);
@@ -147,13 +148,9 @@ const ticketSelection = (to, elements, pairs) => (e) => {
 
 const createCard = (ticket, to, container) => {
   const card = document.createElement("div");
-  console.log("in createCard");
-  console.log(ticket, to);
+  card.id = ticket;
 
-  const ticketType = ticket;
-  card.id = ticketType;
-
-  const icon = cloneTemplate(`${ticketType}-icon`);
+  const icon = cloneTemplate(`${ticket}-icon`);
   icon.style.height = getComputedStyle(container).height;
   icon.style.width = "1.5vw";
 
