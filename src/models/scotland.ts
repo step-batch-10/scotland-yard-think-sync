@@ -1,4 +1,8 @@
-import { mapToObject, randomNumber } from "../game_utils.ts";
+import {
+  assingnAccordingly,
+  mapToObject,
+  randomNumber,
+} from "../game_utils.ts";
 import { basicMap } from "../maps/half_map.ts";
 import { ticketsOf } from "./tickets.ts";
 import {
@@ -67,17 +71,21 @@ export class ScotlandYard {
   }
 
   private defaultAssignment(): void {
-    for (const index in this.players) {
-      const role = this.roles[index];
-      const player = this.assignedRoles.get(role) || this.players[index];
+    this.assignedRoles.set(Role.MrX, this.players[0]);
 
+    const detectives = this.roles.slice(1);
+    const detectivesPlayers = this.players.slice(1);
+    const assignedRoles = assingnAccordingly(detectives, detectivesPlayers);
+
+    assignedRoles.forEach(([role, player]) => {
       this.assignedRoles.set(role, player);
-    }
+    });
   }
 
   assignRole(roles?: Roles): void {
-    if (roles) this.assignedRoles = new Map(Object.entries(roles));
-    this.defaultAssignment();
+    if (!roles) return this.defaultAssignment();
+
+    this.assignedRoles = new Map(Object.entries(roles));
   }
 
   distributeTickets(): void {

@@ -48,23 +48,25 @@ describe("test assignRole", () => {
     assertEquals(mapToObject(assignedRoles), roles);
   });
 
-  it("should assign multiple role to a player", () => {
-    const [sy] = setUpDefaultGame();
-    const roles: Roles = { MrX: "b", Blue: "a" };
+  it("should assign multiple role to player", () => {
+    const players = [
+      "test1",
+      "test2",
+      "test3",
+    ];
 
-    sy.assignRole(roles);
-
-    const assignedRoles = sy.getRoles();
+    const game = new ScotlandYard(players);
+    game.assignRole();
     const expected = {
-      MrX: "b",
-      Blue: "a",
-      Red: "b",
-      Green: "d",
-      Yellow: "e",
-      Purple: "f",
+      "MrX": "test1",
+      "Red": "test2",
+      "Blue": "test2",
+      "Green": "test2",
+      "Yellow": "test3",
+      "Purple": "test3",
     };
 
-    assertEquals(mapToObject(assignedRoles), expected);
+    assertEquals(game.getGameState("test1").roles, expected);
   });
 });
 
