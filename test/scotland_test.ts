@@ -813,6 +813,21 @@ describe("declareWinner", () => {
     assertEquals(game.declareWinner(), "Detective");
   });
 
+  it("should declare Detective as winner when MrX is trapped till his turn", () => {
+    const fakeMap: GameMap = {
+      startingPositions: [2, 1, 3, 4, 5, 6, 7],
+      routes: {
+        1: [],
+        3: [{ to: 2, mode: Transport.Taxi }],
+        4: [{ to: 3, mode: Transport.Taxi }],
+      },
+    };
+
+    const game = makeGame(fakeMap, 5);
+
+    assertEquals(game.declareWinner(), "Detective");
+  });
+
   it("should declare Mr.X as winner when he escapes for one turn", () => {
     const fakeMap: GameMap = {
       startingPositions: [2, 1, 3, 4, 5, 6, 7],
@@ -823,6 +838,7 @@ describe("declareWinner", () => {
         5: [{ to: 4, mode: Transport.Taxi }],
         6: [{ to: 5, mode: Transport.Taxi }],
         7: [{ to: 6, mode: Transport.Taxi }],
+        2: [{ to: 10, mode: Transport.Taxi }],
       },
     };
 
@@ -1046,6 +1062,7 @@ describe("use 2X ticket", () => {
         6: [{ to: 5, mode: Transport.Taxi }],
         7: [{ to: 6, mode: Transport.Taxi }],
         2: [{ to: 100, mode: Transport.Metro }],
+        100: [{ to: 10, mode: Transport.Metro }],
       },
     };
 

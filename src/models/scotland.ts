@@ -186,11 +186,18 @@ export class ScotlandYard {
   }
 
   private hasDetectivesWon() {
-    return this.isMrXCaught();
+    return this.isMrXCaught() || this.MrXCannotMove();
   }
 
   private hasMrXWon() {
     return this.detectivesCannotMove() || this.isTurnReachedLimit();
+  }
+
+  private MrXCannotMove() {
+    const currentStation = this.currentStations.get(Role.MrX)!;
+    const validRoutes = this.validRoutes(currentStation);
+
+    return this.isMrXTurn() && validRoutes.length === 0;
   }
 
   declareWinner() {
