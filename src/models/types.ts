@@ -3,6 +3,7 @@ import { PlayerRegistry } from "./players.ts";
 import { Handler, MiddlewareHandler } from "hono/types";
 import { Rooms } from "./rooms.ts";
 import { GameController } from "./game_controller.ts";
+import { ScotlandYard } from "./scotland.ts";
 
 export enum Role {
   Red = "Red",
@@ -47,10 +48,18 @@ export interface PlayerStats {
   isPlaying?: boolean;
 }
 
+export interface MatchStatus {
+  game: ScotlandYard;
+  winner: null | string;
+  isGameFinished: boolean;
+}
+
 export type Bindings = {
   playerRegistry: PlayerRegistry;
   rooms: Rooms;
   controller: GameController;
+  match?: MatchStatus;
+  playerId?: string;
 };
 
 export type GameContext = Context<{ Bindings: Bindings }>;

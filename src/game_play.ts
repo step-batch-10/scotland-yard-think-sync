@@ -11,16 +11,18 @@ import { ScotlandYard } from "./models/scotland.ts";
 import _ from "lodash";
 import { mapToObject } from "./game_utils.ts";
 
-// export const alreadyInGame: GameMiddleWare = async (context, next) => {
-//   const playerId = extractPlayerId(context);
-//   const playerStat = context.env.playerRegistry.getPlayerStats(playerId);
+export const alreadyInGame: GameMiddleWare = async (context, next) => {
+  console.log("are you  getting called");
 
-//   if (playerStat.isPlaying && context.req.path !== "/html/game.html") {
-//     return context.redirect("/html/game.html");
-//   }
+  const playerId = extractPlayerId(context);
+  const playerStat = context.env.playerRegistry.getPlayerStats(playerId);
 
-//   return await next();
-// };
+  if (playerStat.isPlaying && context.req.path !== "/html/game.html") {
+    return context.redirect("/html/game.html");
+  }
+
+  return await next();
+};
 
 export const ensureActiveGame: GameMiddleWare = async (context, next) => {
   const playerId = extractPlayerId(context);
@@ -43,9 +45,9 @@ const extractMatchAndPlayerId = (context: GameContext) => {
 };
 
 const serveMatchInfo: GameHandler = (context: GameContext) => {
-  const { match } = extractMatchAndPlayerId(context);
+  const { match } = context.env;
 
-  const rolesMap = match.game.getRoles();
+  const rolesMap = match!.game.getRoles();
   const roles = mapToObject<string>(rolesMap);
 
   return context.json({ roles });
@@ -61,24 +63,24 @@ const fetchGameState = (game: ScotlandYard, playerId: string) => {
 };
 
 const serveMatchState: GameHandler = (context: GameContext) => {
-  const { match, playerId } = extractMatchAndPlayerId(context);
-  const gameState = fetchGameState(match.game, playerId);
+  const { match, playerId } = context.env;
+  const gameState = fetchGameState(match!.game, playerId!);
 
   return context.json(gameState);
 };
 
 const servePossibleStations: GameHandler = (context) => {
-  const { match } = extractMatchAndPlayerId(context);
-  const nearbyStations = match.game.possibleStations();
+  const { match } = context.env;
+  const nearbyStations = match!.game.possibleStations();
 
   return context.json(_.uniqWith(nearbyStations, _.isEqual));
 };
 
 const handleMovement: GameHandler = (context: GameContext) => {
-  const { match } = extractMatchAndPlayerId(context);
+  const { match } = context.env;
   const { to, type } = context.req.param() as { to: string; type: Ticket };
 
-  const success = match.game.useTicket(type, Number(to));
+  const success = match!.game.useTicket(type, Number(to));
 
   return context.json({ success });
 };
@@ -91,15 +93,15 @@ const createSkipMessage = (game: ScotlandYard) => {
 };
 
 const handleSkipPlayer: GameHandler = (context: GameContext) => {
-  const { match } = extractMatchAndPlayerId(context);
-  const message = createSkipMessage(match.game);
+  const { match } = context.env;
+  const message = createSkipMessage(match!.game);
 
   return context.json({ message });
 };
 
 const handleEnableTwoX: GameHandler = (context) => {
-  const { match } = extractMatchAndPlayerId(context);
-  const accepted = match.game.enable2X();
+  const { match } = context.env;
+  const accepted = match!.game.enable2X();
 
   return context.json({ accepted });
 };
@@ -111,8 +113,19 @@ const handleMrXLog: GameHandler = (context) => {
   return context.json(logs);
 };
 
+const loadGame: GameMiddleWare = async (context, next) => {
+  const { match, playerId } = extractMatchAndPlayerId(context);
+
+  context.env.match = match;
+  context.env.playerId = playerId;
+
+  return await next();
+};
+
 export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
+
+  gameApp.use(loadGame);
 
   gameApp.get("/info", serveMatchInfo);
   gameApp.get("/state", serveMatchState);

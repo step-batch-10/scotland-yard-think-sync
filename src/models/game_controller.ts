@@ -1,11 +1,5 @@
 import { ScotlandYard } from "./scotland.ts";
-import { GameMap, RandomIndex } from "./types.ts";
-
-interface MatchStatus {
-  game: ScotlandYard;
-  winner: null | string;
-  isGameFinished: boolean;
-}
+import { GameMap, MatchStatus, RandomIndex } from "./types.ts";
 
 export class GameController {
   private matches: Map<string, MatchStatus>;

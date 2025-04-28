@@ -22,7 +22,6 @@ describe("ensure Authentication", () => {
 
   it("should land the user on lobby page if logged in", async () => {
     const playerRegistry = new PlayerRegistry();
-
     playerRegistry.createPlayer("Shalini");
 
     const bindings: Bindings = {
