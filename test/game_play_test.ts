@@ -4,10 +4,11 @@ import {
   createAppWithPlayers,
 } from "./game_setup_test.ts";
 import { assertEquals } from "assert/equals";
-import { Transport } from "../src/models/types.ts";
+import { RandomIndex, Transport } from "../src/models/types.ts";
 import { basicMap } from "../src/maps/game_map.ts";
 import { assert } from "assert/assert";
 
+const random: RandomIndex = () => 0;
 describe("serveMatchInfo", () => {
   it("should serve roles if player are present", async () => {
     const allPlayers = ["tes1", "test2", "test3", "test4", "test5", "test6"];
@@ -21,7 +22,7 @@ describe("serveMatchInfo", () => {
       },
     };
 
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
     const response = await app.request("/game/info", header);
 
     const actual = await response.json();
@@ -65,7 +66,7 @@ describe("gameState", () => {
 
     const header = { headers: { cookie: `playerId=${host}` } };
 
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
     const response = await app.request("/game/state", header);
 
     const actual = await response.json();
@@ -111,18 +112,18 @@ describe("gameState", () => {
       },
     };
 
-    bindings.controller.setMatch(roomId, new Set(allPlayers));
+    bindings.controller.setMatch(roomId, new Set(allPlayers), basicMap, random);
 
     const response = await app.request("/game/state", header);
 
     const actual = await response.json();
     const expected = {
-      Red: 187,
-      Blue: 133,
-      Green: 128,
+      Blue: 183,
+      Green: 184,
+      MrX: 181,
+      Purple: 186,
+      Red: 182,
       Yellow: 185,
-      Purple: 198,
-      MrX: 173,
     };
 
     assertEquals(actual.positions, expected);
@@ -140,18 +141,18 @@ describe("gameState", () => {
       },
     };
 
-    bindings.controller.setMatch(roomId, new Set(allPlayers));
+    bindings.controller.setMatch(roomId, new Set(allPlayers), basicMap, random);
 
     const response = await app.request("/game/state", header);
 
     const actual = await response.json();
     const expected = {
-      Red: 187,
-      Blue: 133,
-      Green: 128,
-      Yellow: 185,
-      Purple: 198,
+      Blue: 183,
+      Green: 184,
       MrX: null,
+      Purple: 186,
+      Red: 182,
+      Yellow: 185,
     };
 
     assertEquals(actual.positions, expected);
@@ -159,75 +160,44 @@ describe("gameState", () => {
 });
 
 describe("servePossibleStations", () => {
-  it("should return all the possible station with 2x card for mr.x", async () => {
+  it("should return all the possible station for mr.x", async () => {
     const allPlayers = ["a", "b", "c", "d", "e", "f"];
     const [host, ...players] = allPlayers;
-
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
     const response = await app.request("/game/possible-stations", {
       headers: { cookie: `playerId=${host}` },
     });
 
     const expected = [
+      { to: 100, mode: Transport.Taxi },
+      { to: 100, mode: Transport.Ferry },
+    ];
+    const actual = await response.json();
+    assertEquals(actual, expected);
+  });
+
+  it("should return all the possible station", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
+
+    await app.request("/game/move/100/ticket/Taxi", {
+      headers: {
+        cookie: `playerId=${host}`,
+      },
+    });
+
+    const response = await app.request("/game/possible-stations", {
+      headers: { cookie: `playerId=b` },
+    });
+
+    const expected = [
       { to: 181, mode: Transport.Taxi },
-      { to: 181, mode: Transport.Ferry },
       { to: 181, mode: Transport.Bus },
       { to: 195, mode: Transport.Taxi },
-      { to: 195, mode: Transport.Ferry },
-    ];
-    const actual = await response.json();
-    assertEquals(actual, expected);
-  });
-
-  it("should return all the possible station without 2x remaining", async () => {
-    const allPlayers = ["a", "b", "c", "d", "e", "f"];
-    const [host, ...players] = allPlayers;
-
-    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller);
-
-    await app.request("/game/move/160/ticket/Taxi", {
-      headers: {
-        cookie: `playerId=${host}`,
-      },
-    });
-
-    const response = await app.request("/game/possible-stations", {
-      headers: { cookie: `playerId=b` },
-    });
-
-    const expected = [
-      { to: 172, mode: Transport.Taxi },
-      { to: 188, mode: Transport.Taxi },
-      { to: 159, mode: Transport.Bus },
-    ];
-
-    const actual = await response.json();
-    assertEquals(actual, expected);
-  });
-
-  it("should not give any possible station if it is not my turn", async () => {
-    const allPlayers = ["a", "b", "c", "d", "e", "f"];
-    const [host, ...players] = allPlayers;
-
-    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller);
-
-    await app.request("/game/move/160/ticket/Taxi", {
-      headers: {
-        cookie: `playerId=${host}`,
-      },
-    });
-
-    const response = await app.request("/game/possible-stations", {
-      headers: { cookie: `playerId=b` },
-    });
-
-    const expected = [
-      { to: 172, mode: Transport.Taxi },
-      { to: 188, mode: Transport.Taxi },
-      { to: 159, mode: Transport.Bus },
     ];
 
     const actual = await response.json();
@@ -241,9 +211,9 @@ describe("handleMovement", () => {
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
 
-    const response = await app.request("/game/move/181/ticket/Taxi", {
+    const response = await app.request("/game/move/100/ticket/Taxi", {
       headers: { cookie: `playerId=${host}` },
     });
 
@@ -253,14 +223,31 @@ describe("handleMovement", () => {
     assertEquals(actual, expected);
   });
 
-  it("should not be able to move if i have used Invalid ticket or destination", async () => {
+  it("should not be able to move if i have used Invalid destination", async () => {
     const allPlayers = ["a", "b", "c", "d", "e", "f"];
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
 
-    const response = await app.request("/game/move/ /ticket/Metro", {
+    const response = await app.request("/game/move/999/ticket/Metro", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const actual = await response.json();
+    const expected = { success: false };
+
+    assertEquals(actual, expected);
+  });
+
+  it("should not be able to move if i have used Invalid ticket", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
+
+    const response = await app.request("/game/move/100/ticket/flight", {
       headers: { cookie: `playerId=${host}` },
     });
 
@@ -277,14 +264,14 @@ describe("handleMovement", () => {
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
 
     app.request("/game/enable-2x", {
       headers: { cookie: `playerId=${host}` },
     });
 
-    const response1 = await app.request("/game/move/181/ticket/Taxi", {
-      headers: { cookie: `playerId=${host}`, isusing2x: "true" },
+    const response1 = await app.request("/game/move/100/ticket/Taxi", {
+      headers: { cookie: `playerId=${host}` },
     });
 
     const actual = await response1.json();
@@ -300,7 +287,7 @@ describe("broadCastMessage", () => {
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
 
     const response = await app.request("/game/skip-move", {
       headers: { cookie: `playerId=${host}` },
@@ -318,17 +305,17 @@ describe("add 2x card", () => {
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
 
     await app.request("/game/enable-2x", {
       headers: { cookie: `playerId=${host}` },
     });
 
-    const response1 = await app.request("/game/move/181/ticket/Taxi", {
+    const response1 = await app.request("/game/move/100/ticket/Taxi", {
       headers: { cookie: `playerId=${host}` },
     });
 
-    await app.request("/game/move/182/ticket/Taxi", {
+    await app.request("/game/move/181/ticket/Taxi", {
       headers: { cookie: `playerId=${host}` },
     });
 
@@ -351,7 +338,7 @@ describe("add 2x card", () => {
     const [host, ...players] = allPlayers;
 
     const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
-    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
 
     const response = await app.request("/game/enable-2x", {
       headers: { cookie: `playerId=${host}` },

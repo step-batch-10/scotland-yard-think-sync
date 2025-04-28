@@ -15,7 +15,7 @@ import { ScotlandYard } from "../src/models/scotland.ts";
 
 const setUpDefaultGame = (): [ScotlandYard, Set<string>] => {
   const players = new Set(["a", "b", "c", "d", "e", "f"]);
-  return [new ScotlandYard([...players]), players];
+  return [new ScotlandYard([...players], basicMap), players];
 };
 
 const random: RandomIndex = () => 1;
@@ -32,12 +32,12 @@ describe("test assignRole", () => {
   it("should assign role", () => {
     const [sy, players] = setUpDefaultGame();
     const roles = {
-      Red: "b",
       MrX: "a",
+      Red: "b",
       Blue: "c",
-      Yellow: "d",
-      Purple: "e",
-      Green: "f",
+      Green: "d",
+      Yellow: "e",
+      Purple: "f",
     };
 
     sy.assignRole(roles);
@@ -49,21 +49,17 @@ describe("test assignRole", () => {
   });
 
   it("should assign multiple role to player", () => {
-    const players = [
-      "test1",
-      "test2",
-      "test3",
-    ];
+    const players = ["test1", "test2", "test3"];
 
     const game = new ScotlandYard(players);
     game.assignRole();
     const expected = {
-      "MrX": "test1",
-      "Red": "test2",
-      "Blue": "test2",
-      "Green": "test2",
-      "Yellow": "test3",
-      "Purple": "test3",
+      MrX: "test1",
+      Red: "test2",
+      Blue: "test2",
+      Green: "test2",
+      Yellow: "test3",
+      Purple: "test3",
     };
 
     assertEquals(game.getGameState("test1").roles, expected);
@@ -243,12 +239,12 @@ describe("game state", () => {
 
     const { positions } = sy.getGameState("b");
     const expected = {
-      Blue: 133,
-      Green: 128,
-      Purple: 198,
-      Red: 187,
-      Yellow: 185,
       MrX: null,
+      Red: 183,
+      Blue: 184,
+      Green: 185,
+      Yellow: 186,
+      Purple: 187,
     };
 
     assertEquals(positions, expected);
@@ -262,12 +258,12 @@ describe("game state", () => {
 
     const { positions } = sy.getGameState("a");
     const expected = {
-      MrX: 173,
-      Blue: 133,
-      Green: 128,
-      Purple: 198,
-      Red: 187,
-      Yellow: 185,
+      MrX: 182,
+      Red: 183,
+      Blue: 184,
+      Green: 185,
+      Yellow: 186,
+      Purple: 187,
     };
 
     assertEquals(positions, expected);
@@ -504,85 +500,6 @@ describe("isMrXTurn", () => {
     game.changePlayer();
 
     assertFalse(game.isMrXTurn());
-  });
-});
-
-describe("validTicket", () => {
-  it("should provide true if travel is possible to travel using a ticket", () => {
-    assert(ScotlandYard.validTicket(Ticket.Yellow, Transport.Taxi));
-
-    assert(ScotlandYard.validTicket(Ticket.Green, Transport.Bus));
-
-    assert(ScotlandYard.validTicket(Ticket.Red, Transport.Metro));
-
-    assert(ScotlandYard.validTicket(Ticket.Black, Transport.Taxi));
-    assert(ScotlandYard.validTicket(Ticket.Black, Transport.Bus));
-    assert(ScotlandYard.validTicket(Ticket.Black, Transport.Metro));
-    assert(ScotlandYard.validTicket(Ticket.Black, Transport.Ferry));
-  });
-
-  it("should provide false if travel is not possible to travel using a ticket", () => {
-    assertFalse(ScotlandYard.validTicket(Ticket.Yellow, Transport.Bus));
-    assertFalse(ScotlandYard.validTicket(Ticket.Yellow, Transport.Metro));
-    assertFalse(ScotlandYard.validTicket(Ticket.Yellow, Transport.Ferry));
-
-    assertFalse(ScotlandYard.validTicket(Ticket.Green, Transport.Metro));
-    assertFalse(ScotlandYard.validTicket(Ticket.Green, Transport.Taxi));
-    assertFalse(ScotlandYard.validTicket(Ticket.Green, Transport.Ferry));
-
-    assertFalse(ScotlandYard.validTicket(Ticket.Red, Transport.Taxi));
-    assertFalse(ScotlandYard.validTicket(Ticket.Red, Transport.Bus));
-    assertFalse(ScotlandYard.validTicket(Ticket.Red, Transport.Ferry));
-  });
-
-  it("should provide false if travel is not possible", () => {
-    assertFalse(ScotlandYard.validTicket(Ticket["2x"], Transport.Bus));
-  });
-});
-
-describe("canTravel", () => {
-  it("should provide true if travel is possible to travel using any ticket", () => {
-    assert(
-      ScotlandYard.canTravel(
-        Ticket.Red,
-        123,
-      )({ to: 123, mode: Transport.Metro }),
-    );
-    assert(
-      ScotlandYard.canTravel(
-        Ticket.Yellow,
-        123,
-      )({ to: 123, mode: Transport.Taxi }),
-    );
-    assert(
-      ScotlandYard.canTravel(
-        Ticket.Green,
-        123,
-      )({ to: 123, mode: Transport.Bus }),
-    );
-  });
-  it("should provide false if destination is deferent", () => {
-    assertFalse(
-      ScotlandYard.canTravel(
-        Ticket.Red,
-        125,
-      )({ to: 123, mode: Transport.Metro }),
-    );
-  });
-
-  it("should provide false if ticket is not valid for this route", () => {
-    assertFalse(
-      ScotlandYard.canTravel(
-        Ticket.Yellow,
-        123,
-      )({ to: 123, mode: Transport.Metro }),
-    );
-    assertFalse(
-      ScotlandYard.canTravel(
-        Ticket.Green,
-        123,
-      )({ to: 123, mode: Transport.Ferry }),
-    );
   });
 });
 

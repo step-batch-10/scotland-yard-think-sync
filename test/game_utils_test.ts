@@ -1,6 +1,6 @@
 import { describe, it } from "testing";
 import { assertEquals, assertThrows } from "assert";
-import { assingnAccordingly, mapToObject } from "../src/game_utils.ts";
+import { assignAccordingly, mapToObject } from "../src/game_utils.ts";
 
 describe("mapToObject", () => {
   it("should return object if map has values", () => {
@@ -16,18 +16,18 @@ describe("mapToObject", () => {
   });
 });
 
-describe("distribue", () => {
+describe("distribute", () => {
   it("should return empty object if key and value are empty", () => {
-    const actual = assingnAccordingly([], []);
+    const actual = assignAccordingly([], []);
     assertEquals(actual, []);
   });
 
   it("should throw error if key is greater than value", () => {
-    assertThrows(() => assingnAccordingly([], [1]));
+    assertThrows(() => assignAccordingly([], [1]));
   });
 
   it("should distribute for two items", () => {
-    const actual = assingnAccordingly([1, 2, 3, 4, 5], [1, 2]);
+    const actual = assignAccordingly([1, 2, 3, 4, 5], [1, 2]);
     const expected = [
       [1, 1],
       [2, 1],
@@ -40,7 +40,7 @@ describe("distribue", () => {
   });
 
   it("should distribute for three items", () => {
-    const actual = assingnAccordingly([1, 2, 3, 4, 5], [1, 2, 3]);
+    const actual = assignAccordingly([1, 2, 3, 4, 5], [1, 2, 3]);
     const expected = [
       [1, 1],
       [2, 1],
@@ -53,7 +53,7 @@ describe("distribue", () => {
   });
 
   it("should distribute for four items", () => {
-    const actual = assingnAccordingly([1, 2, 3, 4, 5], [1, 2, 3, 4]);
+    const actual = assignAccordingly([1, 2, 3, 4, 5], [1, 2, 3, 4]);
 
     const expected = [
       [1, 1],
@@ -67,7 +67,7 @@ describe("distribue", () => {
   });
 
   it("should distribute for five items", () => {
-    const actual = assingnAccordingly([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]);
+    const actual = assignAccordingly([1, 2, 3, 4, 5], [1, 2, 3, 4, 5]);
     const expected = [
       [1, 1],
       [2, 2],

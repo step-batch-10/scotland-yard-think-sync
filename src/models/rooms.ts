@@ -1,5 +1,5 @@
 import { GameController } from "./game_controller.ts";
-import { GameMap } from "./types.ts";
+import { GameMap, RandomIndex } from "./types.ts";
 
 interface WaitingRoom {
   room: Set<string>;
@@ -68,13 +68,17 @@ export class Rooms {
     return true;
   }
 
-  assignGame(roomId: string, match: GameController, map?: GameMap) {
+  assignGame(
+    roomId: string,
+    match: GameController,
+    map?: GameMap,
+    random?: RandomIndex,
+  ) {
     const players = this.getPlayers(roomId);
 
     if (!players || match.hasMatch(roomId)) return false;
 
-    match.setMatch(roomId, players, map);
-
+    match.setMatch(roomId, players, map, random);
     return true;
   }
 }

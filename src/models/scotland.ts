@@ -1,10 +1,8 @@
-import {
-  assingnAccordingly,
-  mapToObject,
-  randomNumber,
-} from "../game_utils.ts";
-import { basicMap } from "../maps/half_map.ts";
-import { ticketsOf } from "./tickets.ts";
+import { mapToObject } from "../game_utils.ts";
+import { PlayerManager } from "./player_manager.ts";
+import { TicketManager } from "./ticket_manager.ts";
+import { MapManager } from "./map_manager.ts";
+import { StateManager } from "./state_manager.ts";
 import {
   GameMap,
   Log,
@@ -15,25 +13,15 @@ import {
   Route,
   Ticket,
   Tickets,
-  Transport,
-  Winner,
 } from "./types.ts";
-
-const turns = [3, 8, 13, 18, 24];
+import { basicMap } from "../maps/half_map.ts";
 
 export class ScotlandYard {
-  private readonly players: string[];
-  private readonly roles: Role[];
-  private assignedRoles: Map<string, string>;
-  private tickets: Map<Role, Tickets>;
-  private startingStations: number[];
-  private currentStations: Map<Role, number>;
-  private currentRole: Role;
-  private gameMap: GameMap;
-  private winner: Winner;
-  private totalTurns: number;
-  private revealingTurns: Set<number>;
-  private lastSeen: number | null;
+  private playerManager: PlayerManager;
+  private ticketManager: TicketManager;
+  private mapManager: MapManager;
+  private stateManager: StateManager;
+  private roles: Role[];
   private mrXHistory: Log[];
   private isUsing2X: boolean;
   private twoXTurnCount: number;
@@ -42,22 +30,8 @@ export class ScotlandYard {
     players: string[],
     map: GameMap = basicMap,
     totalTurns: number = 25,
-    revealingTurns = turns,
+    revealingTurns?: number[],
   ) {
-    this.players = [...players];
-    this.assignedRoles = new Map();
-    this.tickets = new Map();
-    this.currentStations = new Map();
-    this.startingStations = map.startingPositions;
-    this.gameMap = map;
-    this.winner = null;
-    this.totalTurns = totalTurns;
-    this.revealingTurns = new Set(revealingTurns);
-    this.lastSeen = null;
-    this.mrXHistory = [];
-    this.isUsing2X = false;
-    this.twoXTurnCount = 0;
-
     this.roles = [
       Role.MrX,
       Role.Red,
@@ -66,194 +40,111 @@ export class ScotlandYard {
       Role.Yellow,
       Role.Purple,
     ];
-
-    this.currentRole = this.roles[0];
-  }
-
-  private defaultAssignment(): void {
-    this.assignedRoles.set(Role.MrX, this.players[0]);
-
-    const detectives = this.roles.slice(1);
-    const detectivesPlayers = this.players.slice(1);
-    const assignedRoles = assingnAccordingly(detectives, detectivesPlayers);
-
-    assignedRoles.forEach(([role, player]) => {
-      this.assignedRoles.set(role, player);
-    });
+    this.playerManager = new PlayerManager(players, this.roles);
+    this.ticketManager = new TicketManager(this.roles);
+    this.mapManager = new MapManager(map, this.roles, revealingTurns);
+    this.stateManager = new StateManager(this.roles, totalTurns);
+    this.mrXHistory = [];
+    this.isUsing2X = false;
+    this.twoXTurnCount = 0;
   }
 
   assignRole(roles?: Roles): void {
-    if (!roles) return this.defaultAssignment();
-
-    this.assignedRoles = new Map(Object.entries(roles));
+    this.playerManager.assignRole(roles);
   }
 
   distributeTickets(): void {
-    for (const role of this.roles) {
-      this.tickets.set(role, ticketsOf(role));
-    }
+    this.ticketManager.distributeTickets();
   }
 
-  assignStartingPositions(random: RandomIndex = randomNumber) {
-    const positions = [...this.startingStations];
-
-    for (let index = 0; index < this.roles.length; index++) {
-      const role = this.roles[index];
-
-      const randomIndex = random(0, 6) % positions.length;
-      const [start] = positions.splice(randomIndex, 1);
-      this.currentStations.set(role, start);
-    }
+  assignStartingPositions(random?: RandomIndex) {
+    this.mapManager.assignStartingPositions(random);
   }
 
   changePlayer() {
-    const nextPlayerIndex = (this.roles.indexOf(this.currentRole) + 1) % 6;
-    this.currentRole = this.roles[nextPlayerIndex];
-
-    return this.currentRole;
+    return this.stateManager.changePlayer();
   }
 
   getDetectivePositions() {
-    const playerIterator = this.currentStations.entries();
-    const detectiveEntries = [...playerIterator].filter(
-      ([role]) => role !== "MrX",
-    );
-
-    return detectiveEntries.map(([, position]) => position);
+    return this.mapManager.getDetectivePositions();
   }
 
   getValidTickets() {
-    const tickets = this.tickets.get(this.currentRole)!;
-    const pairs = Object.entries(tickets).filter(([_, count]) => count !== 0);
-
-    return pairs.flatMap(([ticket]) =>
-      ticket === "Wild" ? Transport.Ferry : ticket
+    return this.ticketManager.getValidTickets(
+      this.stateManager.getCurrentRole(),
     );
   }
 
-  validRoutes = (station: number) => {
-    const availableRoutes = this.gameMap.routes[station];
-    if (!availableRoutes) return [];
-
+  validRoutes(station: number) {
     const validTickets = this.getValidTickets();
     const detectivesPos = this.getDetectivePositions();
-
-    const possibleRoutes = availableRoutes.filter(({ mode }) => {
-      return validTickets.includes(mode.toString());
-    });
-
-    return possibleRoutes.filter(({ to }) => !detectivesPos.includes(to));
-  };
-
-  private static addBlackTicket(station: Route): Route[] {
-    return [station, { to: station.to, mode: Transport.Ferry }];
+    return this.mapManager.validRoutes(station, validTickets, detectivesPos);
   }
 
-  private hasTickets(ticket: Ticket): boolean {
-    const tickets = this.tickets.get(this.currentRole)!;
-    return tickets[ticket] > 0;
-  }
-
-  private hasTwoXCard(): boolean {
-    return this.hasTickets(Ticket["2x"]);
+  hasTwoXCard(): boolean {
+    return this.ticketManager.hasTickets(
+      this.stateManager.getCurrentRole(),
+      Ticket["2x"],
+    );
   }
 
   hasBlackTickets(): boolean {
-    return this.hasTickets(Ticket.Black);
+    return this.ticketManager.hasTickets(
+      this.stateManager.getCurrentRole(),
+      Ticket.Black,
+    );
+  }
+
+  isMrXTurn(): boolean {
+    return this.stateManager.getCurrentRole()! === Role.MrX;
   }
 
   possibleStations(): Route[] {
-    const station = this.currentStations.get(this.currentRole)!;
+    const currentRole = this.stateManager.getCurrentRole();
+    const station = this.mapManager.getCurrentStations().get(currentRole)!;
     const routes = this.validRoutes(station);
 
     if (!this.isMrXTurn()) return routes;
 
-    return routes.flatMap(ScotlandYard.addBlackTicket);
+    return routes.flatMap(TicketManager.addBlackTicket);
   }
 
-  isMrXCaught() {
+  getCurrentPosition() {
+    return this.mapManager.getCurrentStations();
+  }
+
+  isMrXCaught(): boolean {
     const detectivesPos = this.getDetectivePositions();
     const MrXPosition = this.getCurrentPosition().get(Role.MrX)!;
 
     return detectivesPos.includes(MrXPosition);
   }
 
-  private isTurnReachedLimit(): boolean {
-    return (
-      this.mrXHistory.length >= this.totalTurns &&
-      (this.currentRole === this.roles.at(-1) || this.isUsing2X)
-    );
-  }
-
   private detectivesCannotMove() {
-    const detectiveLocations = this.getDetectivePositions();
-    const permissibleRoutes = detectiveLocations.map(this.validRoutes);
+    const detectivesPositions = this.getDetectivePositions();
+    const allValidRoutes = detectivesPositions.map((position) => {
+      return this.validRoutes(position);
+    });
 
-    return permissibleRoutes.every((validRoutes) => validRoutes.length === 0);
+    return allValidRoutes.every((validRoutes) => validRoutes.length === 0);
   }
 
-  private hasDetectivesWon() {
-    return this.isMrXCaught() || this.MrXCannotMove();
-  }
-
-  private hasMrXWon() {
-    return this.detectivesCannotMove() || this.isTurnReachedLimit();
-  }
-
-  private MrXCannotMove() {
-    const currentStation = this.currentStations.get(Role.MrX)!;
-    const validRoutes = this.validRoutes(currentStation);
-
-    return this.isMrXTurn() && validRoutes.length === 0;
+  private mrXCannotMove() {
+    if (!this.isMrXTurn()) return false;
+    return this.possibleStations().length === 0;
   }
 
   declareWinner() {
-    if (this.hasDetectivesWon()) this.winner = "Detective";
-    if (this.hasMrXWon()) this.winner = "MrX";
-
-    return this.winner;
+    return this.stateManager.declareWinner(
+      this.isMrXCaught(),
+      this.stateManager.isTurnLimitReached(),
+      this.detectivesCannotMove(),
+      this.mrXCannotMove(),
+    );
   }
 
   isGameOver() {
-    return Boolean(this.winner);
-  }
-
-  isMrXTurn(): boolean {
-    return this.currentRole === Role.MrX;
-  }
-
-  static validTicket(ticket: Ticket, mode: Transport): boolean {
-    if (Ticket.Black === ticket) return mode in Transport;
-
-    return ticket.toString() === mode.toString();
-  }
-
-  static canTravel(ticket: Ticket, destination: number) {
-    return function ({ to, mode }: Route) {
-      return to === destination && ScotlandYard.validTicket(ticket, mode);
-    };
-  }
-
-  private movePlayer(destination: number) {
-    this.currentStations.set(this.currentRole, destination);
-  }
-
-  private isTravelPossible(mode: Ticket, destination: number) {
-    const possibleStations = this.possibleStations();
-    return possibleStations.some(ScotlandYard.canTravel(mode, destination));
-  }
-
-  private reduceTickets(role: Role, mode: Ticket) {
-    this.tickets.get(role)![mode] -= 1;
-  }
-
-  private fuelMrX(mode: Ticket) {
-    const mrXTickets = this.tickets.get(Role.MrX);
-    this.reduceTickets(this.currentRole, mode);
-
-    if (this.currentRole === Role.MrX || !mrXTickets) return;
-
-    mrXTickets[mode] += 1;
+    return this.stateManager.isGameOver();
   }
 
   updateLog(to: number, mode: Ticket) {
@@ -274,98 +165,95 @@ export class ScotlandYard {
     this.changePlayer();
   }
 
+  private isTravelPossible(mode: Ticket, destination: number) {
+    const possibleStations = this.possibleStations();
+    return possibleStations.some(TicketManager.canTravel(mode, destination));
+  }
+
+  getCurrentTurn() {
+    return this.stateManager.getCurrentTurn();
+  }
+
   useTicket(mode: Ticket, destination: number): boolean {
     if (!this.isTravelPossible(mode, destination)) return false;
 
     this.updateLog(destination, mode);
-    this.movePlayer(destination);
-    this.fuelMrX(mode);
+    const currentRole = this.stateManager.getCurrentRole();
+    this.mapManager.movePlayer(currentRole, destination);
+    this.ticketManager.fuelMrX(currentRole, mode);
 
+    this.stateManager.updateTurn(currentRole);
     this.updateState();
 
     this.declareWinner();
-    this.updateLastSeen();
+    this.mapManager.updateLastSeen(this.getCurrentTurn());
 
     return true;
   }
 
-  private view(positions: Positions) {
+  private view() {
     const transport = this.mrXHistory.map((log) => log.mode);
 
     return {
-      tickets: mapToObject<Tickets>(this.tickets),
-      roles: mapToObject<string>(this.assignedRoles),
-      positions: positions,
-      currentRole: this.currentRole,
+      tickets: mapToObject<Tickets>(this.getTickets()),
+      roles: mapToObject<string>(this.getRoles()),
+      positions: mapToObject<number>(this.getCurrentPosition()) as Positions,
+      currentRole: this.getCurrentRole(),
       isGameOver: this.isGameOver(),
       winner: this.getWinner(),
-      lastSeen: this.lastSeen,
+      lastSeen: this.mapManager.getLastSeenOfMrX(),
       transport,
     };
   }
 
   private detectivesView() {
-    const positions = mapToObject(this.currentStations) as Positions;
+    const newView = this.view();
+    if (newView.positions.MrX) newView.positions.MrX = null;
 
-    if (positions[Role.MrX]) {
-      positions[Role.MrX] = null;
-    }
-
-    return this.view(positions);
+    return newView;
   }
 
   private mrXView() {
-    const positions = mapToObject(this.currentStations);
-    return this.view(positions);
-  }
-
-  private shouldReveal() {
-    return this.revealingTurns.has(this.mrXHistory.length);
-  }
-
-  private updateLastSeen() {
-    if (!this.shouldReveal()) return;
-    this.lastSeen = this.currentStations.get(Role.MrX) as number;
+    return this.view();
   }
 
   enable2X(): boolean {
     if (this.isUsing2X || !this.hasTwoXCard()) return false;
 
-    this.reduceTickets(Role.MrX, Ticket["2x"]);
+    this.ticketManager.reduceTickets(Role.MrX, Ticket["2x"]);
     return (this.isUsing2X = true);
   }
 
   getGameState(player: string) {
-    const isMrx = this.assignedRoles.get(Role.MrX) === player;
+    const role = this.playerManager.findRole(player) as Role;
 
-    if (isMrx || this.shouldReveal()) {
+    if (
+      role === Role.MrX ||
+      this.mapManager.shouldReveal(this.stateManager.getCurrentTurn())
+    ) {
       return this.mrXView();
     }
 
     return this.detectivesView();
   }
 
-  getCurrentPosition() {
-    return this.currentStations;
-  }
-
   getPlayers(): string[] {
-    return this.players;
+    return this.playerManager.getPlayers();
   }
 
   getRoles(): Map<string, string> {
-    return this.assignedRoles;
+    return this.playerManager.getAssignedRoles();
   }
 
   getTickets() {
-    return this.tickets;
+    return this.ticketManager.getTickets();
   }
 
   getWinner() {
-    return this.winner;
+    return this.stateManager.getWinner();
   }
 
   getCurrentRole() {
-    return this.currentRole;
+    return this.stateManager.getCurrentRole();
   }
 }

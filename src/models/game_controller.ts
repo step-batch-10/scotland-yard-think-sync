@@ -1,5 +1,5 @@
 import { ScotlandYard } from "./scotland.ts";
-import { GameMap } from "./types.ts";
+import { GameMap, RandomIndex } from "./types.ts";
 
 interface MatchStatus {
   game: ScotlandYard;
@@ -13,11 +13,15 @@ export class GameController {
     this.matches = new Map();
   }
 
-  private defaultMatchFormat(players: string[], map?: GameMap) {
+  private defaultMatchFormat(
+    players: string[],
+    map?: GameMap,
+    random?: RandomIndex,
+  ) {
     const game = new ScotlandYard(players, map, 5);
     game.assignRole();
     game.distributeTickets();
-    game.assignStartingPositions();
+    game.assignStartingPositions(random);
 
     return {
       game,
@@ -26,8 +30,16 @@ export class GameController {
     };
   }
 
-  setMatch(roomId: string, players: Set<string>, map?: GameMap) {
-    this.matches.set(roomId, this.defaultMatchFormat([...players], map));
+  setMatch(
+    roomId: string,
+    players: Set<string>,
+    map?: GameMap,
+    random?: RandomIndex,
+  ) {
+    this.matches.set(
+      roomId,
+      this.defaultMatchFormat([...players], map, random),
+    );
   }
 
   getMatch(roomId: string) {
