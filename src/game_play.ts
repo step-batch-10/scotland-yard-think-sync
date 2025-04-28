@@ -15,7 +15,7 @@ export const alreadyInGame: GameMiddleWare = async (context, next) => {
   const playerId = extractPlayerId(context);
   const playerStat = context.env.playerRegistry.getPlayerStats(playerId);
 
-  if (playerStat.isPlaying) {
+  if (playerStat.isPlaying && context.req.path !== "/html/game.html") {
     return context.redirect("/html/game.html");
   }
 

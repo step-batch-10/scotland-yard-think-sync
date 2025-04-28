@@ -26,14 +26,10 @@ const serveAssets = serveStatic({ root: "./public/" });
 const createAuthenticatedRoutes = () => {
   const authApp = new Hono<{ Bindings: Bindings }>();
 
-  authApp
-    .use("/lobby", alreadyInGame)
-    .get(serveStatic({ path: "./public/html/lobby.html" }));
-
+  authApp.use(alreadyInGame);
+  authApp.get("/lobby", serveStatic({ path: "./public/html/lobby.html" }));
   authApp.route("/setup", createGameSetup());
-
   authApp.use("/game/*", ensureActiveGame).route("/game", createGameRoutes());
-
   authApp.get("*", serveAssets);
 
   return authApp;

@@ -363,7 +363,7 @@ describe("add 2x card", () => {
 });
 
 describe("ensureActiveGame", () => {
-  it("It should redirect to the game page if the player is in an active game and tries to access a non-game route.", async () => {
+  it("It should redirect to the game page if the player is in an active game and tries to access a lobby page.", async () => {
     const allPlayers = ["a", "b", "c", "d", "e", "f"];
     const [host, ...players] = allPlayers;
 
@@ -394,5 +394,55 @@ describe("ensureActiveGame", () => {
     await response.text();
 
     assertEquals(response.status, 200);
+  });
+
+  it("It should redirect to the game page if the player is in an active game and tries to access a waiting page.", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.playerRegistry.joinMatch(allPlayers);
+
+    const response = await app.request("/html/waiting.html", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const location = response.headers.get("location");
+
+    assertEquals(location, "/html/game.html");
+  });
+
+  it("It should  serve the waiting page if the player is not in the active game session.", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+
+    const response = await app.request("/lobby", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    await response.text();
+
+    assertEquals(response.status, 200);
+  });
+
+  it("It should redirect to the game page if the player is in an active game and tries to access a waiting page.", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.playerRegistry.joinMatch(allPlayers);
+
+    const response = await app.request("/html/join.html", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const location = response.headers.get("location");
+
+    assertEquals(location, "/html/game.html");
   });
 });
