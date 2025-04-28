@@ -6,7 +6,7 @@ const fetchState = () => fetchJson("/game/state");
 const fetchPossibleStations = () => fetchJson("/game/possible-stations");
 
 const cloneTemplate = (targetId) => {
-  const template = document.querySelector(targetId);
+  const template = document.getElementById(targetId);
   return template.content.firstElementChild.cloneNode(true);
 };
 
@@ -36,19 +36,25 @@ const playerStats = (trElement, [role, playerName, tickets, station]) => {
   return trElement;
 };
 
-const mrXStats = (trElement, [role, playerName, tickets, station]) => {
-  const cells = trElement.querySelectorAll("td");
+const removeTag = (id) => {
+  const tag = document.getElementById(id);
+  if (tag) tag.remove();
+};
 
-  cells[0].textContent = role;
-  cells[1].textContent = playerName;
-  cells[2].textContent = tickets.Taxi;
-  cells[3].textContent = tickets.Bus;
-  cells[4].textContent = tickets.Metro;
-  cells[5].textContent = tickets.Wild;
-  cells[6].textContent = tickets["2x"];
-  cells[7].textContent = station;
+const mrXStats = (ticketsTag, [playerName, tickets, station]) => {
+  const keys = Object.keys(tickets);
 
-  return trElement;
+  keys.forEach((key, index) => {
+    const svg = cloneTemplate(`${key}-icon`);
+    removeTag(`${key}`);
+    ticketsTag[index].appendChild(svg);
+    const count = ticketsTag[index].querySelector(".count");
+    count.textContent = tickets[key];
+  });
+
+  document.getElementById("last-seen").textContent = station;
+  document.querySelector("#bio p").textContent = playerName;
+  return ticketsTag;
 };
 
 const renderMrXTransportLog = (transports) => {
@@ -59,7 +65,7 @@ const renderMrXTransportLog = (transports) => {
     span.textContent = `${index + 1}`;
     span.classList.add("log-text");
 
-    const icon = cloneTemplate(`#${transport}-icon`);
+    const icon = cloneTemplate(`${transport}-icon`);
     icon.style.height = getComputedStyle(log[index]).height;
     icon.style.width = "5vw";
     icon.style.marginLeft = "10px";
@@ -70,11 +76,10 @@ const renderMrXTransportLog = (transports) => {
 };
 
 const renderMrxTickets = (stats) => {
-  const mrXStatTable = document.querySelector(".mrX-stats table");
-  const tbody = mrXStatTable.querySelector("tbody");
-  const row = tbody.children;
+  const mrXStatTable = document.querySelector(".mrX-stats #types");
+  const tickets = mrXStatTable.querySelectorAll(".ticket");
 
-  mrXStats(row[0], stats);
+  mrXStats(tickets, stats.slice(1));
 };
 
 const renderPlayerTickets = (stats, lastSeen) => {
@@ -104,10 +109,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
   const dimensions = element.getBoundingClientRect();
 
   const absoluteX = dimensions.left + scrollLeft;
@@ -149,7 +154,7 @@ const createCard = ({ to, mode }, container) => {
   const ticketType = mode === "Ferry" ? "Wild" : mode;
   card.id = ticketType;
 
-  const icon = cloneTemplate(`#${ticketType}-icon`);
+  const icon = cloneTemplate(`${ticketType}-icon`);
   icon.style.height = getComputedStyle(container).height;
   icon.style.width = "1.5vw";
 
@@ -167,7 +172,7 @@ const addListeners = (elements, card, pairs) => {
 
 const renderTickets = (options, pairs) => (e) => {
   removeAllContainers();
-  const cardsContainer = cloneTemplate("#ticket-hover-card");
+  const cardsContainer = cloneTemplate("ticket-hover-card");
   const closeBtn = cardsContainer.querySelector("#close-btn");
   const card = cardsContainer.querySelector(".card");
   const elements = options.map((option) => createCard(option, card));
@@ -234,7 +239,7 @@ const movePawnToStation = (pawn, stationId) => {
 };
 
 const makePawn = (color) => {
-  const pawn = cloneTemplate("#pawn");
+  const pawn = cloneTemplate("pawn");
   const bodyParts = pawn.querySelectorAll(".body-parts");
   pawn.id = color;
 
@@ -291,8 +296,10 @@ const showTurn = (currentRole, isYourTurn) => {
 const winningMessage = (winner) =>
   winner === "MrX" ? "Mr. X is the winner" : "Detectives are the winner";
 
-const renderGameOver = ({ winner }) => {
-  const banner = cloneTemplate("#winner-banner");
+const renderGameOver = ({ winner }, id) => {
+  clearInterval(id);
+
+  const banner = cloneTemplate("winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
   document.body.appendChild(banner);
 };
@@ -355,7 +362,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };
@@ -367,6 +374,20 @@ const enable2X = async () => {
   if (json.accepted) alert("you are in 2x mode");
 };
 
+const handleZoom = () => {
+  svgPanZoom("#svg1", {
+    zoomEnabled: true,
+    controlIconsEnabled: true,
+    fit: true,
+    center: true,
+    minZoom: 1,
+    maxZoom: 10,
+    contain: true,
+    zoomScaleSensitivity: 0.15,
+    panEnabled: false,
+  });
+};
+
 const main = () => {
   playAudio();
   startPolling();
@@ -374,4 +395,5 @@ const main = () => {
   document.querySelector("#two-x").onclick = enable2X;
 };
 
-globalThis.onload = main;
+globalThis.addEventListener("load", main);
+globalThis.addEventListener("load", handleZoom);

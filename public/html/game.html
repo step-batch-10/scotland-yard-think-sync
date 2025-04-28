@@ -5,7 +5,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="/css/common.css" />
     <link rel="stylesheet" href="/css/game.css" />
+    <script src="https://unpkg.com/svg-pan-zoom/dist/svg-pan-zoom.min.js"></script>
     <script type="module" src="/script/game.js"></script>
+
     <title>Scotland Yard | Game</title>
   </head>
 
@@ -33102,7 +33104,6 @@
         />
       </g>
     </svg>
-
     <div class="player-stats" id="player-panel" popover="">
       <table>
         <thead>
@@ -33161,32 +33162,20 @@
     </div>
 
     <div class="mrX-stats" id="mrX-Panel" popover="">
-      <table>
-        <thead>
-          <tr>
-            <th>Role</th>
-            <th>player</th>
-            <th>Taxi</th>
-            <th>Bus</th>
-            <th>Metro</th>
-            <th>Black</th>
-            <th>2X</th>
-            <th>Last Seen</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-        </tbody>
-      </table>
+      <div id="parent">
+        <div id="bio">
+          <div id="avtar"></div>
+          <p>Mr. X</p>
+        </div>
+        <div id="types">
+          <div class="ticket"><div class="count"></div></div>
+          <div class="ticket"><div class="count"></div></div>
+          <div class="ticket"><div class="count"></div></div>
+          <div class="ticket"><div class="count"></div></div>
+          <div class="ticket"><div class="count"></div></div>
+          <div id="last-seen" class="ticket"></div>
+        </div>
+      </div>
 
       <p>Mode of transports used</p>
       <div class="transport-modes-log">
@@ -35177,6 +35166,70 @@
             ry="0.11108503"
           />
         </g>
+      </svg>
+    </template>
+    <template id="2x-icon">
+      <svg
+        viewBox="0 0 48 48"
+        fill="none"
+        version="1.1"
+        id="2x"
+        sodipodi:docname="2x-icon.svg"
+        inkscape:version="1.4 (e7c3feb1, 2024-10-09)"
+        xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+        xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+        xmlns="http://www.w3.org/2000/svg"
+        xmlns:svg="http://www.w3.org/2000/svg"
+      >
+        <defs id="defs1" />
+        <sodipodi:namedview
+          id="namedview1"
+          pagecolor="#ffffff"
+          bordercolor="#000000"
+          borderopacity="0.25"
+          inkscape:showpageshadow="2"
+          inkscape:pageopacity="0.0"
+          inkscape:pagecheckerboard="0"
+          inkscape:deskcolor="#d1d1d1"
+          inkscape:zoom="6.5223767"
+          inkscape:cx="16.558381"
+          inkscape:cy="25.9108"
+          inkscape:window-width="1792"
+          inkscape:window-height="1067"
+          inkscape:window-x="0"
+          inkscape:window-y="25"
+          inkscape:window-maximized="1"
+          inkscape:current-layer="svg1"
+        />
+        <rect
+          width="48"
+          height="48"
+          rx="8"
+          fill="#ffffff"
+          id="rect1"
+          style="fill: #1a1a1a"
+        />
+        <text
+          x="26.625998"
+          y="25.105425"
+          dominant-baseline="middle"
+          text-anchor="middle"
+          font-family="Arial, sans-serif"
+          font-size="48.4397px"
+          fill="#000000"
+          id="text1"
+          style="
+            fill: #fef3f3;
+            stroke: #1c1c1c;
+            stroke-width: 0.50199999;
+            stroke-dasharray: none;
+            stroke-opacity: 1;
+            fill-opacity: 1;
+          "
+          transform="scale(0.85228492,1.1733166)"
+        >
+          2x
+        </text>
       </svg>
     </template>
   </body>
