@@ -329,7 +329,7 @@ g {
 
 #parent {
   background-color: aliceblue;
-  height: 10vh;
+  height: 8vh;
   width: 24vw;
   display: flex;
   justify-content: space-around;
@@ -384,8 +384,12 @@ g {
   }
 }
 
+.reveal {
+  border: 1px solid black;
+}
+
 .count {
-  font-size: 14px;
+  font-size: 20px;
   border: 3px solid rgba(3, 147, 199, 0.612);
   padding: 2px;
   box-sizing: border-box;

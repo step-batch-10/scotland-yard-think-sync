@@ -324,6 +324,7 @@ const playGame = (data) => {
   renderPawns(detectivesStat);
   renderPlayerTickets(stats, lastSeen);
   showTurn(currentRole, isYourTurn);
+
   renderMrXTransportLog(transport);
 
   render2XTicket(tickets, currentRole, isYourTurn);
