@@ -3,11 +3,7 @@ import { Hono, MiddlewareHandler } from "hono";
 import { serveStatic } from "hono/deno";
 import { createGameSetup } from "./game_setup.ts";
 import { Bindings } from "./models/types.ts";
-import {
-  alreadyInGame,
-  createGameRoutes,
-  ensureActiveGame,
-} from "./game_play.ts";
+import { createGameRoutes, ensureActiveGame } from "./game_play.ts";
 import {
   ensureAuthenticated,
   loginHandler,
@@ -26,7 +22,7 @@ const serveAssets = serveStatic({ root: "./public/" });
 const createAuthenticatedRoutes = () => {
   const authApp = new Hono<{ Bindings: Bindings }>();
 
-  authApp.use(alreadyInGame);
+  // authApp.use(alreadyInGame);
   authApp.get("/lobby", serveStatic({ path: "./public/html/lobby.html" }));
   authApp.route("/setup", createGameSetup());
   authApp.use("/game/*", ensureActiveGame).route("/game", createGameRoutes());
