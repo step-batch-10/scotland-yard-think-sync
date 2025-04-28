@@ -1,8 +1,12 @@
 import { GameController } from "./game_controller.ts";
 import { GameMap } from "./types.ts";
 
+interface WaitingRoom {
+  room: Set<string>;
+  threshold: number;
+}
 export class Rooms {
-  private lobbies: Map<string, Set<string>>;
+  private lobbies: Map<string, WaitingRoom>;
   private roomId: number;
 
   constructor() {
@@ -15,32 +19,36 @@ export class Rooms {
     return this.roomId.toString();
   }
 
-  private createRoom() {
+  private createRoom(threshold: number) {
     const roomId = this.generateId();
-    this.lobbies.set(roomId, new Set());
+    this.lobbies.set(roomId, {
+      room: new Set(),
+      threshold,
+    });
 
     return roomId;
   }
 
-  addHost(player: string) {
-    const roomId = this.createRoom();
+  addHost(player: string, threshold = 6) {
+    const roomId = this.createRoom(threshold);
     const lobby = this.lobbies.get(roomId);
-    lobby?.add(player);
+    lobby?.room.add(player);
 
     return roomId;
   }
 
   addPlayer(roomId: string, player: string) {
     const lobby = this.lobbies.get(roomId);
-    lobby?.add(player);
+    lobby?.room.add(player);
   }
 
   getPlayers(roomId: string) {
-    return this.lobbies.get(roomId);
+    return this.lobbies.get(roomId)?.room;
   }
 
   isRoomFull(roomId: string) {
-    return this.lobbies.get(roomId)?.size === 6;
+    const room = this.lobbies.get(roomId)!;
+    return room.room.size === room.threshold;
   }
 
   hasRoom(roomId: string) {
@@ -48,12 +56,12 @@ export class Rooms {
   }
 
   removePlayer(roomId: string, playerName: string): boolean {
-    const room = this.lobbies.get(roomId);
-    if (!room) return false;
+    const waitingRoom = this.lobbies.get(roomId);
+    if (!waitingRoom) return false;
 
-    room.delete(playerName);
+    waitingRoom.room.delete(playerName);
 
-    if (room.size === 0) {
+    if (waitingRoom.room.size === 0) {
       this.lobbies.delete(roomId);
     }
 

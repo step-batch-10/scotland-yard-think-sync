@@ -8,9 +8,18 @@ export const extractPlayerId = (context: GameContext): string => {
   return String(playerId);
 };
 
-const handleCreateRoom = (context: GameContext) => {
+export const extractNumberOfPlayers = async (
+  request: HonoRequest | Request,
+) => {
+  const fd = await request.formData();
+  return Number(fd.get("playerCount")) || 6;
+};
+
+const handleCreateRoom = async (context: GameContext) => {
   const playerId = extractPlayerId(context);
-  const roomId = context.env.rooms.addHost(playerId);
+  const numberOfPlayers = await extractNumberOfPlayers(context.req);
+
+  const roomId = context.env.rooms.addHost(playerId, numberOfPlayers);
   context.env.playerRegistry.assignRoom(roomId, playerId);
 
   return context.json({ success: true });

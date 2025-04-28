@@ -89,8 +89,7 @@ export class ScotlandYard {
   }
 
   distributeTickets(): void {
-    for (const index in this.players) {
-      const role = this.roles[index];
+    for (const role of this.roles) {
       this.tickets.set(role, ticketsOf(role));
     }
   }

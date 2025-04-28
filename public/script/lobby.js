@@ -1,7 +1,11 @@
 import { redirectTo } from "./waiting.js";
 
 const hostGame = async () => {
-  const response = await fetch("/setup/create-room", { method: "POST" });
+  const playerCount = document.querySelector("#playerCount");
+  const body = new FormData();
+  body.set("playerCount", playerCount.value);
+
+  const response = await fetch("/setup/create-room", { method: "POST", body });
 
   if (response.ok) {
     redirectTo("/html/waiting.html");

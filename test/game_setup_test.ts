@@ -5,6 +5,7 @@ import { PlayerRegistry } from "../src/models/players.ts";
 import { Rooms } from "../src/models/rooms.ts";
 import { App, Bindings } from "../src/models/types.ts";
 import { GameController } from "../src/models/game_controller.ts";
+import { extractNumberOfPlayers } from "../src/game_setup.ts";
 
 interface TestApp {
   (host: string, ...players: string[]): {
@@ -53,14 +54,31 @@ export const createAppWithHostedRoom: TestApp = (host, ...players) => {
 describe("create room", () => {
   it("should get success if room created", async () => {
     const { app } = createAppWithHostedRoom("a");
+    const body = new FormData();
+    body.set("playerCount", "6");
+
     const res = await app.request("/setup/create-room", {
       method: "POST",
       headers: { cookie: "playerId=a" },
+      body,
     });
 
     const jsonData = await res.json();
     assertEquals(res.status, 200);
     assert(jsonData.success);
+  });
+
+  it("should get success if room a created with 6 players if player count is invalid", async () => {
+    const fd = new FormData();
+    fd.set("playerCount", "six");
+
+    const httpRequest = new Request("localhost:090/dnal", {
+      method: "POST",
+      body: fd,
+    });
+
+    const numberOfPlayers = await extractNumberOfPlayers(httpRequest);
+    assertEquals(numberOfPlayers, 6);
   });
 });
 
