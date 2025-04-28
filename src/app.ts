@@ -22,12 +22,13 @@ const serveAssets = serveStatic({ root: "./public/" });
 const createAuthenticatedRoutes = () => {
   const authApp = new Hono<{ Bindings: Bindings }>();
 
-  authApp.get("/lobby", serveStatic({ path: "./public/html/lobby.html" }));
+  authApp
+    .use("/lobby", ensureActiveGame)
+    .get("/lobby", serveStatic({ path: "./public/html/lobby.html" }));
+
   authApp.route("/setup", createGameSetup());
 
-  authApp
-    .use("/game/*", ensureActiveGame)
-    .route("/game", createGameRoutes());
+  authApp.use("/game/*", ensureActiveGame).route("/game", createGameRoutes());
 
   authApp.get("*", serveAssets);
 
@@ -56,9 +57,7 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   app.use(inject(bindings));
 
   app.route("/", createGuestRoutes());
-  app
-    .use(ensureAuthenticated)
-    .route("/", createAuthenticatedRoutes());
+  app.use(ensureAuthenticated).route("/", createAuthenticatedRoutes());
 
   return app;
 };

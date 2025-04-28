@@ -361,3 +361,38 @@ describe("add 2x card", () => {
     assert(actual.accepted);
   });
 });
+
+describe.only("ensureActiveGame", () => {
+  it("It should redirect to the game page if the player is in an active game and tries to access a non-game route.", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+    bindings.playerRegistry.joinMatch(allPlayers);
+
+    const response = await app.request("/lobby", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    const location = response.headers.get("location");
+
+    assertEquals(location, "/html/game.html");
+  });
+
+  it("It should  serve the requested page if the player is not in the active game session.", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+
+    const response = await app.request("/lobby", {
+      headers: { cookie: `playerId=${host}` },
+    });
+
+    await response.text();
+
+    assertEquals(response.status, 200);
+  });
+});

@@ -20,6 +20,10 @@ export const ensureActiveGame: GameMiddleWare = async (context, next) => {
     return context.redirect("/lobby");
   }
 
+  if (playerStat.isPlaying) {
+    return context.redirect("/html/game.html");
+  }
+
   return await next();
 };
 

@@ -74,6 +74,7 @@ export class Rooms {
     if (!players || match.hasMatch(roomId)) return false;
 
     match.setMatch(roomId, players, map);
+
     return true;
   }
 }

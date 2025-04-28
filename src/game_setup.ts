@@ -9,7 +9,7 @@ export const extractPlayerId = (context: GameContext): string => {
 };
 
 export const extractNumberOfPlayers = async (
-  request: HonoRequest | Request,
+  request: HonoRequest | Request
 ) => {
   const fd = await request.formData();
   return Number(fd.get("playerCount")) || 6;
@@ -72,6 +72,7 @@ const servePlayerList = (context: GameContext) => {
   const isRoomFull = context.env.rooms.isRoomFull(roomId);
 
   if (isRoomFull) {
+    context.env.playerRegistry.joinMatch([...players]);
     context.env.rooms.assignGame(roomId, context.env.controller);
   }
 
