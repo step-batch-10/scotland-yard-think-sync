@@ -9,7 +9,7 @@ export const extractPlayerId = (context: GameContext): string => {
 };
 
 export const extractNumberOfPlayers = async (
-  request: HonoRequest | Request
+  request: HonoRequest | Request,
 ) => {
   const fd = await request.formData();
   return Number(fd.get("playerCount")) || 6;

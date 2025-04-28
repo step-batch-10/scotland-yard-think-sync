@@ -362,7 +362,7 @@ describe("add 2x card", () => {
   });
 });
 
-describe.only("ensureActiveGame", () => {
+describe("ensureActiveGame", () => {
   it("It should redirect to the game page if the player is in an active game and tries to access a non-game route.", async () => {
     const allPlayers = ["a", "b", "c", "d", "e", "f"];
     const [host, ...players] = allPlayers;
