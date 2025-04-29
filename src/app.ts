@@ -33,9 +33,7 @@ const createAuthenticatedRoutes = () => {
     .get(serveStatic({ path: "./public/html/lobby.html" }));
 
   authApp.route("/setup", createGameSetup());
-  authApp
-    .use("/game/*", ensureActiveGame)
-    .route("/game", createGameRoutes());
+  authApp.use("/game/*", ensureActiveGame).route("/game", createGameRoutes());
 
   authApp.use(serveAssets);
 
@@ -70,9 +68,7 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   //when not logged in and requested any html, send to login
   // redirect only html not css/js etc
 
-  app
-    .use(ensureAuthenticated)
-    .route("/", createAuthenticatedRoutes());
+  app.use(ensureAuthenticated).route("/", createAuthenticatedRoutes());
 
   return app;
 };

@@ -12,8 +12,6 @@ import _ from "lodash";
 import { mapToObject } from "./game_utils.ts";
 
 export const alreadyInGame: GameMiddleWare = async (context, next) => {
-  console.log("are you  getting called");
-
   const playerId = extractPlayerId(context);
   const playerStat = context.env.playerRegistry.getPlayerStats(playerId);
 
@@ -122,6 +120,12 @@ const loadGame: GameMiddleWare = async (context, next) => {
   return await next();
 };
 
+const handlePlayAgain = (context: GameContext) => {
+  const { playerId } = extractMatchAndPlayerId(context);
+  context.env.playerRegistry.resetPlayer(playerId);
+  return context.redirect("/lobby");
+};
+
 export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   const gameApp = new Hono<{ Bindings: Bindings }>();
 
@@ -134,6 +138,7 @@ export const createGameRoutes = (): Hono<{ Bindings: Bindings }> => {
   gameApp.get("/move/:to/ticket/:type", handleMovement);
   gameApp.get("/enable-2x", handleEnableTwoX);
   gameApp.get("/mrXlog", handleMrXLog);
+  gameApp.post("/play-again", handlePlayAgain);
 
   return gameApp;
 };
