@@ -106,10 +106,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
 
   const { left, top } = element.getBoundingClientRect();
   return [scrollLeft + left, scrollTop + top];
@@ -272,6 +272,7 @@ const createHighlighter = (className, role) => {
 const highlightPawn = (role) => {
   const color = mapRoleToColor(role);
   const pawn = document.querySelector(`#${color}`);
+  document.getElementById("turn-indicator").style.backgroundColor = color;
 
   if (!pawn) return;
   pawn.classList.add("highlight-pawn");
@@ -371,7 +372,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };
