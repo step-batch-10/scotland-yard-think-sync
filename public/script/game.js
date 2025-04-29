@@ -223,7 +223,7 @@ const generateStationId = (station) => `#station-${station}`;
 const movePawnToStation = (pawn, stationId) => {
   const tspan = document.querySelector(stationId);
 
-  addCoordinate(pawn, tspan, -70, -112);
+  addCoordinate(pawn, tspan, -6, -70);
   return pawn;
 };
 
@@ -272,6 +272,12 @@ const highlightPawn = (role) => {
   const pawn = document.querySelector(`#${color}`);
 
   if (!pawn) return;
+  pawn.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+    inline: "center",
+  });
+
   pawn.classList.add("highlight-pawn");
 };
 

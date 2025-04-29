@@ -94,6 +94,11 @@ th {
   position: absolute;
   width: 10px;
   height: 20px;
+
+  & > svg {
+    width: 40px;
+    height: 80px;
+  }
 }
 
 .svg {
@@ -147,7 +152,7 @@ th {
   color: white;
   min-width: 85px;
   background-color: whitesmoke;
-  z-index: 999;
+  z-index: 10;
 
   *:hover {
     cursor: pointer;
