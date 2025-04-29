@@ -1,4 +1,11 @@
-import { Role, Route, Ticket, Tickets, Transport } from "./types.ts";
+import {
+  Role,
+  Route,
+  Ticket,
+  Tickets,
+  Transport,
+  ValidTickets,
+} from "./types.ts";
 import { ticketsOf } from "./tickets.ts";
 
 export class TicketManager {
@@ -30,18 +37,16 @@ export class TicketManager {
     const groupedRoutes = Object.entries(
       Object.groupBy(routes, ({ to }) => to),
     );
-    interface Fn {
-      ({ mode }: Route): Ticket[];
-    }
-    const fn: Fn = ({ mode }) => TicketManager.validTicketOption(tickets, mode);
+
+    const getvalidTickets: ValidTickets = ({ mode }) =>
+      TicketManager.validTicketOption(tickets, mode);
+
     const pair = groupedRoutes.map(([to, routes]): [number, Ticket[]] => [
       Number(to),
-      [...new Set(routes!.flatMap(fn))],
+      [...new Set(routes!.flatMap(getvalidTickets))],
     ]);
 
-    return pair
-      .map(([to, tickets]) => ({ to, tickets }))
-      .filter(({ tickets }) => tickets.length !== 0);
+    return pair.map(([to, tickets]) => ({ to, tickets }));
   }
 
   distributeTickets(): void {

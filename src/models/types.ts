@@ -91,3 +91,7 @@ export interface Log {
 export interface Options {
   isTwoX: boolean;
 }
+
+export interface ValidTickets {
+  ({ mode }: Route): Ticket[];
+}
