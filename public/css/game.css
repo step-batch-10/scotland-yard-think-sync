@@ -14,10 +14,12 @@ body {
 
 #turn-indicator {
   color: white;
-  padding: 10px 20px;
+  padding: 12px 16px;
+  border-left: 4px;
   background-color: rgba(0, 0, 0, 0.8);
   font-weight: 600;
   font-size: 20px;
+  border-radius: 2rem;
 }
 
 td,
@@ -30,11 +32,26 @@ th {
   height: 70px;
 }
 
+@keyframes comeup {
+  0% {
+    top: 64vh;
+  }
+
+  50% {
+    bottom: 44vh;
+  }
+
+  100% {
+    top: 20vh;
+  }
+}
+
 .player-stats {
   position: fixed;
   text-align: center;
-  left: 68vw;
-  top: 6vh;
+  top: 16vw;
+  left: 36vw;
+  animation: comeup 2s ease-in-out;
 }
 
 .players-panel {
@@ -86,8 +103,9 @@ th {
 
 .mrX-stats {
   position: fixed;
-  left: 70vw;
-  top: 12vh;
+  top: 16vw;
+  left: 36vw;
+  animation: comeup 2s ease-in-out;
 }
 
 .pawn {
@@ -235,14 +253,8 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
@@ -315,12 +327,9 @@ g {
   display: none;
   background-color: black;
   color: white;
-  background-image: url("/assets/images/2x-icon.svg");
-  background-repeat: no-repeat;
-  background-size: contain;
+  border-radius: 16px;
   background-position: center;
-
-  height: 25px;
+  height: 32px;
 }
 
 .log-text {
@@ -416,26 +425,25 @@ g {
   background-color: transparent;
 }
 
-.side-bar {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 10px;
-  position: fixed;
-  right: 0;
-}
-
 .side-bar button:hover {
   background-color: transparent;
 }
 
+.side-bar:hover {
+  opacity: 1;
+}
+
 .side-bar {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  gap: 10px;
+  align-content: center;
   position: fixed;
-  right: 2vw;
+  right: 38vw;
+  background-color: #ddd;
+  bottom: 0vh;
+  border-radius: 10px;
+  display: flex;
+  justify-content: space-around;
+  padding: 0px 20px;
 }
 
 @keyframes drop {
