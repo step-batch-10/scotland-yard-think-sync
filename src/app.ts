@@ -62,11 +62,6 @@ export const createApp = (bindings: Bindings): Hono<{ Bindings: Bindings }> => {
   app.use(inject(bindings));
 
   app.route("/", createGuestRoutes());
-  //when logged in and requested login: redirect to relevant page
-  //when hosting, send any other requests to waiting page
-  //when waiting, send any other requests to waiting page
-  //when not logged in and requested any html, send to login
-  // redirect only html not css/js etc
 
   app.use(ensureAuthenticated).route("/", createAuthenticatedRoutes());
 
