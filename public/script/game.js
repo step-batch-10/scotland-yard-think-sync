@@ -154,7 +154,7 @@ const createCard = (ticket, to, container) => {
 
   card.append(icon);
 
-  return { clonedCard: card, to: to };
+  return { clonedCard: card, to };
 };
 
 const addListeners = (elements, card, pairs) => {
@@ -181,11 +181,11 @@ const renderTickets = (tickets, to, stations) => (e) => {
 
 const deleteNodeBySelector = (selector) => {
   const nodes = document.querySelectorAll(selector);
-  if (nodes) {
-    nodes.forEach((node) => {
-      document.body.removeChild(node);
-    });
-  }
+  if (!nodes) return;
+
+  nodes.forEach((node) => {
+    document.body.removeChild(node);
+  });
 };
 
 const highLightDestinations = (stations) => {
