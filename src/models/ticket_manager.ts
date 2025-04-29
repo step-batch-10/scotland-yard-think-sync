@@ -39,7 +39,9 @@ export class TicketManager {
       [...new Set(routes!.flatMap(fn))],
     ]);
 
-    return pair.map(([to, tickets]) => ({ to, tickets }));
+    return pair
+      .map(([to, tickets]) => ({ to, tickets }))
+      .filter(({ tickets }) => tickets.length !== 0);
   }
 
   distributeTickets(): void {
