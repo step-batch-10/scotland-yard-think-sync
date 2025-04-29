@@ -296,6 +296,8 @@ const renderGameOver = ({ winner }, id) => {
 
   const banner = cloneTemplate("winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
+  const prevBanner = document.querySelector(".banner");
+  prevBanner?.remove();
   document.body.appendChild(banner);
 };
 
@@ -316,7 +318,6 @@ const playGame = (data) => {
     lastSeen,
     transport,
   } = data;
-
   const stats = combineObjects(roles, tickets, positions);
   const detectivesStat = stats.filter((stat) => stat[3]);
 

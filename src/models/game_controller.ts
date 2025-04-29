@@ -10,7 +10,7 @@ export class GameController {
   private defaultMatchFormat(
     players: string[],
     map?: GameMap,
-    random?: RandomIndex
+    random?: RandomIndex,
   ) {
     const game = new ScotlandYard(players, map, 5);
     game.assignRole();
@@ -28,11 +28,11 @@ export class GameController {
     roomId: string,
     players: Set<string>,
     map?: GameMap,
-    random?: RandomIndex
+    random?: RandomIndex,
   ) {
     this.matches.set(
       roomId,
-      this.defaultMatchFormat([...players], map, random)
+      this.defaultMatchFormat([...players], map, random),
     );
   }
 

@@ -235,14 +235,8 @@ g {
 
 .banner p {
   text-align: center;
-  font-family:
-    "Lucida Sans",
-    "Lucida Sans Regular",
-    "Lucida Grande",
-    "Lucida Sans Unicode",
-    Geneva,
-    Verdana,
-    sans-serif;
+  font-family: "Lucida Sans", "Lucida Sans Regular", "Lucida Grande",
+    "Lucida Sans Unicode", Geneva, Verdana, sans-serif;
 }
 
 .box {
@@ -260,6 +254,7 @@ g {
 }
 
 .row {
+  width: 100%;
   display: flex;
   gap: 5px;
 }
@@ -462,4 +457,11 @@ g {
   & p {
     color: white;
   }
+}
+
+form {
+  display: flex;
+  flex-direction: row;
+  gap: 4rem;
+  width: 10vw;
 }

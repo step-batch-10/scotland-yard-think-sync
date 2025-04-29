@@ -68,10 +68,15 @@ const serveMatchState: GameHandler = (context: GameContext) => {
 };
 
 const servePossibleStations: GameHandler = (context) => {
+  const playerId = extractPlayerId(context);
   const { match } = context.env;
-  const nearbyStations = match!.game.possibleStations();
+  const { roles, currentRole } = match!.game.getGameState(playerId);
+  const isYourTurn = roles[currentRole] === playerId;
 
-  return context.json(_.uniqWith(nearbyStations, _.isEqual));
+  if (!isYourTurn) return context.json([], 401);
+
+  const nearbyStations = match!.game.possibleStations();
+  return context.json(nearbyStations);
 };
 
 const handleMovement: GameHandler = (context: GameContext) => {
@@ -123,6 +128,7 @@ const loadGame: GameMiddleWare = async (context, next) => {
 const handlePlayAgain = (context: GameContext) => {
   const { playerId } = extractMatchAndPlayerId(context);
   context.env.playerRegistry.resetPlayer(playerId);
+
   return context.redirect("/lobby");
 };
 
