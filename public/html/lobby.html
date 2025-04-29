@@ -1,27 +1,35 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Scotland Yard | Lobby</title>
 
-    <link rel="stylesheet" href="/css/lobby.css" />
-    <link rel="stylesheet" href="/css/common.css" />
-    <script type="module" src="/script/lobby.js"></script>
-  </head>
-  <body>
-    <main id="root">
-      <div id="outer" class="decoration">
-        <p>Select Number of Players</p>
-        <select name="playerCount" id="playerCount">
-          <option value="3">3</option>
-          <option value="4">4</option>
-          <option value="5">5</option>
-          <option selected value="6">6</option>
-        </select>
-        <button id="host">HOST</button>
-        <button id="join">JOIN</button>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scotland Yard | Lobby</title>
+
+  <link rel="stylesheet" href="/css/common.css" />
+  <link rel="stylesheet" href="/css/lobby.css" />
+  <script type="module" src="/script/lobby.js"></script>
+</head>
+
+<body>
+  <main id="root">
+    <section style="display: none;" id="popup-container">
+      <div class="popup">
+        <p>Choose Number Of Players</p>
+        <div class="row">
+          <button class="player-selection" id="3">3</button>
+          <button class="player-selection" id="4">4</button>
+          <button class="player-selection" id="5">5</button>
+          <button class="player-selection" id="6">6</button>
+        </div>
       </div>
-    </main>
-  </body>
+    </section>
+
+    <div id="outer" class="decoration">
+      <button id="host">HOST</button>
+      <button id="join">JOIN</button>
+    </div>
+  </main>
+</body>
+
 </html>

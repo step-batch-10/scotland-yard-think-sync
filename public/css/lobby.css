@@ -1,7 +1,6 @@
 #outer {
-  width: 15vw;
+  min-width: 200px;
   min-height: 10rem;
-  margin-top: 100px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -12,4 +11,87 @@
 a {
   text-decoration: none;
   color: black;
+}
+
+#popup-container {
+  width: 100%;
+  height: 100vh;
+  position: absolute;
+  top: 0%;
+  backdrop-filter: blur(10px);
+  flex-direction: column;
+  z-index: 999;
+}
+
+.popup {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #e7d8b2;
+  min-width: 100px;
+  width: 15vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  padding: 30px 40px;
+  gap: 1rem;
+  color: bisque;
+  border-radius: 6px;
+
+  &>p {
+    font-weight: 600;
+    font-size: 20px;
+    text-align: center;
+  }
+
+}
+
+form {
+  min-width: 100px;
+  height: 100%;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 1.4rem;
+  align-items: center;
+}
+
+form select {
+  width: 50px;
+  aspect-ratio: 3/2;
+  text-align: center;
+  font-size: 1rem;
+  font-weight: 500;
+  border: none;
+  border-radius: 2px;
+
+  background-color: rgb(191, 156, 90);
+  color: white;
+}
+
+.row {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 11px;
+  font-size: 1.4rem;
+  flex-wrap: wrap;
+}
+
+.player-selection {
+  height: 100px;
+  aspect-ratio: 13/22;
+  background-image: url("/assets/images/pawn.png");
+  background-color: transparent;
+  background-position: center;
+  background-size: contain;
+  background-repeat: no-repeat;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  padding-bottom: 18px;
+  font-size: 1.5rem;
+  font-weight: 600;
+
 }
