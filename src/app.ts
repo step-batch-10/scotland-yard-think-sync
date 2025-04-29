@@ -13,6 +13,7 @@ import {
   loginHandler,
   skipIfAuthenticated,
 } from "./handlers/auth_handler.ts";
+import { createScenarioRoutes } from "./scenario_routes.ts";
 
 const inject = (bindings: Bindings): MiddlewareHandler => {
   return async (context, next) => {
@@ -34,6 +35,7 @@ const createAuthenticatedRoutes = () => {
 
   authApp.route("/setup", createGameSetup());
   authApp.use("/game/*", ensureActiveGame).route("/game", createGameRoutes());
+  authApp.route("/scenario", createScenarioRoutes());
 
   authApp.use(serveAssets);
 
