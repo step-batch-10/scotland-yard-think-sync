@@ -263,7 +263,7 @@ g {
 .message-container {
   width: 400px;
   min-width: 100px;
-
+  font-size: 22px;
   text-align: center;
   height: 30vh;
   min-height: 200px;
@@ -271,7 +271,7 @@ g {
   flex-direction: column;
   justify-content: space-evenly;
   align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
+  background-color: rgba(0, 0, 0, 0.2);
 }
 
 .replay {
@@ -316,7 +316,6 @@ g {
   background-position: center;
 
   height: 25px;
-<<<<<<< HEAD
 }
 
 .log-text {
@@ -418,30 +417,6 @@ g {
   gap: 10px;
   position: fixed;
   right: 0;
-}
-
-#controls {
-  position: fixed;
-  bottom: 0px;
-  right: 1vw;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  z-index: 1000;
-}
-
-#controls button {
-  padding: 4px;
-  font-size: 18px;
-  background: #333;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-}
-
-#controls button:hover {
-  background: #555;
 }
 
 .side-bar button:hover {

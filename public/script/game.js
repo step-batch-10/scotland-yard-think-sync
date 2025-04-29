@@ -106,10 +106,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft =
-    globalThis.pageXOffset || document.documentElement.scrollLeft;
-  const scrollTop =
-    globalThis.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = globalThis.pageXOffset ||
+    document.documentElement.scrollLeft;
+  const scrollTop = globalThis.pageYOffset ||
+    document.documentElement.scrollTop;
 
   const { left, top } = element.getBoundingClientRect();
   return [scrollLeft + left, scrollTop + top];
@@ -318,7 +318,6 @@ const playGame = (data) => {
   renderPawns(detectivesStat);
   renderPlayerTickets(stats, lastSeen);
   showTurn(currentRole, isYourTurn);
-
   renderMrXTransportLog(transport);
 
   render2XTicket(tickets, currentRole, isYourTurn);
@@ -351,7 +350,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true }
+      { once: true },
     );
   });
 };
@@ -363,40 +362,6 @@ const enable2X = async () => {
   if (json.accepted) alert("you are in 2x mode");
 };
 
-const handleZoom = () => {
-  const panZoomInstance = svgPanZoom("#svg1", {
-    zoomEnabled: true,
-    controlIconsEnabled: false,
-    fit: true,
-    center: true,
-    minZoom: 1,
-    maxZoom: 10,
-    contain: "inside",
-    zoomScaleSensitivity: 0.15,
-    panEnabled: true,
-    dblClickZoomEnabled: false,
-  });
-
-  const sizes = panZoomInstance.getSizes();
-  const realZoom = sizes.width / sizes.viewBox.width;
-  panZoomInstance.setMinZoom(realZoom);
-  panZoomInstance.fit();
-  panZoomInstance.center();
-
-  document.getElementById("zoom-in").addEventListener("click", function () {
-    panZoomInstance.zoomIn();
-  });
-
-  document.getElementById("zoom-out").addEventListener("click", function () {
-    panZoomInstance.zoomOut();
-  });
-
-  document.getElementById("reset").addEventListener("click", function () {
-    panZoomInstance.resetZoom();
-    panZoomInstance.center();
-  });
-};
-
 const main = () => {
   playAudio();
   startPolling();
@@ -404,5 +369,4 @@ const main = () => {
   document.querySelector("#two-x").onclick = enable2X;
 };
 
-globalThis.addEventListener("load", main);
-globalThis.addEventListener("load", handleZoom);
+globalThis.onload = main;
