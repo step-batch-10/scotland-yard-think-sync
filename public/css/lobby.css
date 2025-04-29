@@ -39,12 +39,11 @@ a {
   color: bisque;
   border-radius: 6px;
 
-  &>p {
+  & > p {
     font-weight: 600;
     font-size: 20px;
     text-align: center;
   }
-
 }
 
 form {
@@ -93,5 +92,4 @@ form select {
   padding-bottom: 18px;
   font-size: 1.5rem;
   font-weight: 600;
-
 }
