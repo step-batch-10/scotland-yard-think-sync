@@ -354,11 +354,23 @@ const playAudio = () => {
   });
 };
 
+const alertMessage = (msg, color = "green") => {
+  const container = cloneTemplate("alert-msg");
+  container.querySelector("p").textContent = msg;
+  container.style.backgroundColor = color;
+
+  document.body.append(container);
+  setTimeout(() => {
+    container.remove();
+  }, 3000);
+};
+
 const enable2X = async () => {
   const response = await fetch("/game/enable-2x");
   const json = await response.json();
 
-  if (json.accepted) alert("you are in 2x mode");
+  const msg = json.accepted ? "You are in 2x mode" : "Your 2X is rejected";
+  alertMessage(msg);
 };
 
 const main = () => {

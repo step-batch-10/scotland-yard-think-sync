@@ -406,6 +406,7 @@ g {
   align-items: center;
   font-size: 26px;
 }
+
 .side-bar button:hover {
   background-color: transparent;
 }
@@ -430,4 +431,31 @@ g {
   gap: 10px;
   position: fixed;
   right: 2vw;
+}
+
+@keyframes drop {
+  0% {
+    top: 0%;
+  }
+
+  50% {
+    top: 10%;
+  }
+
+  100% {
+    top: -10%;
+  }
+}
+
+.alert-message {
+  position: fixed;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem 5rem;
+  animation: drop 3s ease-in-out;
+  z-index: 999;
+
+  & p {
+    color: white;
+  }
 }

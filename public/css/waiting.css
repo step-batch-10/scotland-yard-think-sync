@@ -1,11 +1,9 @@
 #waiting-section {
-  width: 20vw;
-  gap: 2rem;
-  position: absolute;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 2rem 0px;
+  gap: 2rem;
+  padding: 2rem 1rem;
   background-color: #e7d8b2ef;
 }
 
@@ -32,9 +30,8 @@
 
 #gameId {
   display: flex;
-  width: 50%;
-  gap: 20px;
-  justify-content: space-evenly;
+  justify-content: space-between;
+  gap: 10px;
 }
 
 button {
