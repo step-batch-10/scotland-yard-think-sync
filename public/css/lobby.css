@@ -28,7 +28,7 @@ a {
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  background-color: #e7d8b2;
+  background-color: var(--primary-bg);
   min-width: 100px;
   width: 15vw;
   display: flex;
@@ -39,7 +39,7 @@ a {
   color: bisque;
   border-radius: 6px;
 
-  & > p {
+  &>p {
     font-weight: 600;
     font-size: 20px;
     text-align: center;
@@ -65,7 +65,7 @@ form select {
   border: none;
   border-radius: 2px;
 
-  background-color: rgb(191, 156, 90);
+  background-color: var(--secondary-bg);
   color: white;
 }
 
