@@ -106,10 +106,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft =
-    globalThis.pageXOffset || document.documentElement.scrollLeft;
-  const scrollTop =
-    globalThis.pageYOffset || document.documentElement.scrollTop;
+  const scrollLeft = globalThis.pageXOffset ||
+    document.documentElement.scrollLeft;
+  const scrollTop = globalThis.pageYOffset ||
+    document.documentElement.scrollTop;
 
   const { left, top } = element.getBoundingClientRect();
   return [scrollLeft + left, scrollTop + top];
@@ -371,12 +371,12 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true }
+      { once: true },
     );
   });
 };
 
-const alertMessage = (msg, color = "green") => {
+const alertMessage = (msg, color = "black") => {
   const container = cloneTemplate("alert-msg");
   container.querySelector("p").textContent = msg;
   container.style.backgroundColor = color;
