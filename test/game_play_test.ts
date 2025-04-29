@@ -200,6 +200,21 @@ describe("servePossibleStations", () => {
     const actual = await response.json();
     assertEquals(actual, expected);
   });
+
+  it("should not serve station if it is not my turn", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap, random);
+
+    const response = await app.request("/game/possible-stations", {
+      headers: { cookie: `playerId=b` },
+    });
+
+    assertEquals(response.status, 401);
+    assertEquals(await response.json(), []);
+  });
 });
 
 describe("handleMovement", () => {
@@ -479,5 +494,28 @@ describe("ensureActiveGame", () => {
     const location = response.headers.get("location");
 
     assertEquals(location, "/html/game.html");
+  });
+});
+
+describe("handle play again", () => {
+  it("should reset player and redirect to /lobby on play again", async () => {
+    const allPlayers = ["a", "b", "c", "d", "e", "f"];
+    const [host, ...players] = allPlayers;
+
+    const { app, bindings, roomId } = createAppWithHostedRoom(host, ...players);
+    bindings.rooms.assignGame(roomId, bindings.controller, basicMap);
+
+    const header = { headers: { cookie: `playerId=${host}` } };
+
+    const response = await app.request("/game/play-again", {
+      method: "POST",
+      ...header,
+    });
+
+    assertEquals(response.status, 302);
+    assertEquals(response.headers.get("location"), "/lobby");
+
+    const player = bindings.playerRegistry.getPlayerStats(host);
+    assertEquals(player, {});
   });
 });
