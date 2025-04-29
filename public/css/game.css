@@ -32,26 +32,11 @@ th {
   height: 70px;
 }
 
-@keyframes comeup {
-  0% {
-    top: 64vh;
-  }
-
-  50% {
-    bottom: 44vh;
-  }
-
-  100% {
-    top: 20vh;
-  }
-}
-
 .player-stats {
   position: fixed;
   text-align: center;
   top: 16vw;
   left: 36vw;
-  animation: comeup 2s ease-in-out;
 }
 
 .players-panel {
@@ -105,7 +90,6 @@ th {
   position: fixed;
   top: 16vw;
   left: 36vw;
-  animation: comeup 2s ease-in-out;
 }
 
 .pawn {
