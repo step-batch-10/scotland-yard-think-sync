@@ -92,8 +92,8 @@ th {
 
 .pawn {
   position: absolute;
-  width: 30px;
-  height: 10px;
+  width: 10px;
+  height: 20px;
 }
 
 .svg {

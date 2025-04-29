@@ -223,19 +223,18 @@ const generateStationId = (station) => `#station-${station}`;
 const movePawnToStation = (pawn, stationId) => {
   const tspan = document.querySelector(stationId);
 
-  addCoordinate(pawn, tspan, 0, -45);
-
+  addCoordinate(pawn, tspan, -70, -112);
   return pawn;
 };
 
+const changeColor = (elements, color) =>
+  elements.forEach((e) => (e.style.fill = color));
+
 const makePawn = (color) => {
   const pawn = cloneTemplate("pawn");
-  const bodyParts = pawn.querySelectorAll(".body-parts");
+  const rects = pawn.querySelectorAll(".body-parts rect");
   pawn.id = color;
-
-  bodyParts.forEach((part) => {
-    part.setAttribute("fill", color);
-  });
+  changeColor(rects, color);
 
   return pawn;
 };
