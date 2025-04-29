@@ -106,10 +106,10 @@ const alignCard = (cardsContainer, [x, y]) => {
 };
 
 const getDimensions = (element) => {
-  const scrollLeft = globalThis.pageXOffset ||
-    document.documentElement.scrollLeft;
-  const scrollTop = globalThis.pageYOffset ||
-    document.documentElement.scrollTop;
+  const scrollLeft =
+    globalThis.pageXOffset || document.documentElement.scrollLeft;
+  const scrollTop =
+    globalThis.pageYOffset || document.documentElement.scrollTop;
 
   const { left, top } = element.getBoundingClientRect();
   return [scrollLeft + left, scrollTop + top];
@@ -188,12 +188,12 @@ const deleteNodeBySelector = (selector) => {
   });
 };
 
-const highLightDestinations = (stations) => {
+const highLightDestinations = (stations, role) => {
   deleteNodeBySelector(".highlight-station");
 
   stations.forEach(({ to }) => {
     const station = document.getElementById(`station-${to}`);
-    const highlighter = createHighlighter("highlight-station");
+    const highlighter = createHighlighter("highlight-station", role);
     addCoordinate(highlighter, station, -8, -6);
     document.body.appendChild(highlighter);
   });
@@ -205,11 +205,11 @@ const showMessage = async () => {
   return alertUser(message, "#turn-indicator");
 };
 
-const displayTravelOptions = async () => {
+const displayTravelOptions = async (role) => {
   const possibleStation = await fetchPossibleStations();
 
   if (possibleStation.length === 0) return showMessage("skip");
-  highLightDestinations(possibleStation);
+  highLightDestinations(possibleStation, role);
 
   const stations = possibleStation.map(({ to }) => to);
   possibleStation.forEach(({ to, tickets }) => {
@@ -260,9 +260,11 @@ const alertUser = (msg, id) => {
   turnIndicator.textContent = msg;
 };
 
-const createHighlighter = (className) => {
+const createHighlighter = (className, role) => {
   const element = document.createElement("div");
   element.classList.add(className);
+  const color = mapRoleToColor(role);
+  element.style.boxShadow = `0 0 2px 1px ${color}`;
 
   return element;
 };
@@ -322,7 +324,7 @@ const playGame = (data) => {
 
   render2XTicket(tickets, currentRole, isYourTurn);
 
-  if (isYourTurn) displayTravelOptions();
+  if (isYourTurn) displayTravelOptions(currentRole);
 };
 
 const autoFocus = (stationId) => {
@@ -369,7 +371,7 @@ const playAudio = () => {
       () => {
         bgAudio.play();
       },
-      { once: true },
+      { once: true }
     );
   });
 };
