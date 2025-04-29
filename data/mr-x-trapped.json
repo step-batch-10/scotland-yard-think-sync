@@ -18,6 +18,6 @@
     "Purple": { "Bus": 3, "Taxi": 3, "Metro": 3, "Wild": 0, "2x": 0 }
   },
   "currentRole": "MrX",
-  "currentTurn": 5,
-  "logs": [{ "to": 100, "mode": "Black" }]
+  "currentTurn": 1,
+  "logs": [{ "to": 100, "mode": "Wild" }]
 }

@@ -36,6 +36,14 @@ export class GameController {
     );
   }
 
+  setSpecificMatch(roomId: string, game: ScotlandYard) {
+    this.matches.set(roomId, {
+      game,
+      winner: null,
+      isGameFinished: false,
+    });
+  }
+
   getMatch(roomId: string) {
     return this.matches.get(roomId) || null;
   }
