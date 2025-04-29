@@ -10,6 +10,7 @@ import {
   RandomIndex,
   Role,
   Roles,
+  Scenario,
   Ticket,
   Tickets,
 } from "./types.ts";
@@ -46,6 +47,17 @@ export class ScotlandYard {
     this.mrXHistory = [];
     this.isUsing2X = false;
     this.twoXTurnCount = 0;
+  }
+
+  static loadScenario(scenario: Scenario): ScotlandYard {
+    const sy = new ScotlandYard(scenario.players, basicMap, scenario.turn);
+    sy.mapManager.setPositions(scenario.currentPositions);
+    sy.ticketManager.setTickets(scenario.tickets);
+    sy.stateManager.setCurrentRole(scenario.currentRole);
+    sy.stateManager.setCurrentTurn(scenario.currentTurn);
+    sy.mrXHistory = scenario.logs;
+
+    return sy;
   }
 
   assignRole(roles?: Roles): void {
@@ -258,7 +270,7 @@ export class ScotlandYard {
     return this.stateManager.getCurrentRole();
   }
 
-  getMrXhistoryLog() {
+  getMrXHistoryLog() {
     return this.mrXHistory;
   }
 }

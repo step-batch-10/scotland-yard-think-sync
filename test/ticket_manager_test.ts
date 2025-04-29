@@ -283,3 +283,27 @@ describe("possibleStationTickets", () => {
     );
   });
 });
+
+describe("TicketManager", () => {
+  it("should set tickets correctly", () => {
+    const { roles } = getPlayersAndRoles();
+    const ticketManager = new TicketManager(roles);
+    const tickets: Record<Role, Tickets> = {
+      MrX: { Bus: 5, Taxi: 5, Metro: 5, Wild: 5, "2x": 2 },
+      Red: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+      Blue: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+      Green: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+      Yellow: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+      Purple: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+    };
+
+    ticketManager.setTickets(tickets);
+
+    assertEquals(ticketManager.getTickets().get(Role.MrX)?.Bus, 5);
+    assertEquals(ticketManager.getTickets().get(Role.Red)?.Taxi, 3);
+    assertEquals(ticketManager.getTickets().get(Role.Blue)?.Taxi, 3);
+    assertEquals(ticketManager.getTickets().get(Role.Green)?.Taxi, 3);
+    assertEquals(ticketManager.getTickets().get(Role.Yellow)?.Taxi, 3);
+    assertEquals(ticketManager.getTickets().get(Role.Purple)?.Taxi, 3);
+  });
+});

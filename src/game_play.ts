@@ -111,7 +111,7 @@ const handleEnableTwoX: GameHandler = (context) => {
 
 const handleMrXLog: GameHandler = (context) => {
   const { match } = extractMatchAndPlayerId(context);
-  const logs = match.game.getMrXhistoryLog();
+  const logs = match.game.getMrXHistoryLog();
 
   return context.json(logs);
 };

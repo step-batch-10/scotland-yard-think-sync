@@ -80,7 +80,7 @@ describe("isTurnReachedLimit", () => {
 
 describe("isGameOver", () => {
   it("should provide true when won by isMrXCaught", () => {
-    const manager = new StateManager(roles, -1);
+    const manager = new StateManager(roles, 2);
     const isMrXCaught = true;
     manager.declareWinner(isMrXCaught, false, false, false);
     assert(manager.isGameOver());
@@ -94,21 +94,37 @@ describe("isGameOver", () => {
   });
 
   it("should provide true when won by detectivesCannotMove", () => {
-    const manager = new StateManager(roles, -1);
+    const manager = new StateManager(roles, 2);
     const detectivesCannotMove = true;
     manager.declareWinner(false, false, detectivesCannotMove, false);
     assert(manager.isGameOver());
   });
 
   it("should provide true when won by mrXCannotMove", () => {
-    const manager = new StateManager(roles, -1);
+    const manager = new StateManager(roles, 2);
     const mrXCannotMove = true;
     manager.declareWinner(false, false, false, mrXCannotMove);
     assert(manager.isGameOver());
   });
 
   it("should provide false when their is no winner", () => {
-    const manager = new StateManager(roles, -1);
+    const manager = new StateManager(roles, 1);
     assertFalse(manager.isGameOver());
+  });
+});
+
+describe("StateManager - Loading Methods", () => {
+  it("should set the current role correctly", () => {
+    const stateManager = new StateManager(roles, 2);
+    stateManager.setCurrentRole(Role.Red);
+
+    assertEquals(stateManager.getCurrentRole(), Role.Red);
+  });
+
+  it("should set the current turn correctly", () => {
+    const stateManager = new StateManager(roles, 2);
+    stateManager.setCurrentTurn(2);
+
+    assertEquals(stateManager.getCurrentTurn(), 2);
   });
 });

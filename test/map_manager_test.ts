@@ -102,3 +102,16 @@ describe("movePlayer", () => {
     assertEquals(manager.getCurrentStations().get(Role.MrX), 100);
   });
 });
+
+describe("MapManager", () => {
+  it("should set positions correctly", () => {
+    const mapManager = new MapManager(basicMap, roles, revealingTurn);
+    const positions = { MrX: 100, Red: 101, Blue: 102 };
+
+    mapManager.setPositions(positions);
+
+    assertEquals(mapManager.getCurrentStations().get(Role.MrX), 100);
+    assertEquals(mapManager.getCurrentStations().get(Role.Red), 101);
+    assertEquals(mapManager.getCurrentStations().get(Role.Blue), 102);
+  });
+});

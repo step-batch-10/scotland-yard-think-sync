@@ -82,4 +82,11 @@ export class TicketManager {
   getTickets(): Map<Role, Tickets> {
     return this.tickets;
   }
+
+  setTickets(tickets: Record<Role, Tickets>): void {
+    this.tickets.clear();
+    for (const [role, ticketData] of Object.entries(tickets)) {
+      this.tickets.set(role as Role, ticketData);
+    }
+  }
 }

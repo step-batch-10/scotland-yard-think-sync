@@ -60,4 +60,12 @@ export class StateManager {
   getCurrentTurn() {
     return this.turn;
   }
+
+  setCurrentRole(role: Role): void {
+    this.currentRole = role;
+  }
+
+  setCurrentTurn(turn: number): void {
+    this.turn = turn;
+  }
 }

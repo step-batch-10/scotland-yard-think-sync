@@ -95,3 +95,13 @@ export interface Options {
 export interface ValidTickets {
   ({ mode }: Route): Ticket[];
 }
+
+export interface Scenario {
+  players: string[];
+  turn: number;
+  currentPositions: Positions;
+  tickets: Record<Role, Tickets>;
+  currentRole: Role;
+  currentTurn: number;
+  logs: Log[];
+}

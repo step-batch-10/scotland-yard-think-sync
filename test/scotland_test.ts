@@ -7,6 +7,7 @@ import {
   RandomIndex,
   Role,
   Roles,
+  Scenario,
   Ticket,
   Tickets,
   Transport,
@@ -1012,5 +1013,79 @@ describe("can accept 2x", () => {
     game.useTicket(Ticket.Yellow, 195);
 
     assertFalse(game.enable2X());
+  });
+});
+
+describe("ScotlandYard - loadScenario", () => {
+  it("should load a valid scenario correctly", () => {
+    const scenario: Scenario = {
+      players: ["Player1", "Player2", "Player3"],
+      turn: 5,
+      currentPositions: {
+        MrX: 100,
+        Red: 101,
+        Blue: 102,
+        Green: 103,
+        Yellow: 104,
+        Purple: 105,
+      },
+      tickets: {
+        MrX: { Bus: 5, Taxi: 5, Metro: 5, Wild: 5, "2x": 2 },
+        Red: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+        Blue: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+        Green: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+        Yellow: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+        Purple: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+      },
+      currentRole: Role.MrX,
+      currentTurn: 1,
+      logs: [{ to: 100, mode: Ticket.Black }],
+    };
+
+    const game = ScotlandYard.loadScenario(scenario);
+
+    assertEquals(game.getCurrentPosition().get(Role.MrX), 100);
+    assertEquals(game.getCurrentPosition().get(Role.Red), 101);
+    assertEquals(game.getCurrentPosition().get(Role.Blue), 102);
+
+    assertEquals(game.getTickets().get(Role.MrX)?.Bus, 5);
+    assertEquals(game.getTickets().get(Role.Red)?.Taxi, 3);
+
+    assertEquals(game.getCurrentRole(), Role.MrX);
+    assertEquals(game.getCurrentTurn(), 1);
+
+    assertEquals(game.getMrXHistoryLog(), [{ to: 100, mode: Ticket.Black }]);
+  });
+
+  it("should handle missing optional fields gracefully", () => {
+    const partialScenario: Scenario = {
+      players: ["Player1", "Player2", "Player3"],
+      turn: 5,
+      currentPositions: {
+        MrX: 100,
+        Red: 101,
+        Blue: 102,
+        Green: 103,
+        Yellow: 104,
+        Purple: 105,
+      },
+      tickets: {
+        MrX: { Bus: 5, Taxi: 5, Metro: 5, Wild: 5, "2x": 2 },
+        Red: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+        Blue: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+        Green: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+        Yellow: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+        Purple: { Bus: 3, Taxi: 3, Metro: 3, Wild: 0, "2x": 0 },
+      },
+      currentRole: Role.MrX,
+      currentTurn: 0,
+      logs: [],
+    };
+
+    const game = ScotlandYard.loadScenario(partialScenario);
+
+    assertEquals(game.getCurrentPosition().get(Role.MrX), 100);
+
+    assertEquals(game.getMrXHistoryLog(), []);
   });
 });

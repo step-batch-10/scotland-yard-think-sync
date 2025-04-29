@@ -1,4 +1,4 @@
-import { GameMap, Role, Route, Transport } from "./types.ts";
+import { GameMap, Positions, Role, Route, Transport } from "./types.ts";
 const randomInRange = (start: number, end: number) =>
   start + (Math.random() - 0.5) * end;
 const turns = [3, 8, 13, 18, 24];
@@ -72,5 +72,14 @@ export class MapManager {
 
   getLastSeenOfMrX() {
     return this.lastSeen;
+  }
+
+  setPositions(positions: Positions): void {
+    this.currentStations.clear();
+    for (const [role, position] of Object.entries(positions)) {
+      if (position !== null) {
+        this.currentStations.set(role as Role, position);
+      }
+    }
   }
 }
