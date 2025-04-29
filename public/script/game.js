@@ -272,12 +272,6 @@ const highlightPawn = (role) => {
   const pawn = document.querySelector(`#${color}`);
 
   if (!pawn) return;
-  pawn.scrollIntoView({
-    behavior: "smooth",
-    block: "center",
-    inline: "center",
-  });
-
   pawn.classList.add("highlight-pawn");
 };
 
@@ -331,10 +325,29 @@ const playGame = (data) => {
   if (isYourTurn) displayTravelOptions();
 };
 
+const autoFocus = (stationId) => {
+  const element = document.querySelector(`#station-${stationId}`);
+
+  element.scrollIntoView({
+    behavior: "smooth",
+    block: "center",
+    inline: "center",
+  });
+};
+
 const startPolling = () => {
+  let previousPlayerPosition = null;
+
   const intervalId = setInterval(async () => {
     const data = await fetchState();
     playGame(data);
+
+    const currentPlayerPosition = data.positions[data.currentRole];
+
+    if (previousPlayerPosition !== currentPlayerPosition) {
+      previousPlayerPosition = currentPlayerPosition;
+      autoFocus(currentPlayerPosition);
+    }
 
     if (data.isGameOver) {
       renderGameOver(data);
