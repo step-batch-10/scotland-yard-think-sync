@@ -13,7 +13,7 @@ import {
   Ticket,
   Tickets,
 } from "./types.ts";
-import { basicMap } from "../maps/half_map.ts";
+import { basicMap } from "../maps/full_map.ts";
 
 export class ScotlandYard {
   private playerManager: PlayerManager;
