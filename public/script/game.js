@@ -178,7 +178,6 @@ const renderTickets = (tickets, to, stations) => (e) => {
 
   document.body.appendChild(cardsContainer);
 };
-
 const deleteNodeBySelector = (selector) => {
   const nodes = document.querySelectorAll(selector);
   if (!nodes) return;
@@ -288,17 +287,16 @@ const showTurn = (currentRole, isYourTurn) => {
 const winningMessage = (winner) =>
   winner === "MrX" ? "Mr. X is the winner" : "Detectives are the winner";
 
-const blurPawns = () => {
+const blurPawnsAndSideBar = () => {
+  document.querySelector(".side-bar").style.filter = "blur(10px)";
   const pawns = document.querySelectorAll(".pawn");
   pawns.forEach((pawn) => {
     pawn.style.filter = "blur(10px)";
   });
 };
 
-const renderGameOver = ({ winner }, id) => {
-  clearInterval(id);
-
-  blurPawns();
+const renderGameOver = ({ winner }) => {
+  blurPawnsAndSideBar();
   const banner = cloneTemplate("winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
   const prevBanner = document.querySelector(".banner");
@@ -323,6 +321,7 @@ const playGame = (data) => {
     lastSeen,
     transport,
   } = data;
+
   const stats = combineObjects(roles, tickets, positions);
   const detectivesStat = stats.filter((stat) => stat[3]);
 
@@ -351,7 +350,8 @@ const startPolling = () => {
 
   const intervalId = setInterval(async () => {
     const data = await fetchState();
-    playGame(data);
+
+    if (!data.isGameOver) playGame(data);
 
     const currentPlayerPosition = data.positions[data.currentRole];
 

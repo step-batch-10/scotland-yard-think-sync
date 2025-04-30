@@ -481,6 +481,7 @@ g {
   display: flex;
   justify-content: space-around;
   padding: 0px 20px;
+  z-index: 3;
 }
 
 @keyframes drop {
