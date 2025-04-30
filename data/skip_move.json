@@ -1,0 +1,24 @@
+{
+  "players": ["player1", "player2", "player3"],
+  "turn": 5,
+  "currentPositions": {
+    "MrX": 100,
+    "Red": 101,
+    "Blue": 102,
+
+    "Green": 103,
+    "Yellow": 104,
+    "Purple": 105
+  },
+  "tickets": {
+    "MrX": { "Bus": 5, "Taxi": 5, "Metro": 5, "Wild": 5, "2x": 2 },
+    "Red": { "Bus": 0, "Taxi": 0, "Metro": 0, "Wild": 0, "2x": 0 },
+    "Blue": { "Bus": 3, "Taxi": 3, "Metro": 3, "Wild": 0, "2x": 0 },
+    "Green": { "Bus": 3, "Taxi": 3, "Metro": 3, "Wild": 0, "2x": 0 },
+    "Yellow": { "Bus": 3, "Taxi": 3, "Metro": 3, "Wild": 0, "2x": 0 },
+    "Purple": { "Bus": 3, "Taxi": 3, "Metro": 3, "Wild": 0, "2x": 0 }
+  },
+  "currentRole": "Red",
+  "currentTurn": 1,
+  "logs": [{ "to": 100, "mode": "Wild" }]
+}
