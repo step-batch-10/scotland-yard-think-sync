@@ -148,7 +148,7 @@ th {
   height: 20px;
   z-index: 2;
 
-  &>svg {
+  & > svg {
     width: 40px;
     height: 80px;
   }
@@ -402,7 +402,7 @@ g {
   flex-direction: column;
   justify-content: space-around;
 
-  &>p {
+  & > p {
     color: black;
     margin: 0;
   }
@@ -433,7 +433,7 @@ g {
   box-shadow: 0px 8px 20px rgba(0, 0, 0, 0.1);
   position: relative;
 
-  &>svg {
+  & > svg {
     height: 100%;
     width: 80%;
   }
