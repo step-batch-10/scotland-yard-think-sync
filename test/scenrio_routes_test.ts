@@ -56,10 +56,9 @@ describe("setScenario", () => {
     assertEquals(body.message, "loaded successfully");
 
     const { roomId } = bindings.playerRegistry.getPlayerStats("Player1");
-    assertEquals(roomId !== null, true);
+    assert(roomId);
 
     const match = bindings.controller.getMatch(roomId!);
-    console.log(match, roomId, bindings);
     assert(match);
     assertEquals(match?.game.getCurrentTurn(), 5);
     assertEquals(match?.game.getCurrentPosition().get(Role.MrX), 100);
