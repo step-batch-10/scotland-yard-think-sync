@@ -288,9 +288,17 @@ const showTurn = (currentRole, isYourTurn) => {
 const winningMessage = (winner) =>
   winner === "MrX" ? "Mr. X is the winner" : "Detectives are the winner";
 
+const blurPawns = () => {
+  const pawns = document.querySelectorAll(".pawn");
+  pawns.forEach((pawn) => {
+    pawn.style.filter = "blur(10px)";
+  });
+};
+
 const renderGameOver = ({ winner }, id) => {
   clearInterval(id);
 
+  blurPawns();
   const banner = cloneTemplate("winner-banner");
   banner.querySelector("h4").textContent = winningMessage(winner);
   const prevBanner = document.querySelector(".banner");
